@@ -124,7 +124,8 @@ async function saveMember() {
     // ================================
 
     if (editIndex === -1) {
-
+console.log("Trying Supabase INSERT...");
+console.log("Member:", member);
       const { data, error } = await supabaseClient
         .from("members")
         .insert([member])
