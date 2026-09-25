@@ -10,7 +10,11 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_KEY
 );
 
-// FORM ELEMENTS
+
+// ================================
+// ELEMENTS
+// ================================
+
 const memberForm = document.getElementById("memberForm");
 const memberId = document.getElementById("memberId");
 const fullName = document.getElementById("fullName");
@@ -30,25 +34,41 @@ const cancelButton = document.getElementById("cancelButton");
 const formTitle = document.getElementById("formTitle");
 const emptyMessage = document.getElementById("emptyMessage");
 
+
+// ================================
 // FORM SUBMIT
-memberForm.addEventListener("submit", e => {
+// ================================
+
+memberForm.addEventListener("submit", function (e) {
   e.preventDefault();
   saveMember();
 });
 
+
+// ================================
 // SEARCH
+// ================================
+
 search.addEventListener("input", displayMembers);
 
-// PHOTO PREVIEW
-photo.addEventListener("change", event => {
+
+// ================================
+// PHOTO
+// ================================
+
+photo.addEventListener("change", function (event) {
 
   const file = event.target.files[0];
 
-  if (!file) return;
+  if (!file) {
+    selectedPhoto = "";
+    photoPreview.innerHTML = "";
+    return;
+  }
 
   const reader = new FileReader();
 
-  reader.onload = e => {
+  reader.onload = function (e) {
 
     selectedPhoto = e.target.result;
 
@@ -64,12 +84,17 @@ photo.addEventListener("change", event => {
   reader.readAsDataURL(file);
 });
 
+
+// ================================
 // CANCEL
+// ================================
+
 cancelButton.addEventListener("click", resetForm);
 
 
 // ================================
 // SAVE MEMBER
+// ADD / UPDATE
 // ================================
 
 async function saveMember() {
@@ -95,18 +120,22 @@ async function saveMember() {
       emergencyNumber.value.trim(),
 
     membership_status:
-      status.value,
+      status.value || "Active",
 
     photo_url:
       selectedPhoto || null
   };
 
 
+  // ================================
   // VALIDATION
+  // ================================
 
   if (!member.member_id || !member.full_name) {
 
-    alert("Please enter Member ID and Full Name.");
+    alert(
+      "Please enter Member ID and Full Name."
+    );
 
     return;
   }
@@ -124,22 +153,27 @@ async function saveMember() {
     // ================================
 
     if (editIndex === -1) {
-console.log("Trying Supabase INSERT...");
-console.log("Member:", member);
-      const { data, error } = await supabaseClient
-        .from("members")
-        .insert([member])
-        .select()
-        .single();
+
+      const { data, error } =
+        await supabaseClient
+          .from("members")
+          .insert([member])
+          .select()
+          .single();
 
 
       if (error) {
 
-        console.error(error);
+        console.error(
+          "INSERT ERROR:",
+          error
+        );
 
         if (error.code === "23505") {
 
-          alert("This Member ID already exists.");
+          alert(
+            "This Member ID already exists."
+          );
 
         } else {
 
@@ -153,11 +187,20 @@ console.log("Member:", member);
       }
 
 
-      // Add Supabase result to local display array
-      members.push(convertMember(data));
+      console.log(
+        "MEMBER INSERTED:",
+        data
+      );
 
-      alert("Member registered successfully!");
 
+      members.unshift(
+        convertMember(data)
+      );
+
+
+      alert(
+        "Member registered successfully!"
+      );
     }
 
 
@@ -167,20 +210,33 @@ console.log("Member:", member);
 
     else {
 
-      const oldMember = members[editIndex];
+      const oldMember =
+        members[editIndex];
 
 
-      const { data, error } = await supabaseClient
-        .from("members")
-        .update(member)
-        .eq("member_id", oldMember.memberId)
-        .select()
-        .single();
+      const { data, error } =
+        await supabaseClient
+
+          .from("members")
+
+          .update(member)
+
+          .eq(
+            "member_id",
+            oldMember.memberId
+          )
+
+          .select()
+
+          .single();
 
 
       if (error) {
 
-        console.error(error);
+        console.error(
+          "UPDATE ERROR:",
+          error
+        );
 
         alert(
           "Update failed: " +
@@ -191,9 +247,13 @@ console.log("Member:", member);
       }
 
 
-      members[editIndex] = convertMember(data);
+      members[editIndex] =
+        convertMember(data);
 
-      alert("Member updated successfully.");
+
+      alert(
+        "Member updated successfully."
+      );
     }
 
 
@@ -205,7 +265,10 @@ console.log("Member:", member);
 
   catch (error) {
 
-    console.error(error);
+    console.error(
+      "UNEXPECTED ERROR:",
+      error
+    );
 
     alert(
       "An unexpected error occurred: " +
@@ -227,18 +290,21 @@ console.log("Member:", member);
 
 
 // ================================
-// CONVERT SUPABASE DATA
+// CONVERT DATABASE MEMBER
 // ================================
 
 function convertMember(data) {
 
   return {
 
-    id: data.id,
+    id:
+      data.id || null,
 
-    memberId: data.member_id || "",
+    memberId:
+      data.member_id || "",
 
-    fullName: data.full_name || "",
+    fullName:
+      data.full_name || "",
 
     passportNumber:
       data.passport_number || "",
@@ -268,6 +334,77 @@ function convertMember(data) {
 
 
 // ================================
+// LOAD MEMBERS FROM SUPABASE
+// ================================
+
+async function loadMembers() {
+
+  memberTable.innerHTML = "";
+
+  emptyMessage.textContent =
+    "Loading members...";
+
+  emptyMessage.style.display =
+    "block";
+
+
+  try {
+
+    const { data, error } =
+      await supabaseClient
+
+        .from("members")
+
+        .select("*")
+
+        .order("id", {
+          ascending: false
+        });
+
+
+    if (error) {
+
+      console.error(
+        "LOAD ERROR:",
+        error
+      );
+
+      emptyMessage.textContent =
+        "Unable to load members.";
+
+      alert(
+        "Could not load members: " +
+        error.message
+      );
+
+      return;
+    }
+
+
+    members =
+      (data || []).map(
+        convertMember
+      );
+
+
+    displayMembers();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "LOAD ERROR:",
+      error
+    );
+
+    emptyMessage.textContent =
+      "Unable to load members.";
+  }
+}
+
+
+// ================================
 // DISPLAY MEMBERS
 // ================================
 
@@ -281,48 +418,66 @@ function displayMembers() {
       .toLowerCase();
 
 
-  const filtered = members.filter(member =>
+  const filtered =
+    members.filter(member => {
 
-    String(member.memberId || "")
-      .toLowerCase()
-      .includes(q)
+      return (
 
-    ||
+        String(
+          member.memberId || ""
+        )
+          .toLowerCase()
+          .includes(q)
 
-    String(member.fullName || "")
-      .toLowerCase()
-      .includes(q)
+        ||
 
-    ||
+        String(
+          member.fullName || ""
+        )
+          .toLowerCase()
+          .includes(q)
 
-    String(member.passportNumber || "")
-      .toLowerCase()
-      .includes(q)
+        ||
 
-    ||
+        String(
+          member.passportNumber || ""
+        )
+          .toLowerCase()
+          .includes(q)
 
-    String(member.address || "")
-      .toLowerCase()
-      .includes(q)
+        ||
 
-    ||
+        String(
+          member.address || ""
+        )
+          .toLowerCase()
+          .includes(q)
 
-    String(member.contact || "")
-      .toLowerCase()
-      .includes(q)
+        ||
 
-    ||
+        String(
+          member.contact || ""
+        )
+          .toLowerCase()
+          .includes(q)
 
-    String(member.emergencyContact || "")
-      .toLowerCase()
-      .includes(q)
+        ||
 
-    ||
+        String(
+          member.emergencyContact || ""
+        )
+          .toLowerCase()
+          .includes(q)
 
-    String(member.status || "")
-      .toLowerCase()
-      .includes(q)
-  );
+        ||
+
+        String(
+          member.status || ""
+        )
+          .toLowerCase()
+          .includes(q)
+      );
+    });
 
 
   emptyMessage.style.display =
@@ -352,7 +507,7 @@ function displayMembers() {
 
         ? `
           <img
-            src="${member.photo}"
+            src="${escapeHTML(member.photo)}"
             class="member-photo"
             alt="Member photo"
           >
@@ -404,7 +559,6 @@ function displayMembers() {
           Edit
         </button>
 
-
         <button
           class="btn-delete"
           onclick="deleteMember(${index})"
@@ -429,6 +583,11 @@ function editMember(index) {
 
   const member =
     members[index];
+
+
+  if (!member) {
+    return;
+  }
 
 
   memberId.value =
@@ -468,7 +627,7 @@ function editMember(index) {
 
       ? `
         <img
-          src="${selectedPhoto}"
+          src="${escapeHTML(selectedPhoto)}"
           class="preview-image"
           alt="Member photo"
         >
@@ -512,198 +671,5 @@ async function deleteMember(index) {
     members[index];
 
 
-  if (
-    !confirm(
-      `Delete ${member.fullName}?`
-    )
-  ) {
-
+  if (!member) {
     return;
-  }
-
-
-  try {
-
-    const { error } =
-      await supabaseClient
-
-        .from("members")
-
-        .delete()
-
-        .eq(
-          "member_id",
-          member.memberId
-        );
-
-
-    if (error) {
-
-      console.error(error);
-
-      alert(
-        "Delete failed: " +
-        error.message
-      );
-
-      return;
-    }
-
-
-    members.splice(index, 1);
-
-
-    displayMembers();
-
-
-    alert(
-      "Member deleted successfully."
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-    alert(
-      "An unexpected error occurred."
-    );
-  }
-}
-
-
-// ================================
-// RESET FORM
-// ================================
-
-function resetForm() {
-
-  memberForm.reset();
-
-  status.value = "Active";
-
-  editIndex = -1;
-
-  selectedPhoto = "";
-
-  photoPreview.innerHTML = "";
-
-  formTitle.textContent =
-    "Add Member";
-
-  saveButton.textContent =
-    "Add Member";
-
-  cancelButton.classList.add(
-    "hidden"
-  );
-}
-
-
-// ================================
-// LOAD MEMBERS FROM SUPABASE
-// ================================
-
-async function loadMembers() {
-
-  memberTable.innerHTML = "";
-
-  emptyMessage.textContent =
-    "Loading members...";
-
-  emptyMessage.style.display =
-    "block";
-
-
-  try {
-
-    const { data, error } =
-      await supabaseClient
-
-        .from("members")
-
-        .select("*")
-
-        .order("id", {
-          ascending: false
-        });
-
-
-    if (error) {
-
-      console.error(error);
-
-      emptyMessage.textContent =
-        "Failed to load members.";
-
-      alert(
-        "Could not load members: " +
-        error.message
-      );
-
-      return;
-    }
-
-
-    members =
-      (data || []).map(
-        convertMember
-      );
-
-
-    displayMembers();
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-    emptyMessage.textContent =
-      "Failed to load members.";
-
-  }
-}
-
-
-// ================================
-// ESCAPE HTML
-// ================================
-
-function escapeHTML(value) {
-
-  return String(value || "")
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-}
-
-
-// ================================
-// START SYSTEM
-// ================================
-
-loadMembers();
