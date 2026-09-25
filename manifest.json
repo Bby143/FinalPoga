@@ -1,0 +1,10 @@
+{
+  "name": "POGA KSA Member Management System",
+  "short_name": "POGA KSA",
+  "description": "Offline POGA KSA Member Management System",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#166534",
+  "orientation": "portrait"
+}
