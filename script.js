@@ -54,12 +54,25 @@ const search =
 const saveButton =
   document.getElementById("saveButton");
 
+const cancelButton =
+  document.getElementById("cancelButton");
+
+const formTitle =
+  document.getElementById("formTitle");
+
 const emptyMessage =
   document.getElementById("emptyMessage");
 
 
 // ================================
-// SUBMIT
+// EDIT MODE
+// ================================
+
+let editingMemberId = null;
+
+
+// ================================
+// FORM SUBMIT
 // ================================
 
 memberForm.addEventListener(
@@ -75,7 +88,25 @@ memberForm.addEventListener(
 
 
 // ================================
-// SAVE MEMBER
+// CANCEL EDIT
+// ================================
+
+if (cancelButton) {
+
+  cancelButton.addEventListener(
+    "click",
+    function () {
+
+      cancelEdit();
+
+    }
+  );
+
+}
+
+
+// ================================
+// SAVE / UPDATE MEMBER
 // ================================
 
 async function saveMember() {
@@ -115,6 +146,10 @@ async function saveMember() {
   };
 
 
+  // ================================
+  // VALIDATION
+  // ================================
+
   if (
     !member.member_id ||
     !member.full_name
@@ -132,12 +167,86 @@ async function saveMember() {
   saveButton.disabled = true;
 
   saveButton.textContent =
-    "Saving...";
+    editingMemberId
+      ? "Updating..."
+      : "Saving...";
 
 
   try {
 
-    const { error } =
+    // ================================
+    // UPDATE EXISTING MEMBER
+    // ================================
+
+    if (editingMemberId !== null) {
+
+      const {
+        error
+      } =
+        await supabaseClient
+
+          .from("members")
+
+          .update(member)
+
+          .eq(
+            "id",
+            editingMemberId
+          );
+
+
+      if (error) {
+
+        console.error(
+          "UPDATE ERROR:",
+          error
+        );
+
+
+        alert(
+
+          "UPDATE FAILED\n\n" +
+
+          "Message: " +
+          error.message +
+
+          "\n\nCode: " +
+          (error.code || "N/A") +
+
+          "\n\nDetails: " +
+          (error.details || "N/A") +
+
+          "\n\nHint: " +
+          (error.hint || "N/A")
+
+        );
+
+        return;
+
+      }
+
+
+      alert(
+        "Member updated successfully!"
+      );
+
+
+      cancelEdit();
+
+      await loadMembers();
+
+      return;
+
+    }
+
+
+    // ================================
+    // ADD NEW MEMBER
+    // ================================
+
+    const {
+      error
+    } =
       await supabaseClient
 
         .from("members")
@@ -151,6 +260,7 @@ async function saveMember() {
         "INSERT ERROR:",
         error
       );
+
 
       alert(
 
@@ -183,9 +293,6 @@ async function saveMember() {
     memberForm.reset();
 
 
-    // IMPORTANT:
-    // Reload records after successful save
-
     await loadMembers();
 
   }
@@ -197,8 +304,9 @@ async function saveMember() {
       error
     );
 
+
     alert(
-      "Error: " +
+      "ERROR\n\n" +
       error.message
     );
 
@@ -209,7 +317,9 @@ async function saveMember() {
     saveButton.disabled = false;
 
     saveButton.textContent =
-      "Add Member";
+      editingMemberId
+        ? "Update Member"
+        : "Add Member";
 
   }
 
@@ -353,22 +463,31 @@ function displayMembers(data) {
       row.innerHTML = `
 
         <td>
+
           ${
             member.photo_url
+
               ? `
+
                 <img
                   src="${escapeHTML(member.photo_url)}"
                   class="member-photo"
                   alt="Member photo"
                 >
+
               `
+
               : `
+
                 <div class="no-photo">
                   No Photo
                 </div>
+
               `
           }
+
         </td>
+
 
         <td>
           ${escapeHTML(
@@ -376,11 +495,13 @@ function displayMembers(data) {
           )}
         </td>
 
+
         <td>
           ${escapeHTML(
             member.full_name || ""
           )}
         </td>
+
 
         <td>
           ${escapeHTML(
@@ -388,11 +509,13 @@ function displayMembers(data) {
           )}
         </td>
 
+
         <td>
           ${escapeHTML(
             member.birthday || ""
           )}
         </td>
+
 
         <td>
           ${escapeHTML(
@@ -400,14 +523,33 @@ function displayMembers(data) {
           )}
         </td>
 
+
         <td class="${statusClass}">
           ${escapeHTML(
             member.membership_status || ""
           )}
         </td>
 
+
         <td>
-          <span>Saved</span>
+
+          <button
+            type="button"
+            class="btn-edit"
+            onclick="editMember(${member.id})"
+          >
+            Edit
+          </button>
+
+
+          <button
+            type="button"
+            class="btn-delete"
+            onclick="deleteMember(${member.id}, '${escapeJavaScript(member.full_name)}')"
+          >
+            Delete
+          </button>
+
         </td>
 
       `;
@@ -417,6 +559,295 @@ function displayMembers(data) {
 
     }
   );
+
+}
+
+
+// ================================
+// EDIT MEMBER
+// ================================
+
+async function editMember(id) {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+
+        .from("members")
+
+        .select("*")
+
+        .eq(
+          "id",
+          id
+        )
+
+        .single();
+
+
+    if (error) {
+
+      console.error(
+        "GET MEMBER ERROR:",
+        error
+      );
+
+
+      alert(
+
+        "COULD NOT OPEN MEMBER\n\n" +
+
+        error.message
+
+      );
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      alert(
+        "Member record not found."
+      );
+
+      return;
+
+    }
+
+
+    // ================================
+    // PUT DATA INTO FORM
+    // ================================
+
+    memberId.value =
+      data.member_id || "";
+
+    fullName.value =
+      data.full_name || "";
+
+    passportNumber.value =
+      data.passport_number || "";
+
+    birthday.value =
+      data.birthday || "";
+
+    address.value =
+      data.address || "";
+
+    contact.value =
+      data.contact_number || "";
+
+    emergencyContact.value =
+      data.emergency_contact_person || "";
+
+    emergencyNumber.value =
+      data.emergency_contact_number || "";
+
+    status.value =
+      data.membership_status || "Active";
+
+
+    editingMemberId =
+      data.id;
+
+
+    // ================================
+    // CHANGE BUTTON
+    // ================================
+
+    saveButton.textContent =
+      "Update Member";
+
+
+    if (formTitle) {
+
+      formTitle.textContent =
+        "Edit Member";
+
+    }
+
+
+    if (cancelButton) {
+
+      cancelButton.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    window.scrollTo({
+
+      top: 0,
+
+      behavior: "smooth"
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "EDIT ERROR:",
+      error
+    );
+
+
+    alert(
+      "EDIT ERROR\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ================================
+// DELETE MEMBER
+// ================================
+
+async function deleteMember(
+  id,
+  memberName
+) {
+
+  const confirmed =
+    confirm(
+
+      "Are you sure you want to delete this member?\n\n" +
+
+      "Member: " +
+      memberName +
+
+      "\n\nThis action cannot be undone."
+
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const {
+      error
+    } =
+      await supabaseClient
+
+        .from("members")
+
+        .delete()
+
+        .eq(
+          "id",
+          id
+        );
+
+
+    if (error) {
+
+      console.error(
+        "DELETE ERROR:",
+        error
+      );
+
+
+      alert(
+
+        "DELETE FAILED\n\n" +
+
+        "Message: " +
+        error.message +
+
+        "\n\nCode: " +
+        (error.code || "N/A") +
+
+        "\n\nDetails: " +
+        (error.details || "N/A") +
+
+        "\n\nHint: " +
+        (error.hint || "N/A")
+
+      );
+
+      return;
+
+    }
+
+
+    alert(
+      "Member deleted successfully!"
+    );
+
+
+    await loadMembers();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "DELETE ERROR:",
+      error
+    );
+
+
+    alert(
+
+      "DELETE ERROR\n\n" +
+      error.message
+
+    );
+
+  }
+
+}
+
+
+// ================================
+// CANCEL EDIT
+// ================================
+
+function cancelEdit() {
+
+  editingMemberId =
+    null;
+
+
+  memberForm.reset();
+
+
+  if (formTitle) {
+
+    formTitle.textContent =
+      "Add Member";
+
+  }
+
+
+  saveButton.textContent =
+    "Add Member";
+
+
+  if (cancelButton) {
+
+    cancelButton.classList.add(
+      "hidden"
+    );
+
+  }
 
 }
 
@@ -455,18 +886,23 @@ search.addEventListener(
         .select("*")
 
         .or(
+
           "member_id.ilike.%" +
           query +
           "%," +
+
           "full_name.ilike.%" +
           query +
           "%," +
+
           "passport_number.ilike.%" +
           query +
           "%," +
+
           "contact_number.ilike.%" +
           query +
           "%"
+
         );
 
 
@@ -499,6 +935,7 @@ search.addEventListener(
 
     emptyMessage.style.display =
       "none";
+
 
     displayMembers(data);
 
@@ -537,6 +974,42 @@ function escapeHTML(value) {
     .replace(
       /'/g,
       "&#039;"
+    );
+
+}
+
+
+// ================================
+// ESCAPE JAVASCRIPT
+// ================================
+
+function escapeJavaScript(value) {
+
+  return String(value)
+
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    )
+
+    .replace(
+      /"/g,
+      '\\"'
+    )
+
+    .replace(
+      /\n/g,
+      "\\n"
+    )
+
+    .replace(
+      /\r/g,
+      "\\r"
     );
 
 }
