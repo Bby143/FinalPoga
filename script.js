@@ -1,5 +1,6 @@
 // ============================================
-// POGA KSA - SUPABASE TEST VERSION
+// POGA KSA MEMBER REGISTRATION
+// SUPABASE INSERT TEST
 // ============================================
 
 const SUPABASE_URL =
@@ -13,8 +14,6 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_KEY
   );
-
-console.log("POGA KSA SCRIPT LOADED");
 
 
 // ============================================
@@ -33,11 +32,11 @@ const fullName =
 const passportNumber =
   document.getElementById("passportNumber");
 
-const address =
-  document.getElementById("address");
-
 const birthday =
   document.getElementById("birthday");
+
+const address =
+  document.getElementById("address");
 
 const contact =
   document.getElementById("contact");
@@ -62,16 +61,62 @@ const saveButton =
 
 
 // ============================================
-// FORM
+// FORM SUBMIT
 // ============================================
 
 memberForm.addEventListener(
   "submit",
-  async function (event) {
+  function (event) {
 
     event.preventDefault();
 
-    await saveMember();
+    saveMember();
+
+  }
+);
+
+
+// ============================================
+// PHOTO PREVIEW
+// ============================================
+
+photo.addEventListener(
+  "change",
+  function (event) {
+
+    const file =
+      event.target.files[0];
+
+    if (!file) {
+
+      photoPreview.innerHTML = "";
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function (event) {
+
+        photoPreview.innerHTML = `
+
+          <img
+            src="${event.target.result}"
+            class="preview-image"
+            alt="Member photo"
+          >
+
+        `;
+
+      };
+
+
+    reader.readAsDataURL(file);
 
   }
 );
@@ -143,25 +188,23 @@ async function saveMember() {
 
 
   console.log(
-    "Trying to insert:",
+    "MEMBER BEING SENT:",
     member
   );
 
 
   try {
 
-    const {
-      data,
-      error
-    } = await supabaseClient
+    // ========================================
+    // INSERT ONLY
+    // ========================================
 
-      .from("members")
+    const { error } =
+      await supabaseClient
 
-      .insert([member])
+        .from("members")
 
-      .select()
-      
-      .single();
+        .insert([member]);
 
 
     // ========================================
@@ -171,17 +214,17 @@ async function saveMember() {
     if (error) {
 
       console.error(
-        "SUPABASE ERROR:",
+        "SUPABASE INSERT ERROR:",
         error
       );
 
 
       alert(
 
-        "SUPABASE INSERT FAILED\n\n" +
+        "REGISTRATION FAILED\n\n" +
 
         "Message:\n" +
-        error.message +
+        (error.message || "N/A") +
 
         "\n\nCode:\n" +
         (error.code || "N/A") +
@@ -195,8 +238,7 @@ async function saveMember() {
       );
 
 
-      // IMPORTANT:
-      // DO NOT CLEAR FORM
+      // DO NOT CLEAR THE FORM
 
       return;
 
@@ -208,24 +250,21 @@ async function saveMember() {
     // ========================================
 
     console.log(
-      "SUCCESS!",
-      data
+      "MEMBER SAVED SUCCESSFULLY"
     );
 
 
     alert(
-      "SUCCESS! Member saved to Supabase."
+      "SUCCESS! Member has been saved."
     );
 
 
-    // Clear ONLY after successful insert
+    // Clear ONLY after successful INSERT
 
     memberForm.reset();
 
 
-    if (photoPreview) {
-      photoPreview.innerHTML = "";
-    }
+    photoPreview.innerHTML = "";
 
 
   }
@@ -242,11 +281,12 @@ async function saveMember() {
 
       "JAVASCRIPT ERROR\n\n" +
 
-      error.message
+      (error.message || error)
 
     );
 
   }
+
 
   finally {
 
@@ -257,4 +297,4 @@ async function saveMember() {
 
   }
 
-}
+      }
