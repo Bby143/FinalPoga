@@ -1,3 +1,7 @@
+// ========================================
+// SUPABASE
+// ========================================
+
 const SUPABASE_URL =
   "https://rocvqcqgbdohfwfkhncy.supabase.co";
 
@@ -9,6 +13,13 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_KEY
   );
+
+
+// ========================================
+// SETTINGS
+// ========================================
+
+const PHOTO_BUCKET = "member-photos";
 
 
 // ========================================
@@ -71,15 +82,7 @@ const emptyMessage =
 
 
 // ========================================
-// SETTINGS
-// ========================================
-
-const PHOTO_BUCKET =
-  "member-photos";
-
-
-// ========================================
-// EDIT STATE
+// VARIABLES
 // ========================================
 
 let editingId = null;
@@ -90,111 +93,95 @@ let selectedPhotoFile = null;
 
 
 // ========================================
-// PHOTO SELECTION
+// PHOTO SELECT / PREVIEW
 // ========================================
 
-if (photo) {
+photo.addEventListener(
+  "change",
+  function () {
 
-  photo.addEventListener(
-    "change",
-    function () {
+    const file =
+      photo.files[0];
 
-      const file =
-        photo.files[0];
-
-      selectedPhotoFile =
-        file || null;
+    selectedPhotoFile =
+      file || null;
 
 
-      if (!file) {
+    if (!file) {
 
-        if (currentPhotoUrl) {
+      if (currentPhotoUrl) {
 
-          showPhotoPreview(
-            currentPhotoUrl
-          );
-
-        } else {
-
-          photoPreview.innerHTML =
-            "";
-
-        }
-
-        return;
-
-      }
-
-
-      // Check image type
-
-      if (!file.type.startsWith("image/")) {
-
-        alert(
-          "Please select an image file."
+        showPhotoPreview(
+          currentPhotoUrl
         );
 
-        photo.value = "";
+      } else {
 
-        selectedPhotoFile =
-          null;
-
-        return;
+        photoPreview.innerHTML = "";
 
       }
 
-
-      // Maximum 5 MB
-
-      const maxSize =
-        5 * 1024 * 1024;
-
-
-      if (file.size > maxSize) {
-
-        alert(
-          "Photo is too large.\n\n" +
-          "Maximum allowed size is 5 MB."
-        );
-
-        photo.value = "";
-
-        selectedPhotoFile =
-          null;
-
-        return;
-
-      }
-
-
-      // Preview selected photo
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function (event) {
-
-          photoPreview.innerHTML = `
-
-            <img
-              src="${event.target.result}"
-              class="preview-image"
-              alt="Selected member photo"
-            >
-
-          `;
-
-        };
-
-
-      reader.readAsDataURL(file);
-
+      return;
     }
-  );
 
-}
+
+    if (!file.type.startsWith("image/")) {
+
+      alert(
+        "Please select an image file."
+      );
+
+      photo.value = "";
+
+      selectedPhotoFile = null;
+
+      return;
+    }
+
+
+    const maxSize =
+      5 * 1024 * 1024;
+
+
+    if (file.size > maxSize) {
+
+      alert(
+        "Photo is too large.\n\n" +
+        "Maximum size is 5 MB."
+      );
+
+      photo.value = "";
+
+      selectedPhotoFile = null;
+
+      return;
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function (event) {
+
+        photoPreview.innerHTML = `
+
+          <img
+            src="${event.target.result}"
+            class="preview-image"
+            alt="Member Photo Preview"
+          >
+
+        `;
+
+      };
+
+
+    reader.readAsDataURL(file);
+
+  }
+);
 
 
 // ========================================
@@ -206,7 +193,6 @@ memberForm.addEventListener(
   async function (event) {
 
     event.preventDefault();
-
 
     if (editingId === null) {
 
@@ -223,21 +209,17 @@ memberForm.addEventListener(
 
 
 // ========================================
-// CANCEL BUTTON
+// CANCEL
 // ========================================
 
-if (cancelButton) {
+cancelButton.addEventListener(
+  "click",
+  function () {
 
-  cancelButton.addEventListener(
-    "click",
-    function () {
+    resetForm();
 
-      resetForm();
-
-    }
-  );
-
-}
+  }
+);
 
 
 // ========================================
@@ -297,7 +279,7 @@ async function uploadPhoto(file) {
     getFileExtension(file.name);
 
 
-  const uniqueName =
+  const fileName =
     "member_" +
     Date.now() +
     "_" +
@@ -307,13 +289,9 @@ async function uploadPhoto(file) {
     extension;
 
 
-  const filePath =
-    uniqueName;
-
-
   console.log(
-    "Uploading photo:",
-    filePath
+    "Uploading:",
+    fileName
   );
 
 
@@ -328,7 +306,7 @@ async function uploadPhoto(file) {
       .from(PHOTO_BUCKET)
 
       .upload(
-        filePath,
+        fileName,
         file,
         {
           cacheControl: "3600",
@@ -356,13 +334,13 @@ async function uploadPhoto(file) {
 
 
   console.log(
-    "PHOTO UPLOADED:",
+    "UPLOAD SUCCESS:",
     data
   );
 
 
   const {
-    data: publicUrlData
+    data: publicData
   } =
     supabaseClient
 
@@ -370,43 +348,47 @@ async function uploadPhoto(file) {
 
       .from(PHOTO_BUCKET)
 
-      .getPublicUrl(filePath);
+      .getPublicUrl(
+        fileName
+      );
 
 
   if (
-    !publicUrlData ||
-    !publicUrlData.publicUrl
+    !publicData ||
+    !publicData.publicUrl
   ) {
 
     throw new Error(
-      "Photo uploaded, but public URL could not be created."
+      "Photo uploaded but public URL was not created."
     );
 
   }
 
 
   console.log(
-    "PHOTO URL:",
-    publicUrlData.publicUrl
+    "PUBLIC PHOTO URL:",
+    publicData.publicUrl
   );
 
 
-  return publicUrlData.publicUrl;
+  return publicData.publicUrl;
 
 }
 
 
 // ========================================
-// GET FILE EXTENSION
+// FILE EXTENSION
 // ========================================
 
-function getFileExtension(filename) {
+function getFileExtension(
+  filename
+) {
 
-  const lastDot =
+  const dot =
     filename.lastIndexOf(".");
 
 
-  if (lastDot === -1) {
+  if (dot === -1) {
 
     return ".jpg";
 
@@ -414,7 +396,7 @@ function getFileExtension(filename) {
 
 
   return filename
-    .substring(lastDot)
+    .substring(dot)
     .toLowerCase();
 
 }
@@ -453,13 +435,10 @@ async function addMember() {
 
   try {
 
-    let photoUrl =
-      null;
+    let photoUrl = null;
 
 
-    // ================================
-    // UPLOAD PHOTO FIRST
-    // ================================
+    // Upload photo
 
     if (selectedPhotoFile) {
 
@@ -471,23 +450,15 @@ async function addMember() {
     }
 
 
-    // ================================
-    // ADD PHOTO URL TO MEMBER
-    // ================================
-
     member.photo_url =
       photoUrl;
 
 
     console.log(
-      "Saving member:",
+      "INSERT MEMBER:",
       member
     );
 
-
-    // ================================
-    // INSERT MEMBER
-    // ================================
 
     const {
       data,
@@ -506,28 +477,9 @@ async function addMember() {
 
     if (error) {
 
-      console.error(
-        "INSERT ERROR:",
+      showError(
+        "REGISTRATION FAILED",
         error
-      );
-
-
-      alert(
-
-        "REGISTRATION FAILED\n\n" +
-
-        "Message: " +
-        error.message +
-
-        "\n\nCode: " +
-        (error.code || "N/A") +
-
-        "\n\nDetails: " +
-        (error.details || "N/A") +
-
-        "\n\nHint: " +
-        (error.hint || "N/A")
-
       );
 
       return;
@@ -556,7 +508,6 @@ async function addMember() {
   catch (error) {
 
     console.error(
-      "ADD MEMBER ERROR:",
       error
     );
 
@@ -617,9 +568,7 @@ async function updateMember() {
       currentPhotoUrl;
 
 
-    // ================================
-    // NEW PHOTO SELECTED
-    // ================================
+    // New photo selected
 
     if (selectedPhotoFile) {
 
@@ -633,12 +582,6 @@ async function updateMember() {
 
     member.photo_url =
       photoUrl;
-
-
-    console.log(
-      "Updating member:",
-      editingId
-    );
 
 
     const {
@@ -663,28 +606,9 @@ async function updateMember() {
 
     if (error) {
 
-      console.error(
-        "UPDATE ERROR:",
+      showError(
+        "UPDATE FAILED",
         error
-      );
-
-
-      alert(
-
-        "UPDATE FAILED\n\n" +
-
-        "Message: " +
-        error.message +
-
-        "\n\nCode: " +
-        (error.code || "N/A") +
-
-        "\n\nDetails: " +
-        (error.details || "N/A") +
-
-        "\n\nHint: " +
-        (error.hint || "N/A")
-
       );
 
       return;
@@ -693,7 +617,7 @@ async function updateMember() {
 
 
     console.log(
-      "MEMBER UPDATED:",
+      "UPDATED:",
       data
     );
 
@@ -713,7 +637,6 @@ async function updateMember() {
   catch (error) {
 
     console.error(
-      "UPDATE ERROR:",
       error
     );
 
@@ -746,8 +669,10 @@ async function loadMembers() {
   memberTable.innerHTML =
     "";
 
+
   emptyMessage.textContent =
     "Loading members...";
+
 
   emptyMessage.style.display =
     "block";
@@ -775,32 +700,9 @@ async function loadMembers() {
 
     if (error) {
 
-      console.error(
-        "LOAD ERROR:",
+      showError(
+        "LOAD MEMBERS FAILED",
         error
-      );
-
-
-      emptyMessage.textContent =
-        "Unable to load members.";
-
-
-      alert(
-
-        "LOAD MEMBERS FAILED\n\n" +
-
-        "Message: " +
-        error.message +
-
-        "\n\nCode: " +
-        (error.code || "N/A") +
-
-        "\n\nDetails: " +
-        (error.details || "N/A") +
-
-        "\n\nHint: " +
-        (error.hint || "N/A")
-
       );
 
       return;
@@ -809,7 +711,7 @@ async function loadMembers() {
 
 
     console.log(
-      "MEMBERS LOADED:",
+      "MEMBERS:",
       data
     );
 
@@ -838,7 +740,6 @@ async function loadMembers() {
   catch (error) {
 
     console.error(
-      "LOAD ERROR:",
       error
     );
 
@@ -876,34 +777,52 @@ function displayMembers(data) {
           : "status-inactive";
 
 
+      let photoHTML;
+
+
+      if (member.photo_url) {
+
+        photoHTML = `
+
+          <img
+            src="${escapeHTML(
+              member.photo_url
+            )}"
+            class="member-photo"
+            alt="Member Photo"
+            loading="lazy"
+            onerror="
+              this.style.display='none';
+              this.nextElementSibling.style.display='block';
+            "
+          >
+
+          <div
+            class="no-photo"
+            style="display:none;"
+          >
+            Photo unavailable
+          </div>
+
+        `;
+
+      } else {
+
+        photoHTML = `
+
+          <div class="no-photo">
+            No Photo
+          </div>
+
+        `;
+
+      }
+
+
       row.innerHTML = `
 
         <td>
-
-          ${
-            member.photo_url
-
-              ? `
-
-                <img
-                  src="${escapeHTML(
-                    member.photo_url
-                  )}"
-                  class="member-photo"
-                  alt="Member photo"
-                >
-
-              `
-
-              : `
-
-                <div class="no-photo">
-                  No Photo
-                </div>
-
-              `
-          }
-
+          ${photoHTML}
         </td>
 
 
@@ -1065,7 +984,7 @@ async function editMember(id) {
 
     if (error) {
 
-      showSupabaseError(
+      showError(
         "EDIT FAILED",
         error
       );
@@ -1115,10 +1034,6 @@ async function editMember(id) {
       "Active";
 
 
-    // ================================
-    // SAVE CURRENT PHOTO
-    // ================================
-
     currentPhotoUrl =
       data.photo_url || null;
 
@@ -1127,17 +1042,9 @@ async function editMember(id) {
       null;
 
 
-    if (photo) {
+    photo.value =
+      "";
 
-      photo.value =
-        "";
-
-    }
-
-
-    // ================================
-    // SHOW CURRENT PHOTO
-    // ================================
 
     if (currentPhotoUrl) {
 
@@ -1165,13 +1072,9 @@ async function editMember(id) {
       "Update Member";
 
 
-    if (cancelButton) {
-
-      cancelButton.classList.remove(
-        "hidden"
-      );
-
-    }
+    cancelButton.classList.remove(
+      "hidden"
+    );
 
 
     window.scrollTo({
@@ -1211,9 +1114,7 @@ async function deleteMember(
       "Are you sure you want to delete this member?\n\n" +
 
       "Member: " +
-      name +
-
-      "\n\nThis action cannot be undone."
+      name
 
     );
 
@@ -1244,7 +1145,7 @@ async function deleteMember(
 
     if (error) {
 
-      showSupabaseError(
+      showError(
         "DELETE FAILED",
         error
       );
@@ -1268,81 +1169,6 @@ async function deleteMember(
     alert(
       "DELETE ERROR\n\n" +
       error.message
-    );
-
-  }
-
-}
-
-
-// ========================================
-// PHOTO PREVIEW
-// ========================================
-
-function showPhotoPreview(
-  imageUrl
-) {
-
-  if (!imageUrl) {
-
-    photoPreview.innerHTML =
-      "";
-
-    return;
-
-  }
-
-
-  photoPreview.innerHTML = `
-
-    <img
-      src="${escapeHTML(imageUrl)}"
-      class="preview-image"
-      alt="Member photo"
-    >
-
-  `;
-
-}
-
-
-// ========================================
-// RESET FORM
-// ========================================
-
-function resetForm() {
-
-  memberForm.reset();
-
-
-  editingId =
-    null;
-
-
-  currentPhotoUrl =
-    null;
-
-
-  selectedPhotoFile =
-    null;
-
-
-  photoPreview.innerHTML =
-    "";
-
-
-  formTitle.textContent =
-    "Add Member";
-
-
-  saveButton.textContent =
-    "Add Member";
-
-
-  if (cancelButton) {
-
-    cancelButton.classList.add(
-      "hidden"
     );
 
   }
@@ -1406,7 +1232,7 @@ search.addEventListener(
 
     if (error) {
 
-      showSupabaseError(
+      showError(
         "SEARCH FAILED",
         error
       );
@@ -1446,10 +1272,81 @@ search.addEventListener(
 
 
 // ========================================
-// ERROR HANDLER
+// SHOW PHOTO PREVIEW
 // ========================================
 
-function showSupabaseError(
+function showPhotoPreview(
+  imageUrl
+) {
+
+  if (!imageUrl) {
+
+    photoPreview.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  photoPreview.innerHTML = `
+
+    <img
+      src="${escapeHTML(imageUrl)}"
+      class="preview-image"
+      alt="Member Photo"
+    >
+
+  `;
+
+}
+
+
+// ========================================
+// RESET FORM
+// ========================================
+
+function resetForm() {
+
+  memberForm.reset();
+
+
+  editingId =
+    null;
+
+
+  currentPhotoUrl =
+    null;
+
+
+  selectedPhotoFile =
+    null;
+
+
+  photoPreview.innerHTML =
+    "";
+
+
+  formTitle.textContent =
+    "Add Member";
+
+
+  saveButton.textContent =
+    "Add Member";
+
+
+  cancelButton.classList.add(
+    "hidden"
+  );
+
+}
+
+
+// ========================================
+// ERROR MESSAGE
+// ========================================
+
+function showError(
   title,
   error
 ) {
@@ -1520,7 +1417,7 @@ function escapeHTML(value) {
 
 
 // ========================================
-// START SYSTEM
+// START
 // ========================================
 
 loadMembers();
