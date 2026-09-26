@@ -15,103 +15,277 @@ const supabaseClient =
 // ELEMENTS
 // ================================
 
-const memberForm =
-  document.getElementById("memberForm");
-
-const memberId =
-  document.getElementById("memberId");
-
-const fullName =
-  document.getElementById("fullName");
-
-const passportNumber =
-  document.getElementById("passportNumber");
-
-const birthday =
-  document.getElementById("birthday");
-
-const address =
-  document.getElementById("address");
-
-const contact =
-  document.getElementById("contact");
-
-const emergencyContact =
-  document.getElementById("emergencyContact");
-
-const emergencyNumber =
-  document.getElementById("emergencyNumber");
-
-const status =
-  document.getElementById("status");
-
-const memberTable =
-  document.getElementById("memberTable");
-
-const search =
-  document.getElementById("search");
-
-const saveButton =
-  document.getElementById("saveButton");
-
-const cancelButton =
-  document.getElementById("cancelButton");
-
-const formTitle =
-  document.getElementById("formTitle");
-
-const emptyMessage =
-  document.getElementById("emptyMessage");
+const memberForm = document.getElementById("memberForm");
+const memberId = document.getElementById("memberId");
+const fullName = document.getElementById("fullName");
+const passportNumber = document.getElementById("passportNumber");
+const birthday = document.getElementById("birthday");
+const address = document.getElementById("address");
+const contact = document.getElementById("contact");
+const emergencyContact = document.getElementById("emergencyContact");
+const emergencyNumber = document.getElementById("emergencyNumber");
+const status = document.getElementById("status");
+const memberTable = document.getElementById("memberTable");
+const search = document.getElementById("search");
+const saveButton = document.getElementById("saveButton");
+const cancelButton = document.getElementById("cancelButton");
+const formTitle = document.getElementById("formTitle");
+const emptyMessage = document.getElementById("emptyMessage");
 
 
 // ================================
-// EDIT MODE
+// EDIT STATE
 // ================================
 
-let editingMemberId = null;
+let editingId = null;
 
 
 // ================================
 // FORM SUBMIT
 // ================================
 
-memberForm.addEventListener(
-  "submit",
-  async function (event) {
+memberForm.addEventListener("submit", async function (event) {
 
-    event.preventDefault();
+  event.preventDefault();
 
-    await saveMember();
+  if (editingId === null) {
+
+    await addMember();
+
+  } else {
+
+    await updateMember();
 
   }
-);
+
+});
 
 
 // ================================
-// CANCEL EDIT
+// ADD MEMBER
 // ================================
 
-if (cancelButton) {
+async function addMember() {
 
-  cancelButton.addEventListener(
-    "click",
-    function () {
+  const member = getFormData();
 
-      cancelEdit();
+  if (!member.member_id || !member.full_name) {
+
+    alert("Please enter Member ID and Full Name.");
+
+    return;
+
+  }
+
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
+
+  try {
+
+    const { error } =
+      await supabaseClient
+        .from("members")
+        .insert([member]);
+
+    if (error) {
+
+      showSupabaseError(
+        "REGISTRATION FAILED",
+        error
+      );
+
+      return;
 
     }
-  );
+
+    alert("Member registered successfully!");
+
+    resetForm();
+
+    await loadMembers();
+
+  }
+
+  catch (error) {
+
+    alert(
+      "ERROR\n\n" +
+      error.message
+    );
+
+  }
+
+  finally {
+
+    saveButton.disabled = false;
+
+    if (editingId === null) {
+      saveButton.textContent = "Add Member";
+    }
+
+  }
 
 }
 
 
 // ================================
-// SAVE / UPDATE MEMBER
+// UPDATE MEMBER
 // ================================
 
-async function saveMember() {
+async function updateMember() {
 
-  const member = {
+  const member = getFormData();
+
+  if (!member.member_id || !member.full_name) {
+
+    alert("Please enter Member ID and Full Name.");
+
+    return;
+
+  }
+
+  saveButton.disabled = true;
+  saveButton.textContent = "Updating...";
+
+  try {
+
+    console.log(
+      "Updating member ID:",
+      editingId
+    );
+
+    console.log(
+      "New data:",
+      member
+    );
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("members")
+        .update(member)
+        .eq("id", editingId)
+        .select();
+
+    if (error) {
+
+      showSupabaseError(
+        "UPDATE FAILED",
+        error
+      );
+
+      return;
+
+    }
+
+    console.log(
+      "UPDATE RESULT:",
+      data
+    );
+
+
+    alert(
+      "Member updated successfully!"
+    );
+
+    resetForm();
+
+    await loadMembers();
+
+  }
+
+  catch (error) {
+
+    alert(
+      "UPDATE ERROR\n\n" +
+      error.message
+    );
+
+  }
+
+  finally {
+
+    saveButton.disabled = false;
+
+    saveButton.textContent =
+      "Add Member";
+
+  }
+
+}
+
+
+// ================================
+// DELETE MEMBER
+// ================================
+
+async function deleteMember(id, name) {
+
+  const confirmed =
+    confirm(
+      "Are you sure you want to delete this member?\n\n" +
+      name
+    );
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  console.log(
+    "Deleting member ID:",
+    id
+  );
+
+
+  try {
+
+    const { error } =
+      await supabaseClient
+        .from("members")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+
+      showSupabaseError(
+        "DELETE FAILED",
+        error
+      );
+
+      return;
+
+    }
+
+    alert(
+      "Member deleted successfully!"
+    );
+
+    await loadMembers();
+
+  }
+
+  catch (error) {
+
+    alert(
+      "DELETE ERROR\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ================================
+// GET FORM DATA
+// ================================
+
+function getFormData() {
+
+  return {
 
     member_id:
       memberId.value.trim(),
@@ -145,184 +319,6 @@ async function saveMember() {
 
   };
 
-
-  // ================================
-  // VALIDATION
-  // ================================
-
-  if (
-    !member.member_id ||
-    !member.full_name
-  ) {
-
-    alert(
-      "Please enter Member ID and Full Name."
-    );
-
-    return;
-
-  }
-
-
-  saveButton.disabled = true;
-
-  saveButton.textContent =
-    editingMemberId
-      ? "Updating..."
-      : "Saving...";
-
-
-  try {
-
-    // ================================
-    // UPDATE EXISTING MEMBER
-    // ================================
-
-    if (editingMemberId !== null) {
-
-      const {
-        error
-      } =
-        await supabaseClient
-
-          .from("members")
-
-          .update(member)
-
-          .eq(
-            "id",
-            editingMemberId
-          );
-
-
-      if (error) {
-
-        console.error(
-          "UPDATE ERROR:",
-          error
-        );
-
-
-        alert(
-
-          "UPDATE FAILED\n\n" +
-
-          "Message: " +
-          error.message +
-
-          "\n\nCode: " +
-          (error.code || "N/A") +
-
-          "\n\nDetails: " +
-          (error.details || "N/A") +
-
-          "\n\nHint: " +
-          (error.hint || "N/A")
-
-        );
-
-        return;
-
-      }
-
-
-      alert(
-        "Member updated successfully!"
-      );
-
-
-      cancelEdit();
-
-      await loadMembers();
-
-      return;
-
-    }
-
-
-    // ================================
-    // ADD NEW MEMBER
-    // ================================
-
-    const {
-      error
-    } =
-      await supabaseClient
-
-        .from("members")
-
-        .insert([member]);
-
-
-    if (error) {
-
-      console.error(
-        "INSERT ERROR:",
-        error
-      );
-
-
-      alert(
-
-        "REGISTRATION FAILED\n\n" +
-
-        "Message: " +
-        error.message +
-
-        "\n\nCode: " +
-        (error.code || "N/A") +
-
-        "\n\nDetails: " +
-        (error.details || "N/A") +
-
-        "\n\nHint: " +
-        (error.hint || "N/A")
-
-      );
-
-      return;
-
-    }
-
-
-    alert(
-      "Member registered successfully!"
-    );
-
-
-    memberForm.reset();
-
-
-    await loadMembers();
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "SAVE ERROR:",
-      error
-    );
-
-
-    alert(
-      "ERROR\n\n" +
-      error.message
-    );
-
-  }
-
-  finally {
-
-    saveButton.disabled = false;
-
-    saveButton.textContent =
-      editingMemberId
-        ? "Update Member"
-        : "Add Member";
-
-  }
-
 }
 
 
@@ -348,58 +344,23 @@ async function loadMembers() {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
-        .order(
-          "id",
-          {
-            ascending: false
-          }
-        );
+        .order("id", {
+          ascending: false
+        });
 
 
     if (error) {
 
-      console.error(
-        "LOAD ERROR:",
+      showSupabaseError(
+        "LOAD FAILED",
         error
-      );
-
-
-      emptyMessage.textContent =
-        "Unable to load members.";
-
-
-      alert(
-
-        "LOAD MEMBERS FAILED\n\n" +
-
-        "Message: " +
-        error.message +
-
-        "\n\nCode: " +
-        (error.code || "N/A") +
-
-        "\n\nDetails: " +
-        (error.details || "N/A") +
-
-        "\n\nHint: " +
-        (error.hint || "N/A")
-
       );
 
       return;
 
     }
-
-
-    console.log(
-      "MEMBERS LOADED:",
-      data
-    );
 
 
     if (!data || data.length === 0) {
@@ -422,14 +383,8 @@ async function loadMembers() {
 
   catch (error) {
 
-    console.error(
-      "LOAD ERROR:",
-      error
-    );
-
-
     alert(
-      "Error loading members:\n\n" +
+      "LOAD ERROR\n\n" +
       error.message
     );
 
@@ -447,120 +402,138 @@ function displayMembers(data) {
   memberTable.innerHTML = "";
 
 
-  data.forEach(
-    function (member) {
+  data.forEach(function (member) {
 
-      const row =
-        document.createElement("tr");
-
-
-      const statusClass =
-        member.membership_status === "Active"
-          ? "status-active"
-          : "status-inactive";
+    const row =
+      document.createElement("tr");
 
 
-      row.innerHTML = `
+    row.innerHTML = `
 
-        <td>
+      <td>
+        ${
+          member.photo_url
+            ? `<img
+                 src="${escapeHTML(member.photo_url)}"
+                 class="member-photo"
+                 alt="Member photo"
+               >`
+            : `<div class="no-photo">
+                 No Photo
+               </div>`
+        }
+      </td>
 
-          ${
-            member.photo_url
+      <td>
+        ${escapeHTML(member.member_id || "")}
+      </td>
 
-              ? `
+      <td>
+        ${escapeHTML(member.full_name || "")}
+      </td>
 
-                <img
-                  src="${escapeHTML(member.photo_url)}"
-                  class="member-photo"
-                  alt="Member photo"
-                >
+      <td>
+        ${escapeHTML(member.passport_number || "")}
+      </td>
 
-              `
+      <td>
+        ${escapeHTML(member.birthday || "")}
+      </td>
 
-              : `
+      <td>
+        ${escapeHTML(member.contact_number || "")}
+      </td>
 
-                <div class="no-photo">
-                  No Photo
-                </div>
+      <td>
+        ${escapeHTML(member.membership_status || "")}
+      </td>
 
-              `
-          }
+      <td>
 
-        </td>
+        <button
+          type="button"
+          class="btn-edit"
+          data-action="edit"
+          data-id="${member.id}"
+        >
+          Edit
+        </button>
 
+        <button
+          type="button"
+          class="btn-delete"
+          data-action="delete"
+          data-id="${member.id}"
+          data-name="${escapeHTML(member.full_name || "")}"
+        >
+          Delete
+        </button>
 
-        <td>
-          ${escapeHTML(
-            member.member_id || ""
-          )}
-        </td>
+      </td>
 
-
-        <td>
-          ${escapeHTML(
-            member.full_name || ""
-          )}
-        </td>
-
-
-        <td>
-          ${escapeHTML(
-            member.passport_number || ""
-          )}
-        </td>
-
-
-        <td>
-          ${escapeHTML(
-            member.birthday || ""
-          )}
-        </td>
-
-
-        <td>
-          ${escapeHTML(
-            member.contact_number || ""
-          )}
-        </td>
-
-
-        <td class="${statusClass}">
-          ${escapeHTML(
-            member.membership_status || ""
-          )}
-        </td>
+    `;
 
 
-        <td>
+    memberTable.appendChild(row);
 
-          <button
-            type="button"
-            class="btn-edit"
-            onclick="editMember(${member.id})"
-          >
-            Edit
-          </button>
-
-
-          <button
-            type="button"
-            class="btn-delete"
-            onclick="deleteMember(${member.id}, '${escapeJavaScript(member.full_name)}')"
-          >
-            Delete
-          </button>
-
-        </td>
-
-      `;
-
-
-      memberTable.appendChild(row);
-
-    }
-  );
+  });
 
 }
+
+
+// ================================
+// TABLE BUTTON HANDLER
+// ================================
+
+memberTable.addEventListener(
+  "click",
+  async function (event) {
+
+    const button =
+      event.target.closest("button");
+
+    if (!button) {
+
+      return;
+
+    }
+
+
+    const action =
+      button.dataset.action;
+
+    const id =
+      Number(button.dataset.id);
+
+
+    console.log(
+      "BUTTON CLICKED:",
+      action,
+      id
+    );
+
+
+    if (action === "edit") {
+
+      await editMember(id);
+
+    }
+
+
+    if (action === "delete") {
+
+      const name =
+        button.dataset.name || "this member";
+
+      await deleteMember(
+        id,
+        name
+      );
+
+    }
+
+  }
+);
 
 
 // ================================
@@ -576,33 +549,17 @@ async function editMember(id) {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
-        .eq(
-          "id",
-          id
-        )
-
+        .eq("id", id)
         .single();
 
 
     if (error) {
 
-      console.error(
-        "GET MEMBER ERROR:",
+      showSupabaseError(
+        "EDIT FAILED",
         error
-      );
-
-
-      alert(
-
-        "COULD NOT OPEN MEMBER\n\n" +
-
-        error.message
-
       );
 
       return;
@@ -613,17 +570,13 @@ async function editMember(id) {
     if (!data) {
 
       alert(
-        "Member record not found."
+        "Member not found."
       );
 
       return;
 
     }
 
-
-    // ================================
-    // PUT DATA INTO FORM
-    // ================================
 
     memberId.value =
       data.member_id || "";
@@ -653,24 +606,15 @@ async function editMember(id) {
       data.membership_status || "Active";
 
 
-    editingMemberId =
+    editingId =
       data.id;
 
 
-    // ================================
-    // CHANGE BUTTON
-    // ================================
+    formTitle.textContent =
+      "Edit Member";
 
     saveButton.textContent =
       "Update Member";
-
-
-    if (formTitle) {
-
-      formTitle.textContent =
-        "Edit Member";
-
-    }
 
 
     if (cancelButton) {
@@ -694,12 +638,6 @@ async function editMember(id) {
 
   catch (error) {
 
-    console.error(
-      "EDIT ERROR:",
-      error
-    );
-
-
     alert(
       "EDIT ERROR\n\n" +
       error.message
@@ -711,131 +649,35 @@ async function editMember(id) {
 
 
 // ================================
-// DELETE MEMBER
+// CANCEL EDIT
 // ================================
 
-async function deleteMember(
-  id,
-  memberName
-) {
+if (cancelButton) {
 
-  const confirmed =
-    confirm(
+  cancelButton.addEventListener(
+    "click",
+    function () {
 
-      "Are you sure you want to delete this member?\n\n" +
-
-      "Member: " +
-      memberName +
-
-      "\n\nThis action cannot be undone."
-
-    );
-
-
-  if (!confirmed) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const {
-      error
-    } =
-      await supabaseClient
-
-        .from("members")
-
-        .delete()
-
-        .eq(
-          "id",
-          id
-        );
-
-
-    if (error) {
-
-      console.error(
-        "DELETE ERROR:",
-        error
-      );
-
-
-      alert(
-
-        "DELETE FAILED\n\n" +
-
-        "Message: " +
-        error.message +
-
-        "\n\nCode: " +
-        (error.code || "N/A") +
-
-        "\n\nDetails: " +
-        (error.details || "N/A") +
-
-        "\n\nHint: " +
-        (error.hint || "N/A")
-
-      );
-
-      return;
+      resetForm();
 
     }
-
-
-    alert(
-      "Member deleted successfully!"
-    );
-
-
-    await loadMembers();
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "DELETE ERROR:",
-      error
-    );
-
-
-    alert(
-
-      "DELETE ERROR\n\n" +
-      error.message
-
-    );
-
-  }
+  );
 
 }
 
 
 // ================================
-// CANCEL EDIT
+// RESET FORM
 // ================================
 
-function cancelEdit() {
-
-  editingMemberId =
-    null;
-
+function resetForm() {
 
   memberForm.reset();
 
+  editingId = null;
 
-  if (formTitle) {
-
-    formTitle.textContent =
-      "Add Member";
-
-  }
-
+  formTitle.textContent =
+    "Add Member";
 
   saveButton.textContent =
     "Add Member";
@@ -880,36 +722,28 @@ search.addEventListener(
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
         .or(
-
           "member_id.ilike.%" +
           query +
           "%," +
-
           "full_name.ilike.%" +
           query +
           "%," +
-
           "passport_number.ilike.%" +
           query +
           "%," +
-
           "contact_number.ilike.%" +
           query +
           "%"
-
         );
 
 
     if (error) {
 
-      console.error(
-        "SEARCH ERROR:",
+      showSupabaseError(
+        "SEARCH FAILED",
         error
       );
 
@@ -936,11 +770,48 @@ search.addEventListener(
     emptyMessage.style.display =
       "none";
 
-
     displayMembers(data);
 
   }
 );
+
+
+// ================================
+// ERROR DISPLAY
+// ================================
+
+function showSupabaseError(
+  title,
+  error
+) {
+
+  console.error(
+    title,
+    error
+  );
+
+
+  alert(
+
+    title +
+
+    "\n\n" +
+
+    "Message: " +
+    (error.message || "N/A") +
+
+    "\n\nCode: " +
+    (error.code || "N/A") +
+
+    "\n\nDetails: " +
+    (error.details || "N/A") +
+
+    "\n\nHint: " +
+    (error.hint || "N/A")
+
+  );
+
+}
 
 
 // ================================
@@ -951,66 +822,15 @@ function escapeHTML(value) {
 
   return String(value)
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
+    .replace(/&/g, "&amp;")
 
-    .replace(
-      /</g,
-      "&lt;"
-    )
+    .replace(/</g, "&lt;")
 
-    .replace(
-      />/g,
-      "&gt;"
-    )
+    .replace(/>/g, "&gt;")
 
-    .replace(
-      /"/g,
-      "&quot;"
-    )
+    .replace(/"/g, "&quot;")
 
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-// ================================
-// ESCAPE JAVASCRIPT
-// ================================
-
-function escapeJavaScript(value) {
-
-  return String(value)
-
-    .replace(
-      /\\/g,
-      "\\\\"
-    )
-
-    .replace(
-      /'/g,
-      "\\'"
-    )
-
-    .replace(
-      /"/g,
-      '\\"'
-    )
-
-    .replace(
-      /\n/g,
-      "\\n"
-    )
-
-    .replace(
-      /\r/g,
-      "\\r"
-    );
+    .replace(/'/g, "&#039;");
 
 }
 
