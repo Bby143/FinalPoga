@@ -168,3 +168,18 @@ tr:hover { background: #f9fafb; }
   .section-header input { max-width: none; }
   header h1 { font-size: 23px; }
 }
+.btn-view {
+  display: inline-block !important;
+  padding: 8px 12px;
+  margin: 2px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-view:hover {
+  background: #1d4ed8;
+}
