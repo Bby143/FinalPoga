@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta name="theme-color" content="#166534">  <title>POGA KSA Member Registration</title>  <link rel="stylesheet" href="registration.css">
+</head><body>  <div class="container"><!-- HEADER -->
+<header>
+  <div class="logo-circle">POGA</div>
+
+  <h1>POGA KSA</h1>
+
+  <p>Member Registration Form</p>
+
+  <div class="header-line"></div>
+
+  <span class="instruction">
+    Please complete the form below to register as a member.
+  </span>
+</header>
+
+
+<!-- REGISTRATION FORM -->
+<section class="form-section">
+
+  <form id="registrationForm">
+
+    <div class="form-grid">
+
+      <!-- MEMBER ID -->
+      <div class="form-group">
+        <label for="memberId">
+          Member ID
+          <span>*</span>
+        </label>
+
+        <input
+          type="text"
+          id="memberId"
+          placeholder="Example: POGA001"
+          required
+          autocomplete="off"
+        >
+      </div>
+
+
+      <!-- FULL NAME -->
+      <div class="form-group">
+        <label for="fullName">
+          Full Name
+          <span>*</span>
+        </label>
+
+        <input
+          type="text"
+          id="fullName"
+          placeholder="Enter your full name"
+          required
+          autocomplete="name"
+        >
+      </div>
+
+
+      <!-- PASSPORT -->
+      <div class="form-group">
+        <label for="passportNumber">
+          Passport Number
+        </label>
+
+        <input
+          type="text"
+          id="passportNumber"
+          placeholder="Enter passport number"
+          autocomplete="off"
+        >
+      </div>
+
+
+      <!-- BIRTHDAY -->
+      <div class="form-group">
+        <label for="birthday">
+          Birthday
+        </label>
+
+        <input
+          type="date"
+          id="birthday"
+        >
+      </div>
+
+
+      <!-- ADDRESS -->
+      <div class="form-group full-width">
+        <label for="address">
+          Address
+        </label>
+
+        <textarea
+          id="address"
+          placeholder="Enter your complete address"
+          rows="3"
+        ></textarea>
+      </div>
+
+
+      <!-- CONTACT -->
+      <div class="form-group">
+        <label for="contact">
+          Contact Number
+        </label>
+
+        <input
+          type="tel"
+          id="contact"
+          placeholder="Enter contact number"
+          autocomplete="tel"
+        >
+      </div>
+
+
+      <!-- EMERGENCY CONTACT PERSON -->
+      <div class="form-group">
+        <label for="emergencyContact">
+          Emergency Contact Person
+        </label>
+
+        <input
+          type="text"
+          id="emergencyContact"
+          placeholder="Name of emergency contact"
+          autocomplete="off"
+        >
+      </div>
+
+
+      <!-- EMERGENCY NUMBER -->
+      <div class="form-group">
+        <label for="emergencyNumber">
+          Emergency Contact Number
+        </label>
+
+        <input
+          type="tel"
+          id="emergencyNumber"
+          placeholder="Emergency contact number"
+          autocomplete="tel"
+        >
+      </div>
+
+
+      <!-- PHOTO -->
+      <div class="form-group full-width">
+
+        <label for="photo">
+          Member Photo
+        </label>
+
+        <div class="photo-upload-box">
+
+          <input
+            type="file"
+            id="photo"
+            accept="image/jpeg,image/png,image/webp,image/*"
+          >
+
+          <p class="photo-help">
+            Accepted: JPG, PNG, or WebP. Maximum size: 5 MB.
+          </p>
+
+          <div id="photoPreview"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SUBMIT -->
+    <div class="form-buttons">
+
+      <button
+        type="submit"
+        id="submitButton"
+        class="btn-primary"
+      >
+        Submit Registration
+      </button>
+
+    </div>
+
+  </form>
+
+
+  <!-- SUCCESS MESSAGE -->
+  <div
+    id="successMessage"
+    class="success-message hidden"
+  >
+    <div class="success-icon">✓</div>
+
+    <h3>Registration Submitted!</h3>
+
+    <p>
+      Your member registration has been successfully submitted.
+    </p>
+
+    <button
+      type="button"
+      id="registerAnotherButton"
+      class="btn-secondary"
+    >
+      Register Another Member
+    </button>
+  </div>
+
+
+  <!-- ERROR MESSAGE -->
+  <div
+    id="errorMessage"
+    class="error-message hidden"
+  ></div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <p>POGA KSA Member Registration</p>
+  <p class="footer-note">
+    Please make sure that the information you provide is correct.
+  </p>
+</footer>
+
+  </div>  <!-- SUPABASE -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <!-- REGISTRATION SCRIPT -->  <script src="registration.js"></script></body>
+</html>
