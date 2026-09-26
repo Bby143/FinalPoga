@@ -3,94 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <meta name="theme-color" content="#166534">
+
   <title>POGA KSA Member Management System</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
+
 <div class="container">
+
   <header>
     <h1>POGA KSA Member Management System</h1>
-    <p>Offline Member Records</p>
+    <p>Member Records</p>
   </header>
 
+
+  <!-- ========================= -->
+  <!-- MEMBER FORM -->
+  <!-- ========================= -->
+
   <section class="form-section">
+
     <h2 id="formTitle">Add Member</h2>
+
     <form id="memberForm">
+
       <div class="form-grid">
+
         <div class="form-group">
           <label for="memberId">Member ID</label>
-          <input type="text" id="memberId" placeholder="Example: POGA001" required>
+
+          <input
+            type="text"
+            id="memberId"
+            placeholder="Example: POGA001"
+            required
+          >
         </div>
+
 
         <div class="form-group">
           <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" placeholder="Full name" required>
+
+          <input
+            type="text"
+            id="fullName"
+            placeholder="Full name"
+            required
+          >
         </div>
 
+
         <div class="form-group">
-          <label for="passportNumber">Passport Number</label>
-          <input type="text" id="passportNumber" placeholder="Passport number">
+          <label for="passportNumber">
+            Passport Number
+          </label>
+
+          <input
+            type="text"
+            id="passportNumber"
+            placeholder="Passport number"
+          >
         </div>
+
 
         <div class="form-group">
           <label for="birthday">Birthday</label>
-          <input type="date" id="birthday">
+
+          <input
+            type="date"
+            id="birthday"
+          >
         </div>
+
 
         <div class="form-group full-width">
           <label for="address">Address</label>
-          <textarea id="address" placeholder="Complete address" rows="3"></textarea>
+
+          <textarea
+            id="address"
+            placeholder="Complete address"
+            rows="3"
+          ></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="contact">Contact Number</label>
-          <input type="text" id="contact" placeholder="Contact number">
-        </div>
 
         <div class="form-group">
-          <label for="emergencyContact">Emergency Contact Person</label>
-          <input type="text" id="emergencyContact" placeholder="Name of emergency contact">
+          <label for="contact">
+            Contact Number
+          </label>
+
+          <input
+            type="text"
+            id="contact"
+            placeholder="Contact number"
+          >
         </div>
 
-        <div class="form-group">
-          <label for="emergencyNumber">Emergency Contact Number</label>
-          <input type="text" id="emergencyNumber" placeholder="Emergency contact number">
-        </div>
 
         <div class="form-group">
-          <label for="status">Membership Status</label>
+          <label for="emergencyContact">
+            Emergency Contact Person
+          </label>
+
+          <input
+            type="text"
+            id="emergencyContact"
+            placeholder="Name of emergency contact"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label for="emergencyNumber">
+            Emergency Contact Number
+          </label>
+
+          <input
+            type="text"
+            id="emergencyNumber"
+            placeholder="Emergency contact number"
+          >
+        </div>
+
+
+        <div class="form-group">
+          <label for="status">
+            Membership Status
+          </label>
+
           <select id="status">
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
+
+            <option value="Active">
+              Active
+            </option>
+
+            <option value="Inactive">
+              Inactive
+            </option>
+
           </select>
         </div>
 
+
+        <!-- PHOTO -->
+
         <div class="form-group full-width">
-          <label for="photo">Member Photo</label>
-          <input type="file" id="photo" accept="image/*">
+
+          <label for="photo">
+            Member Photo
+          </label>
+
+          <input
+            type="file"
+            id="photo"
+            accept="image/*"
+          >
+
           <div id="photoPreview"></div>
+
         </div>
+
       </div>
+
 
       <div class="form-buttons">
-        <button type="submit" id="saveButton" class="btn-primary">Add Member</button>
-        <button type="button" id="cancelButton" class="btn-secondary hidden">Cancel</button>
+
+        <button
+          type="submit"
+          id="saveButton"
+          class="btn-primary"
+        >
+          Add Member
+        </button>
+
+
+        <button
+          type="button"
+          id="cancelButton"
+          class="btn-secondary hidden"
+        >
+          Cancel
+        </button>
+
       </div>
+
     </form>
+
   </section>
 
+
+  <!-- ========================= -->
+  <!-- MEMBER RECORDS -->
+  <!-- ========================= -->
+
   <section class="member-section">
+
     <div class="section-header">
+
       <h2>Member Records</h2>
-      <input type="text" id="search" placeholder="Search member...">
+
+      <input
+        type="text"
+        id="search"
+        placeholder="Search member..."
+      >
+
     </div>
 
+
     <div class="table-container">
+
       <table>
+
         <thead>
+
           <tr>
+
             <th>Photo</th>
             <th>Member ID</th>
             <th>Full Name</th>
@@ -99,17 +232,38 @@
             <th>Contact</th>
             <th>Status</th>
             <th>Action</th>
+
           </tr>
+
         </thead>
+
+
         <tbody id="memberTable"></tbody>
+
       </table>
+
     </div>
 
-    <p id="emptyMessage" class="empty-message">No member records found.</p>
+
+    <p
+      id="emptyMessage"
+      class="empty-message"
+    >
+      No member records found.
+    </p>
+
   </section>
+
 </div>
-<script 
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- YOUR SCRIPT -->
+
 <script src="script.js"></script>
+
 </body>
 </html>
