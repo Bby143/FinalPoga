@@ -1,639 +1,185 @@
-/* ========================================
-   RESET
-======================================== */
-
-* {
-  box-sizing: border-box;
-}
-
-
-/* ========================================
-   BODY
-======================================== */
+ { box-sizing: border-box; }
 
 body {
-  margin: 0;
-  padding: 30px;
-  font-family: Arial, sans-serif;
-  background: #f3f4f6;
-  color: #1f2937;
+margin: 0;
+padding: 30px;
+font-family: Arial, sans-serif;
+background: #f3f4f6;
+color: #1f2937;
 }
-
-
-/* ========================================
-   MAIN CONTAINER
-======================================== */
 
 .container {
-  max-width: 1200px;
-  margin: auto;
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+max-width: 1200px;
+margin: auto;
+background: white;
+padding: 30px;
+border-radius: 12px;
+box-shadow: 0 4px 15px rgba(0,0,0,.08);
 }
 
-
-/* ========================================
-   HEADER
-======================================== */
-
-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-header h1 {
-  margin: 0 0 8px;
-  color: #166534;
-}
-
-header p {
-  margin: 0;
-  color: #6b7280;
-}
-
-
-/* ========================================
-   FORM
-======================================== */
+header { text-align: center; margin-bottom: 30px; }
+header h1 { margin-bottom: 8px; color: #166534; }
+header p { margin: 0; color: #6b7280; }
 
 .form-section {
-  margin-bottom: 35px;
-  padding: 20px;
-  background: #f9fafb;
-  border-radius: 10px;
+margin-bottom: 35px;
+padding: 20px;
+background: #f9fafb;
+border-radius: 10px;
 }
 
-.form-section h2 {
-  margin-top: 0;
-}
+.form-section h2 { margin-top: 0; }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 15px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.full-width {
-  grid-column: 1 / -1;
-}
+.form-group { display: flex; flex-direction: column; }
+.full-width { grid-column: 1 / -1; }
 
 .form-group label {
-  margin-bottom: 6px;
-  font-weight: bold;
-  font-size: 14px;
+margin-bottom: 6px;
+font-weight: bold;
+font-size: 14px;
 }
 
-
-/* ========================================
-   INPUTS
-======================================== */
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 11px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 15px;
-  background: #ffffff;
-  font-family: Arial, sans-serif;
+input, select, textarea {
+width: 100%;
+padding: 11px;
+border: 1px solid #d1d5db;
+border-radius: 6px;
+font-size: 15px;
+background: white;
+font-family: Arial, sans-serif;
 }
 
-textarea {
-  resize: vertical;
+textarea { resize: vertical; }
+
+input:focus, select:focus, textarea:focus {
+outline: none;
+border-color: #16a34a;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #16a34a;
-}
-
-
-/* ========================================
-   PHOTO PREVIEW
-======================================== */
-
-#photoPreview {
-  margin-top: 10px;
-}
+#photoPreview { margin-top: 10px; }
 
 .preview-image {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #d1d5db;
+width: 120px;
+height: 120px;
+object-fit: cover;
+border-radius: 8px;
+border: 2px solid #d1d5db;
 }
 
-
-/* ========================================
-   FORM BUTTONS
-======================================== */
-
-.form-buttons {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.form-buttons { margin-top: 20px; display: flex; gap: 10px; }
 
 button {
-  border: none;
-  padding: 11px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
+border: none;
+padding: 11px 18px;
+border-radius: 6px;
+cursor: pointer;
+font-size: 14px;
+font-weight: bold;
 }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.btn-primary { background: #16a34a; color: white; }
+.btn-primary:hover { background: #15803d; }
+.btn-secondary { background: #6b7280; color: white; }
+.btn-secondary:hover { background: #4b5563; }
+.btn-edit { background: #f59e0b; color: white; margin-right: 5px; }
+.btn-delete { background: #dc2626; color: white; }
+
+.section-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 15px;
+margin-bottom: 15px;
 }
 
+.section-header input { max-width: 300px; }
 
-/* ========================================
-   PRIMARY / SECONDARY
-======================================== */
+.table-container { width: 100%; overflow-x: auto; }
 
-.btn-primary {
-  background: #16a34a;
-  color: #ffffff;
+table {
+width: 100%;
+border-collapse: collapse;
+min-width: 1000px;
 }
 
-.btn-primary:hover {
-  background: #15803d;
+th, td {
+padding: 12px;
+border-bottom: 1px solid #e5e7eb;
+text-align: left;
+font-size: 14px;
 }
-
-.btn-secondary {
-  background: #6b7280;
-  color: #ffffff;
-}
-
-.btn-secondary:hover {
-  background: #4b5563;
-}
-
-
-/* ========================================
-   TABLE ACTION BUTTONS
-======================================== */
-
-/* VIEW */
-
 .btn-view {
-  display: inline-block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  background: #2563eb;
-  color: #ffffff;
-  padding: 8px 12px;
-  margin: 2px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
+display: inline-block !important;
+padding: 8px 12px;
+margin: 2px;
+border: none;
+border-radius: 6px;
+background: #2563eb;
+color: white;
+cursor: pointer;
+font-size: 14px;
 }
 
 .btn-view:hover {
-  background: #1d4ed8;
+background: #1d4ed8;
 }
 
-
-/* EDIT */
-
-.btn-edit {
-  display: inline-block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  background: #f59e0b;
-  color: #ffffff;
-  padding: 8px 12px;
-  margin: 2px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-edit:hover {
-  background: #d97706;
-}
-
-
-/* DELETE */
-
-.btn-delete {
-  display: inline-block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  background: #dc2626;
-  color: #ffffff;
-  padding: 8px 12px;
-  margin: 2px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-delete:hover {
-  background: #b91c1c;
-}
-
-
-/* ========================================
-   MEMBER SECTION
-======================================== */
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-
-.section-header h2 {
-  margin: 0;
-}
-
-.section-header input {
-  max-width: 300px;
-}
-
-
-/* ========================================
-   TABLE
-======================================== */
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 1000px;
-}
-
-th,
-td {
-  padding: 12px;
-  border-bottom: 1px solid #e5e7eb;
-  text-align: left;
-  font-size: 14px;
-  vertical-align: middle;
-}
-
-th {
-  background: #166534;
-  color: #ffffff;
-  white-space: nowrap;
-}
-
-tr:hover {
-  background: #f9fafb;
-}
-
-
-/* ========================================
-   MEMBER PHOTO
-======================================== */
+th { background: #166534; color: white; }
+tr:hover { background: #f9fafb; }
 
 .member-photo {
-  width: 55px;
-  height: 55px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #d1d5db;
-  display: block;
+width: 55px;
+height: 55px;
+object-fit: cover;
+border-radius: 50%;
+border: 2px solid #d1d5db;
 }
 
 .no-photo {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: #e5e7eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: #6b7280;
-  text-align: center;
+width: 55px;
+height: 55px;
+border-radius: 50%;
+background: #e5e7eb;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 11px;
+color: #6b7280;
+text-align: center;
 }
 
-
-/* ========================================
-   STATUS
-======================================== */
-
-.status-active {
-  color: #15803d;
-  font-weight: bold;
-}
-
-.status-inactive {
-  color: #dc2626;
-  font-weight: bold;
-}
-
-
-/* ========================================
-   EMPTY MESSAGE
-======================================== */
-
-.empty-message {
-  text-align: center;
-  color: #6b7280;
-  padding: 20px;
-}
-
-
-/* ========================================
-   HIDDEN
-======================================== */
-
-.hidden {
-  display: none !important;
-}
-
-
-/* ========================================
-   MEMBER PROFILE OVERLAY
-======================================== */
-
-.member-profile-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  padding: 20px;
-
-  background: rgba(0, 0, 0, 0.65);
-
-  overflow-y: auto;
-}
-
-
-/* ========================================
-   PROFILE CARD
-======================================== */
-
-.member-profile-card {
-  position: relative;
-
-  width: 100%;
-  max-width: 600px;
-
-  background: #ffffff;
-
-  border-radius: 16px;
-
-  padding: 30px;
-
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-
-  animation: profileOpen 0.2s ease;
-}
-
-@keyframes profileOpen {
-  from {
-    opacity: 0;
-    transform: translateY(15px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-
-/* ========================================
-   PROFILE CLOSE
-======================================== */
-
-.profile-close {
-  position: absolute;
-
-  top: 12px;
-  right: 12px;
-
-  width: 40px;
-  height: 40px;
-
-  padding: 0;
-
-  border-radius: 50%;
-
-  background: #f3f4f6;
-  color: #374151;
-
-  font-size: 25px;
-
-  line-height: 40px;
-}
-
-.profile-close:hover {
-  background: #e5e7eb;
-}
-
-
-/* ========================================
-   PROFILE HEADER
-======================================== */
-
-.profile-header {
-  text-align: center;
-  padding-bottom: 20px;
-}
-
-.profile-header h2 {
-  margin: 15px 0 5px;
-  color: #166534;
-}
-
-.profile-header p {
-  margin: 0;
-  color: #6b7280;
-}
-
-
-/* ========================================
-   PROFILE PHOTO
-======================================== */
-
-.profile-photo {
-  width: 150px;
-  height: 150px;
-
-  object-fit: cover;
-
-  border-radius: 50%;
-
-  border: 4px solid #166534;
-
-  display: block;
-
-  margin: auto;
-}
-
-.profile-no-photo {
-  width: 150px;
-  height: 150px;
-
-  border-radius: 50%;
-
-  background: #e5e7eb;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  margin: auto;
-
-  color: #6b7280;
-
-  font-size: 14px;
-}
-
-
-/* ========================================
-   PROFILE DETAILS
-======================================== */
-
-.profile-details {
-  display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 12px;
-
-  margin-top: 15px;
-}
-
-.profile-details > div {
-  padding: 12px;
-
-  background: #f9fafb;
-
-  border-radius: 8px;
-
-  border: 1px solid #e5e7eb;
-}
-
-.profile-details strong {
-  display: block;
-
-  margin-bottom: 5px;
-
-  color: #374151;
-
-  font-size: 13px;
-}
-
-.profile-details span {
-  display: block;
-
-  color: #1f2937;
-
-  word-break: break-word;
-}
-
-
-/* ========================================
-   PROFILE ACTIONS
-======================================== */
-
-.profile-actions {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 10px;
-
-  margin-top: 25px;
-
-  flex-wrap: wrap;
-}
-
-
-/* ========================================
-   MOBILE
-======================================== */
+.status-active { color: #15803d; font-weight: bold; }
+.status-inactive { color: #dc2626; font-weight: bold; }
+.empty-message { text-align: center; color: #6b7280; padding: 20px; }
+.hidden { display: none; }
 
 @media (max-width: 700px) {
+body { padding: 10px; }
+.container { padding: 15px; }
+.form-grid { grid-template-columns: 1fr; }
+.full-width { grid-column: auto; }
+.section-header { flex-direction: column; align-items: stretch; }
+.section-header input { max-width: none; }
+header h1 { font-size: 23px; }
+}
+.btn-view {
+display: inline-block !important;
+padding: 8px 12px;
+margin: 2px;
+border: none;
+border-radius: 6px;
+background: #2563eb;
+color: white;
+cursor: pointer;
+font-size: 14px;
+}
 
-  body {
-    padding: 10px;
-  }
-
-  .container {
-    padding: 15px;
-    border-radius: 8px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .full-width {
-    grid-column: auto;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .section-header input {
-    max-width: none;
-  }
-
-  header h1 {
-    font-size: 23px;
-  }
-
-  .form-buttons {
-    flex-direction: column;
-  }
-
-  .form-buttons button {
-    width: 100%;
-  }
-
-  .profile-details {
-    grid-template-columns: 1fr;
-  }
-
-  .member-profile-card {
-    padding: 20px;
-  }
-
-  .profile-photo,
-  .profile-no-photo {
-    width: 120px;
-    height: 120px;
-  }
-
-  .btn-view,
-  .btn-edit,
-  .btn-delete {
-    display: inline-block !important;
-    margin: 3px 2px;
-  }
-  }
+.btn-view:hover {
+background: #1d4ed8;
+}
