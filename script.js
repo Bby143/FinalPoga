@@ -1,10 +1,5 @@
 // ============================================
-// POGA KSA - MEMBER MANAGEMENT SYSTEM
-// SUPABASE VERSION
-// ============================================
-
-// ============================================
-// SUPABASE CONFIG
+// POGA KSA - SUPABASE TEST VERSION
 // ============================================
 
 const SUPABASE_URL =
@@ -19,14 +14,7 @@ const supabaseClient =
     SUPABASE_KEY
   );
 
-
-// ============================================
-// VARIABLES
-// ============================================
-
-let members = [];
-let editIndex = -1;
-let selectedPhoto = "";
+console.log("POGA KSA SCRIPT LOADED");
 
 
 // ============================================
@@ -69,75 +57,204 @@ const photo =
 const photoPreview =
   document.getElementById("photoPreview");
 
-const memberTable =
-  document.getElementById("memberTable");
-
-const search =
-  document.getElementById("search");
-
 const saveButton =
   document.getElementById("saveButton");
 
-const cancelButton =
-  document.getElementById("cancelButton");
 
-const formTitle =
-  document.getElementById("formTitle");
+// ============================================
+// FORM
+// ============================================
 
-const emptyMessage =
-  document.getElementById("emptyMessage");
+memberForm.addEventListener(
+  "submit",
+  async function (event) {
+
+    event.preventDefault();
+
+    await saveMember();
+
+  }
+);
 
 
 // ============================================
-// FORM SUBMIT
+// SAVE MEMBER
 // ============================================
 
-if (memberForm) {
+async function saveMember() {
 
-  memberForm.addEventListener(
-    "submit",
-    function (event) {
+  const member = {
 
-      event.preventDefault();
+    member_id:
+      memberId.value.trim(),
 
-      saveMember();
+    full_name:
+      fullName.value.trim(),
+
+    passport_number:
+      passportNumber.value.trim(),
+
+    birthday:
+      birthday.value || null,
+
+    address:
+      address.value.trim(),
+
+    contact_number:
+      contact.value.trim(),
+
+    emergency_contact_person:
+      emergencyContact.value.trim(),
+
+    emergency_contact_number:
+      emergencyNumber.value.trim(),
+
+    membership_status:
+      status.value || "Active",
+
+    photo_url:
+      null
+
+  };
+
+
+  // ==========================================
+  // VALIDATION
+  // ==========================================
+
+  if (
+    !member.member_id ||
+    !member.full_name
+  ) {
+
+    alert(
+      "Please enter Member ID and Full Name."
+    );
+
+    return;
+
+  }
+
+
+  saveButton.disabled = true;
+
+  saveButton.textContent =
+    "Saving...";
+
+
+  console.log(
+    "Trying to insert:",
+    member
+  );
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+
+      .from("members")
+
+      .insert([member])
+
+      .select()
+      
+      .single();
+
+
+    // ========================================
+    // ERROR
+    // ========================================
+
+    if (error) {
+
+      console.error(
+        "SUPABASE ERROR:",
+        error
+      );
+
+
+      alert(
+
+        "SUPABASE INSERT FAILED\n\n" +
+
+        "Message:\n" +
+        error.message +
+
+        "\n\nCode:\n" +
+        (error.code || "N/A") +
+
+        "\n\nDetails:\n" +
+        (error.details || "N/A") +
+
+        "\n\nHint:\n" +
+        (error.hint || "N/A")
+
+      );
+
+
+      // IMPORTANT:
+      // DO NOT CLEAR FORM
+
+      return;
 
     }
-  );
+
+
+    // ========================================
+    // SUCCESS
+    // ========================================
+
+    console.log(
+      "SUCCESS!",
+      data
+    );
+
+
+    alert(
+      "SUCCESS! Member saved to Supabase."
+    );
+
+
+    // Clear ONLY after successful insert
+
+    memberForm.reset();
+
+
+    if (photoPreview) {
+      photoPreview.innerHTML = "";
+    }
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "JAVASCRIPT ERROR:",
+      error
+    );
+
+
+    alert(
+
+      "JAVASCRIPT ERROR\n\n" +
+
+      error.message
+
+    );
+
+  }
+
+  finally {
+
+    saveButton.disabled = false;
+
+    saveButton.textContent =
+      "Add Member";
+
+  }
 
 }
-
-
-// ============================================
-// SEARCH
-// ============================================
-
-if (search) {
-
-  search.addEventListener(
-    "input",
-    displayMembers
-  );
-
-}
-
-
-// ============================================
-// PHOTO PREVIEW
-// ============================================
-
-if (photo) {
-
-  photo.addEventListener(
-    "change",
-    function (event) {
-
-      const file =
-        event.target.files[0];
-
-      if (!file) {
-
-        selectedPhoto = "";
-
-        if (photoPreview) {
-          photoPreview.innerHTML =
