@@ -1,4 +1,3 @@
-      
 // ========================================
 // SUPABASE
 // ========================================
@@ -87,140 +86,160 @@ const emptyMessage =
 // ========================================
 
 let editingId = null;
-
 let currentPhotoUrl = null;
-
 let selectedPhotoFile = null;
 
 
 // ========================================
-// PHOTO PREVIEW
+// CHECK ELEMENTS
 // ========================================
 
-photo.addEventListener(
-  "change",
-  function () {
+if (!memberForm) {
+  alert("ERROR: memberForm was not found.");
+}
 
-    const file =
-      photo.files[0];
-
-    selectedPhotoFile =
-      file || null;
+if (!saveButton) {
+  alert("ERROR: saveButton was not found.");
+}
 
 
-    if (!file) {
+// ========================================
+// PHOTO SELECT
+// ========================================
 
-      if (currentPhotoUrl) {
+if (photo) {
 
-        showPhotoPreview(
-          currentPhotoUrl
-        );
+  photo.addEventListener(
+    "change",
+    function () {
 
-      } else {
+      const file =
+        photo.files[0];
 
-        photoPreview.innerHTML = "";
+      selectedPhotoFile =
+        file || null;
 
+
+      if (!file) {
+
+        if (currentPhotoUrl) {
+
+          showPhotoPreview(
+            currentPhotoUrl
+          );
+
+        } else {
+
+          photoPreview.innerHTML = "";
+
+        }
+
+        return;
       }
 
-      return;
+
+      if (!file.type.startsWith("image/")) {
+
+        alert(
+          "Please select an image file."
+        );
+
+        photo.value = "";
+        selectedPhotoFile = null;
+
+        return;
+      }
+
+
+      const maxSize =
+        5 * 1024 * 1024;
+
+
+      if (file.size > maxSize) {
+
+        alert(
+          "Photo is too large.\n\nMaximum size is 5 MB."
+        );
+
+        photo.value = "";
+        selectedPhotoFile = null;
+
+        return;
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function (event) {
+
+          photoPreview.innerHTML = `
+
+            <img
+              src="${event.target.result}"
+              class="preview-image"
+              alt="Member Photo Preview"
+            >
+
+          `;
+
+        };
+
+
+      reader.readAsDataURL(file);
+
     }
+  );
 
-
-    if (!file.type.startsWith("image/")) {
-
-      alert(
-        "Please select an image file."
-      );
-
-      photo.value = "";
-
-      selectedPhotoFile = null;
-
-      return;
-    }
-
-
-    const maxSize =
-      5 * 1024 * 1024;
-
-
-    if (file.size > maxSize) {
-
-      alert(
-        "Photo is too large.\n\nMaximum size is 5 MB."
-      );
-
-      photo.value = "";
-
-      selectedPhotoFile = null;
-
-      return;
-    }
-
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload =
-      function (event) {
-
-        photoPreview.innerHTML = `
-
-          <img
-            src="${event.target.result}"
-            class="preview-image"
-            alt="Member Photo Preview"
-          >
-
-        `;
-
-      };
-
-
-    reader.readAsDataURL(file);
-
-  }
-);
+}
 
 
 // ========================================
 // FORM SUBMIT
 // ========================================
 
-memberForm.addEventListener(
-  "submit",
-  async function (event) {
+if (memberForm) {
 
-    event.preventDefault();
+  memberForm.addEventListener(
+    "submit",
+    async function (event) {
 
+      event.preventDefault();
 
-    if (editingId === null) {
+      if (editingId === null) {
 
-      await addMember();
+        await addMember();
 
-    } else {
+      } else {
 
-      await updateMember();
+        await updateMember();
+
+      }
 
     }
+  );
 
-  }
-);
+}
 
 
 // ========================================
 // CANCEL
 // ========================================
 
-cancelButton.addEventListener(
-  "click",
-  function () {
+if (cancelButton) {
 
-    resetForm();
+  cancelButton.addEventListener(
+    "click",
+    function () {
 
-  }
-);
+      resetForm();
+
+    }
+  );
+
+}
 
 
 // ========================================
@@ -270,9 +289,7 @@ function getFormData() {
 async function uploadPhoto(file) {
 
   if (!file) {
-
     return null;
-
   }
 
 
@@ -295,11 +312,8 @@ async function uploadPhoto(file) {
     error
   } =
     await supabaseClient
-
       .storage
-
       .from(PHOTO_BUCKET)
-
       .upload(
         fileName,
         file,
@@ -321,7 +335,10 @@ async function uploadPhoto(file) {
       error.message +
 
       "\n\nCode: " +
-      (error.statusCode || "N/A")
+      (error.statusCode || "N/A") +
+
+      "\n\nDetails: " +
+      (error.statusText || "N/A")
 
     );
 
@@ -338,11 +355,8 @@ async function uploadPhoto(file) {
     data: publicData
   } =
     supabaseClient
-
       .storage
-
       .from(PHOTO_BUCKET)
-
       .getPublicUrl(
         fileName
       );
@@ -360,6 +374,12 @@ async function uploadPhoto(file) {
   }
 
 
+  console.log(
+    "PHOTO URL:",
+    publicData.publicUrl
+  );
+
+
   return publicData.publicUrl;
 
 }
@@ -369,18 +389,14 @@ async function uploadPhoto(file) {
 // FILE EXTENSION
 // ========================================
 
-function getFileExtension(
-  filename
-) {
+function getFileExtension(filename) {
 
   const dot =
     filename.lastIndexOf(".");
 
 
   if (dot === -1) {
-
     return ".jpg";
-
   }
 
 
@@ -415,11 +431,8 @@ async function addMember() {
   }
 
 
-  saveButton.disabled =
-    true;
-
-  saveButton.textContent =
-    "Saving...";
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
 
 
   try {
@@ -427,6 +440,7 @@ async function addMember() {
     let photoUrl = null;
 
 
+    // Upload photo first
     if (selectedPhotoFile) {
 
       photoUrl =
@@ -441,18 +455,20 @@ async function addMember() {
       photoUrl;
 
 
+    console.log(
+      "SAVING MEMBER:",
+      member
+    );
+
+
     const {
       data,
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .insert([member])
-
         .select()
-
         .single();
 
 
@@ -494,6 +510,7 @@ async function addMember() {
 
 
     alert(
+      "ADD MEMBER ERROR\n\n" +
       error.message
     );
 
@@ -501,8 +518,7 @@ async function addMember() {
 
   finally {
 
-    saveButton.disabled =
-      false;
+    saveButton.disabled = false;
 
     saveButton.textContent =
       "Add Member";
@@ -536,11 +552,8 @@ async function updateMember() {
   }
 
 
-  saveButton.disabled =
-    true;
-
-  saveButton.textContent =
-    "Updating...";
+  saveButton.disabled = true;
+  saveButton.textContent = "Updating...";
 
 
   try {
@@ -568,18 +581,13 @@ async function updateMember() {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .update(member)
-
         .eq(
           "id",
           editingId
         )
-
         .select()
-
         .single();
 
 
@@ -621,6 +629,7 @@ async function updateMember() {
 
 
     alert(
+      "UPDATE ERROR\n\n" +
       error.message
     );
 
@@ -628,8 +637,7 @@ async function updateMember() {
 
   finally {
 
-    saveButton.disabled =
-      false;
+    saveButton.disabled = false;
 
     saveButton.textContent =
       "Add Member";
@@ -645,13 +653,10 @@ async function updateMember() {
 
 async function loadMembers() {
 
-  memberTable.innerHTML =
-    "";
-
+  memberTable.innerHTML = "";
 
   emptyMessage.textContent =
     "Loading members...";
-
 
   emptyMessage.style.display =
     "block";
@@ -664,11 +669,8 @@ async function loadMembers() {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
         .order(
           "id",
           {
@@ -687,6 +689,12 @@ async function loadMembers() {
       return;
 
     }
+
+
+    console.log(
+      "MEMBERS LOADED:",
+      data
+    );
 
 
     if (
@@ -713,6 +721,7 @@ async function loadMembers() {
   catch (error) {
 
     console.error(
+      "LOAD ERROR:",
       error
     );
 
@@ -733,8 +742,7 @@ async function loadMembers() {
 
 function displayMembers(data) {
 
-  memberTable.innerHTML =
-    "";
+  memberTable.innerHTML = "";
 
 
   data.forEach(
@@ -758,15 +766,13 @@ function displayMembers(data) {
         photoHTML = `
 
           <img
-            src="${escapeHTML(
-              member.photo_url
-            )}"
+            src="${escapeHTML(member.photo_url)}"
             class="member-photo"
             alt="Member Photo"
             loading="lazy"
             onerror="
               this.style.display='none';
-              this.nextElementSibling.style.display='block';
+              this.nextElementSibling.style.display='flex';
             "
           >
 
@@ -888,15 +894,11 @@ memberTable.addEventListener(
   async function (event) {
 
     const button =
-      event.target.closest(
-        "button"
-      );
+      event.target.closest("button");
 
 
     if (!button) {
-
       return;
-
     }
 
 
@@ -908,6 +910,17 @@ memberTable.addEventListener(
       Number(
         button.dataset.id
       );
+
+
+    if (!id) {
+
+      alert(
+        "Invalid member ID."
+      );
+
+      return;
+
+    }
 
 
     if (action === "view") {
@@ -928,7 +941,7 @@ memberTable.addEventListener(
 
       await deleteMember(
         id,
-        button.dataset.name
+        button.dataset.name || ""
       );
 
     }
@@ -950,16 +963,12 @@ async function viewMember(id) {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
         .eq(
           "id",
           id
         )
-
         .single();
 
 
@@ -1129,7 +1138,10 @@ async function viewMember(id) {
             <button
               type="button"
               class="btn-edit"
-              onclick="closeMemberProfile(); editMember(${data.id})"
+              onclick="
+                closeMemberProfile();
+                editMember(${data.id});
+              "
             >
               Edit
             </button>
@@ -1162,6 +1174,7 @@ async function viewMember(id) {
   catch (error) {
 
     console.error(
+      "VIEW ERROR:",
       error
     );
 
@@ -1189,9 +1202,7 @@ function closeMemberProfile() {
 
 
   if (overlay) {
-
     overlay.remove();
-
   }
 
 }
@@ -1210,16 +1221,12 @@ async function editMember(id) {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
         .eq(
           "id",
           id
         )
-
         .single();
 
 
@@ -1228,6 +1235,17 @@ async function editMember(id) {
       showError(
         "EDIT FAILED",
         error
+      );
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      alert(
+        "Member not found."
       );
 
       return;
@@ -1272,8 +1290,7 @@ async function editMember(id) {
       null;
 
 
-    photo.value =
-      "";
+    photo.value = "";
 
 
     if (currentPhotoUrl) {
@@ -1284,8 +1301,7 @@ async function editMember(id) {
 
     } else {
 
-      photoPreview.innerHTML =
-        "";
+      photoPreview.innerHTML = "";
 
     }
 
@@ -1319,6 +1335,12 @@ async function editMember(id) {
 
   catch (error) {
 
+    console.error(
+      "EDIT ERROR:",
+      error
+    );
+
+
     alert(
       "EDIT ERROR\n\n" +
       error.message
@@ -1349,23 +1371,41 @@ async function deleteMember(
 
 
   if (!confirmed) {
-
     return;
-
   }
 
 
   try {
 
     const {
+      data: member,
+      error: findError
+    } =
+      await supabaseClient
+        .from("members")
+        .select("photo_url")
+        .eq("id", id)
+        .single();
+
+
+    if (findError) {
+
+      showError(
+        "DELETE FAILED",
+        findError
+      );
+
+      return;
+
+    }
+
+
+    const {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .delete()
-
         .eq(
           "id",
           id
@@ -1384,6 +1424,56 @@ async function deleteMember(
     }
 
 
+    // Try to delete the photo from Storage
+    // if the member has a photo.
+    if (member && member.photo_url) {
+
+      try {
+
+        const photoPath =
+          getStorageFileName(
+            member.photo_url
+          );
+
+
+        if (photoPath) {
+
+          const {
+            error: photoDeleteError
+          } =
+            await supabaseClient
+              .storage
+              .from(PHOTO_BUCKET)
+              .remove([
+                photoPath
+              ]);
+
+
+          if (photoDeleteError) {
+
+            console.warn(
+              "Photo deletion failed:",
+              photoDeleteError
+            );
+
+          }
+
+        }
+
+      }
+
+      catch (photoError) {
+
+        console.warn(
+          "Photo cleanup failed:",
+          photoError
+        );
+
+      }
+
+    }
+
+
     alert(
       "Member deleted successfully!"
     );
@@ -1394,6 +1484,12 @@ async function deleteMember(
   }
 
   catch (error) {
+
+    console.error(
+      "DELETE ERROR:",
+      error
+    );
+
 
     alert(
       "DELETE ERROR\n\n" +
@@ -1409,61 +1505,315 @@ async function deleteMember(
 // SEARCH
 // ========================================
 
-search.addEventListener(
-  "input",
-  async function () {
+if (search) {
 
-    const query =
-      search.value
-        .trim()
-        .toLowerCase();
+  search.addEventListener(
+    "input",
+    async function () {
 
-
-    if (!query) {
-
-      await loadMembers();
-
-      return;
-
-    }
+      const query =
+        search.value
+          .trim()
+          .toLowerCase();
 
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
+      if (!query) {
 
-        .from("members")
+        await loadMembers();
 
-        .select("*")
+        return;
 
-        .or(
+      }
 
-          "member_id.ilike.%" +
-          query +
-          "%," +
 
-          "full_name.ilike.%" +
-          query +
-          "%," +
+      try {
 
-          "passport_number.ilike.%" +
-          query +
-          "%," +
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .from("members")
+            .select("*")
+            .or(
 
-          "contact_number.ilike.%" +
-          query +
-          "%"
+              "member_id.ilike.%" +
+              query +
+              "%," +
 
+              "full_name.ilike.%" +
+              query +
+              "%," +
+
+              "passport_number.ilike.%" +
+              query +
+              "%," +
+
+              "contact_number.ilike.%" +
+              query +
+              "%"
+
+            );
+
+
+        if (error) {
+
+          showError(
+            "SEARCH FAILED",
+            error
+          );
+
+          return;
+
+        }
+
+
+        if (
+          !data ||
+          data.length === 0
+        ) {
+
+          memberTable.innerHTML = "";
+
+          emptyMessage.textContent =
+            "No matching members found.";
+
+          emptyMessage.style.display =
+            "block";
+
+          return;
+
+        }
+
+
+        emptyMessage.style.display =
+          "none";
+
+
+        displayMembers(data);
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "SEARCH ERROR:",
+          error
         );
 
 
-    if (error) {
+        alert(
+          "SEARCH ERROR\n\n" +
+          error.message
+        );
 
-      showError(
-        "SEARCH FAILED",
-        error
-      );
+      }
 
-      return;
+    }
+  );
+
+}
+
+
+// ========================================
+// RESET FORM
+// ========================================
+
+function resetForm() {
+
+  memberForm.reset();
+
+
+  editingId = null;
+
+  currentPhotoUrl = null;
+
+  selectedPhotoFile = null;
+
+
+  photoPreview.innerHTML = "";
+
+
+  formTitle.textContent =
+    "Add Member";
+
+
+  saveButton.textContent =
+    "Add Member";
+
+
+  cancelButton.classList.add(
+    "hidden"
+  );
+
+}
+
+
+// ========================================
+// PHOTO PREVIEW
+// ========================================
+
+function showPhotoPreview(url) {
+
+  if (!url) {
+
+    photoPreview.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  photoPreview.innerHTML = `
+
+    <img
+      src="${escapeHTML(url)}"
+      class="preview-image"
+      alt="Member Photo"
+      onerror="
+        this.style.display='none';
+      "
+    >
+
+  `;
+
+}
+
+
+// ========================================
+// GET STORAGE FILE NAME
+// ========================================
+
+function getStorageFileName(url) {
+
+  if (!url) {
+    return null;
+  }
+
+
+  const marker =
+    "/storage/v1/object/public/" +
+    PHOTO_BUCKET +
+    "/";
+
+
+  const index =
+    url.indexOf(marker);
+
+
+  if (index === -1) {
+    return null;
+  }
+
+
+  return decodeURIComponent(
+    url.substring(
+      index + marker.length
+    )
+  );
+
+}
+
+
+// ========================================
+// ERROR DISPLAY
+// ========================================
+
+function showError(
+  title,
+  error
+) {
+
+  console.error(
+    title,
+    error
+  );
+
+
+  const message =
+    error && error.message
+      ? error.message
+      : "Unknown error";
+
+
+  const code =
+    error && error.code
+      ? error.code
+      : "N/A";
+
+
+  const details =
+    error && error.details
+      ? error.details
+      : "N/A";
+
+
+  const hint =
+    error && error.hint
+      ? error.hint
+      : "N/A";
+
+
+  alert(
+
+    title +
+
+    "\n\nMessage:\n" +
+    message +
+
+    "\n\nCode:\n" +
+    code +
+
+    "\n\nDetails:\n" +
+    details +
+
+    "\n\nHint:\n" +
+    hint
+
+  );
+
+}
+
+
+// ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+// ========================================
+// START APPLICATION
+// ========================================
+
+loadMembers();
