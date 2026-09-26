@@ -93,7 +93,7 @@ let selectedPhotoFile = null;
 
 
 // ========================================
-// PHOTO SELECT / PREVIEW
+// PHOTO PREVIEW
 // ========================================
 
 photo.addEventListener(
@@ -146,8 +146,7 @@ photo.addEventListener(
     if (file.size > maxSize) {
 
       alert(
-        "Photo is too large.\n\n" +
-        "Maximum size is 5 MB."
+        "Photo is too large.\n\nMaximum size is 5 MB."
       );
 
       photo.value = "";
@@ -193,6 +192,7 @@ memberForm.addEventListener(
   async function (event) {
 
     event.preventDefault();
+
 
     if (editingId === null) {
 
@@ -289,12 +289,6 @@ async function uploadPhoto(file) {
     extension;
 
 
-  console.log(
-    "Uploading:",
-    fileName
-  );
-
-
   const {
     data,
     error
@@ -334,7 +328,7 @@ async function uploadPhoto(file) {
 
 
   console.log(
-    "UPLOAD SUCCESS:",
+    "PHOTO UPLOADED:",
     data
   );
 
@@ -363,12 +357,6 @@ async function uploadPhoto(file) {
     );
 
   }
-
-
-  console.log(
-    "PUBLIC PHOTO URL:",
-    publicData.publicUrl
-  );
 
 
   return publicData.publicUrl;
@@ -438,8 +426,6 @@ async function addMember() {
     let photoUrl = null;
 
 
-    // Upload photo
-
     if (selectedPhotoFile) {
 
       photoUrl =
@@ -452,12 +438,6 @@ async function addMember() {
 
     member.photo_url =
       photoUrl;
-
-
-    console.log(
-      "INSERT MEMBER:",
-      member
-    );
 
 
     const {
@@ -500,7 +480,6 @@ async function addMember() {
 
     resetForm();
 
-
     await loadMembers();
 
   }
@@ -508,6 +487,7 @@ async function addMember() {
   catch (error) {
 
     console.error(
+      "ADD MEMBER ERROR:",
       error
     );
 
@@ -568,8 +548,6 @@ async function updateMember() {
       currentPhotoUrl;
 
 
-    // New photo selected
-
     if (selectedPhotoFile) {
 
       photoUrl =
@@ -617,7 +595,7 @@ async function updateMember() {
 
 
     console.log(
-      "UPDATED:",
+      "MEMBER UPDATED:",
       data
     );
 
@@ -629,7 +607,6 @@ async function updateMember() {
 
     resetForm();
 
-
     await loadMembers();
 
   }
@@ -637,6 +614,7 @@ async function updateMember() {
   catch (error) {
 
     console.error(
+      "UPDATE ERROR:",
       error
     );
 
@@ -708,12 +686,6 @@ async function loadMembers() {
       return;
 
     }
-
-
-    console.log(
-      "MEMBERS:",
-      data
-    );
 
 
     if (
@@ -825,13 +797,11 @@ function displayMembers(data) {
           ${photoHTML}
         </td>
 
-
         <td>
           ${escapeHTML(
             member.member_id || ""
           )}
         </td>
-
 
         <td>
           ${escapeHTML(
@@ -839,13 +809,11 @@ function displayMembers(data) {
           )}
         </td>
 
-
         <td>
           ${escapeHTML(
             member.passport_number || ""
           )}
         </td>
-
 
         <td>
           ${escapeHTML(
@@ -853,13 +821,11 @@ function displayMembers(data) {
           )}
         </td>
 
-
         <td>
           ${escapeHTML(
             member.contact_number || ""
           )}
         </td>
-
 
         <td class="${statusClass}">
           ${escapeHTML(
@@ -867,8 +833,16 @@ function displayMembers(data) {
           )}
         </td>
 
-
         <td>
+
+          <button
+            type="button"
+            class="btn-view"
+            data-action="view"
+            data-id="${member.id}"
+          >
+            View
+          </button>
 
           <button
             type="button"
@@ -878,7 +852,6 @@ function displayMembers(data) {
           >
             Edit
           </button>
-
 
           <button
             type="button"
@@ -906,7 +879,7 @@ function displayMembers(data) {
 
 
 // ========================================
-// EDIT / DELETE BUTTONS
+// ACTION BUTTONS
 // ========================================
 
 memberTable.addEventListener(
@@ -936,6 +909,13 @@ memberTable.addEventListener(
       );
 
 
+    if (action === "view") {
+
+      await viewMember(id);
+
+    }
+
+
     if (action === "edit") {
 
       await editMember(id);
@@ -954,6 +934,266 @@ memberTable.addEventListener(
 
   }
 );
+
+
+// ========================================
+// VIEW MEMBER
+// ========================================
+
+async function viewMember(id) {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+
+        .from("members")
+
+        .select("*")
+
+        .eq(
+          "id",
+          id
+        )
+
+        .single();
+
+
+    if (error) {
+
+      showError(
+        "VIEW MEMBER FAILED",
+        error
+      );
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      alert(
+        "Member not found."
+      );
+
+      return;
+
+    }
+
+
+    const photoHTML =
+      data.photo_url
+
+        ? `
+
+          <img
+            src="${escapeHTML(
+              data.photo_url
+            )}"
+            class="profile-photo"
+            alt="Member Photo"
+          >
+
+        `
+
+        : `
+
+          <div class="profile-no-photo">
+            No Photo
+          </div>
+
+        `;
+
+
+    const profileHTML = `
+
+      <div
+        id="memberProfileOverlay"
+        class="member-profile-overlay"
+      >
+
+        <div
+          class="member-profile-card"
+        >
+
+          <button
+            type="button"
+            class="profile-close"
+            onclick="closeMemberProfile()"
+          >
+            ×
+          </button>
+
+
+          <div class="profile-header">
+
+            ${photoHTML}
+
+            <h2>
+              ${escapeHTML(
+                data.full_name || ""
+              )}
+            </h2>
+
+            <p>
+              Member ID:
+              ${escapeHTML(
+                data.member_id || ""
+              )}
+            </p>
+
+          </div>
+
+
+          <div class="profile-details">
+
+            <div>
+              <strong>Passport Number</strong>
+              <span>
+                ${escapeHTML(
+                  data.passport_number || "-"
+                )}
+              </span>
+            </div>
+
+
+            <div>
+              <strong>Birthday</strong>
+              <span>
+                ${escapeHTML(
+                  data.birthday || "-"
+                )}
+              </span>
+            </div>
+
+
+            <div>
+              <strong>Address</strong>
+              <span>
+                ${escapeHTML(
+                  data.address || "-"
+                )}
+              </span>
+            </div>
+
+
+            <div>
+              <strong>Contact Number</strong>
+              <span>
+                ${escapeHTML(
+                  data.contact_number || "-"
+                )}
+              </span>
+            </div>
+
+
+            <div>
+              <strong>Emergency Contact</strong>
+              <span>
+                ${escapeHTML(
+                  data.emergency_contact_person || "-"
+                )}
+              </span>
+            </div>
+
+
+            <div>
+              <strong>Emergency Number</strong>
+              <span>
+                ${escapeHTML(
+                  data.emergency_contact_number || "-"
+                )}
+              </span>
+            </div>
+
+
+            <div>
+              <strong>Membership Status</strong>
+              <span>
+                ${escapeHTML(
+                  data.membership_status || "-"
+                )}
+              </span>
+            </div>
+
+          </div>
+
+
+          <div class="profile-actions">
+
+            <button
+              type="button"
+              class="btn-edit"
+              onclick="closeMemberProfile(); editMember(${data.id})"
+            >
+              Edit
+            </button>
+
+
+            <button
+              type="button"
+              class="btn-secondary"
+              onclick="closeMemberProfile()"
+            >
+              Close
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      profileHTML
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "VIEW ERROR\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ========================================
+// CLOSE PROFILE
+// ========================================
+
+function closeMemberProfile() {
+
+  const overlay =
+    document.getElementById(
+      "memberProfileOverlay"
+    );
+
+
+  if (overlay) {
+
+    overlay.remove();
+
+  }
+
+}
 
 
 // ========================================
@@ -987,17 +1227,6 @@ async function editMember(id) {
       showError(
         "EDIT FAILED",
         error
-      );
-
-      return;
-
-    }
-
-
-    if (!data) {
-
-      alert(
-        "Member not found."
       );
 
       return;
@@ -1112,7 +1341,6 @@ async function deleteMember(
     confirm(
 
       "Are you sure you want to delete this member?\n\n" +
-
       "Member: " +
       name
 
@@ -1239,185 +1467,3 @@ search.addEventListener(
 
       return;
 
-    }
-
-
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-      memberTable.innerHTML =
-        "";
-
-      emptyMessage.textContent =
-        "No matching members found.";
-
-      emptyMessage.style.display =
-        "block";
-
-      return;
-
-    }
-
-
-    emptyMessage.style.display =
-      "none";
-
-
-    displayMembers(data);
-
-  }
-);
-
-
-// ========================================
-// SHOW PHOTO PREVIEW
-// ========================================
-
-function showPhotoPreview(
-  imageUrl
-) {
-
-  if (!imageUrl) {
-
-    photoPreview.innerHTML =
-      "";
-
-    return;
-
-  }
-
-
-  photoPreview.innerHTML = `
-
-    <img
-      src="${escapeHTML(imageUrl)}"
-      class="preview-image"
-      alt="Member Photo"
-    >
-
-  `;
-
-}
-
-
-// ========================================
-// RESET FORM
-// ========================================
-
-function resetForm() {
-
-  memberForm.reset();
-
-
-  editingId =
-    null;
-
-
-  currentPhotoUrl =
-    null;
-
-
-  selectedPhotoFile =
-    null;
-
-
-  photoPreview.innerHTML =
-    "";
-
-
-  formTitle.textContent =
-    "Add Member";
-
-
-  saveButton.textContent =
-    "Add Member";
-
-
-  cancelButton.classList.add(
-    "hidden"
-  );
-
-}
-
-
-// ========================================
-// ERROR MESSAGE
-// ========================================
-
-function showError(
-  title,
-  error
-) {
-
-  console.error(
-    title,
-    error
-  );
-
-
-  alert(
-
-    title +
-
-    "\n\n" +
-
-    "Message: " +
-    (error.message || "N/A") +
-
-    "\n\nCode: " +
-    (error.code || "N/A") +
-
-    "\n\nDetails: " +
-    (error.details || "N/A") +
-
-    "\n\nHint: " +
-    (error.hint || "N/A")
-
-  );
-
-}
-
-
-// ========================================
-// ESCAPE HTML
-// ========================================
-
-function escapeHTML(value) {
-
-  return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-// ========================================
-// START
-// ========================================
-
-loadMembers();
