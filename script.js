@@ -1,8 +1,3 @@
-// ============================================
-// POGA KSA MEMBER REGISTRATION
-// SUPABASE INSERT TEST
-// ============================================
-
 const SUPABASE_URL =
   "https://rocvqcqgbdohfwfkhncy.supabase.co";
 
@@ -16,9 +11,9 @@ const supabaseClient =
   );
 
 
-// ============================================
+// ================================
 // ELEMENTS
-// ============================================
+// ================================
 
 const memberForm =
   document.getElementById("memberForm");
@@ -50,81 +45,38 @@ const emergencyNumber =
 const status =
   document.getElementById("status");
 
-const photo =
-  document.getElementById("photo");
+const memberTable =
+  document.getElementById("memberTable");
 
-const photoPreview =
-  document.getElementById("photoPreview");
+const search =
+  document.getElementById("search");
 
 const saveButton =
   document.getElementById("saveButton");
 
+const emptyMessage =
+  document.getElementById("emptyMessage");
 
-// ============================================
-// FORM SUBMIT
-// ============================================
+
+// ================================
+// SUBMIT
+// ================================
 
 memberForm.addEventListener(
   "submit",
-  function (event) {
+  async function (event) {
 
     event.preventDefault();
 
-    saveMember();
+    await saveMember();
 
   }
 );
 
 
-// ============================================
-// PHOTO PREVIEW
-// ============================================
-
-photo.addEventListener(
-  "change",
-  function (event) {
-
-    const file =
-      event.target.files[0];
-
-    if (!file) {
-
-      photoPreview.innerHTML = "";
-
-      return;
-
-    }
-
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload =
-      function (event) {
-
-        photoPreview.innerHTML = `
-
-          <img
-            src="${event.target.result}"
-            class="preview-image"
-            alt="Member photo"
-          >
-
-        `;
-
-      };
-
-
-    reader.readAsDataURL(file);
-
-  }
-);
-
-
-// ============================================
+// ================================
 // SAVE MEMBER
-// ============================================
+// ================================
 
 async function saveMember() {
 
@@ -163,10 +115,6 @@ async function saveMember() {
   };
 
 
-  // ==========================================
-  // VALIDATION
-  // ==========================================
-
   if (
     !member.member_id ||
     !member.full_name
@@ -187,17 +135,7 @@ async function saveMember() {
     "Saving...";
 
 
-  console.log(
-    "MEMBER BEING SENT:",
-    member
-  );
-
-
   try {
-
-    // ========================================
-    // INSERT ONLY
-    // ========================================
 
     const { error } =
       await supabaseClient
@@ -207,86 +145,64 @@ async function saveMember() {
         .insert([member]);
 
 
-    // ========================================
-    // ERROR
-    // ========================================
-
     if (error) {
 
       console.error(
-        "SUPABASE INSERT ERROR:",
+        "INSERT ERROR:",
         error
       );
-
 
       alert(
 
         "REGISTRATION FAILED\n\n" +
 
-        "Message:\n" +
-        (error.message || "N/A") +
+        "Message: " +
+        error.message +
 
-        "\n\nCode:\n" +
+        "\n\nCode: " +
         (error.code || "N/A") +
 
-        "\n\nDetails:\n" +
+        "\n\nDetails: " +
         (error.details || "N/A") +
 
-        "\n\nHint:\n" +
+        "\n\nHint: " +
         (error.hint || "N/A")
 
       );
-
-
-      // DO NOT CLEAR THE FORM
 
       return;
 
     }
 
 
-    // ========================================
-    // SUCCESS
-    // ========================================
-
-    console.log(
-      "MEMBER SAVED SUCCESSFULLY"
-    );
-
-
     alert(
-      "SUCCESS! Member has been saved."
+      "Member registered successfully!"
     );
 
-
-    // Clear ONLY after successful INSERT
 
     memberForm.reset();
 
 
-    photoPreview.innerHTML = "";
+    // IMPORTANT:
+    // Reload records after successful save
 
+    await loadMembers();
 
   }
 
   catch (error) {
 
     console.error(
-      "JAVASCRIPT ERROR:",
+      "SAVE ERROR:",
       error
     );
 
-
     alert(
-
-      "JAVASCRIPT ERROR\n\n" +
-
-      (error.message || error)
-
+      "Error: " +
+      error.message
     );
 
   }
-
 
   finally {
 
@@ -297,4 +213,337 @@ async function saveMember() {
 
   }
 
-      }
+}
+
+
+// ================================
+// LOAD MEMBERS
+// ================================
+
+async function loadMembers() {
+
+  memberTable.innerHTML = "";
+
+  emptyMessage.textContent =
+    "Loading members...";
+
+  emptyMessage.style.display =
+    "block";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+
+        .from("members")
+
+        .select("*")
+
+        .order(
+          "id",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      console.error(
+        "LOAD ERROR:",
+        error
+      );
+
+
+      emptyMessage.textContent =
+        "Unable to load members.";
+
+
+      alert(
+
+        "LOAD MEMBERS FAILED\n\n" +
+
+        "Message: " +
+        error.message +
+
+        "\n\nCode: " +
+        (error.code || "N/A") +
+
+        "\n\nDetails: " +
+        (error.details || "N/A") +
+
+        "\n\nHint: " +
+        (error.hint || "N/A")
+
+      );
+
+      return;
+
+    }
+
+
+    console.log(
+      "MEMBERS LOADED:",
+      data
+    );
+
+
+    if (!data || data.length === 0) {
+
+      emptyMessage.textContent =
+        "No member records found.";
+
+      return;
+
+    }
+
+
+    emptyMessage.style.display =
+      "none";
+
+
+    displayMembers(data);
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "LOAD ERROR:",
+      error
+    );
+
+
+    alert(
+      "Error loading members:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ================================
+// DISPLAY MEMBERS
+// ================================
+
+function displayMembers(data) {
+
+  memberTable.innerHTML = "";
+
+
+  data.forEach(
+    function (member) {
+
+      const row =
+        document.createElement("tr");
+
+
+      const statusClass =
+        member.membership_status === "Active"
+          ? "status-active"
+          : "status-inactive";
+
+
+      row.innerHTML = `
+
+        <td>
+          ${
+            member.photo_url
+              ? `
+                <img
+                  src="${escapeHTML(member.photo_url)}"
+                  class="member-photo"
+                  alt="Member photo"
+                >
+              `
+              : `
+                <div class="no-photo">
+                  No Photo
+                </div>
+              `
+          }
+        </td>
+
+        <td>
+          ${escapeHTML(
+            member.member_id || ""
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            member.full_name || ""
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            member.passport_number || ""
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            member.birthday || ""
+          )}
+        </td>
+
+        <td>
+          ${escapeHTML(
+            member.contact_number || ""
+          )}
+        </td>
+
+        <td class="${statusClass}">
+          ${escapeHTML(
+            member.membership_status || ""
+          )}
+        </td>
+
+        <td>
+          <span>Saved</span>
+        </td>
+
+      `;
+
+
+      memberTable.appendChild(row);
+
+    }
+  );
+
+}
+
+
+// ================================
+// SEARCH
+// ================================
+
+search.addEventListener(
+  "input",
+  async function () {
+
+    const query =
+      search.value
+        .trim()
+        .toLowerCase();
+
+
+    if (!query) {
+
+      await loadMembers();
+
+      return;
+
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+
+        .from("members")
+
+        .select("*")
+
+        .or(
+          "member_id.ilike.%" +
+          query +
+          "%," +
+          "full_name.ilike.%" +
+          query +
+          "%," +
+          "passport_number.ilike.%" +
+          query +
+          "%," +
+          "contact_number.ilike.%" +
+          query +
+          "%"
+        );
+
+
+    if (error) {
+
+      console.error(
+        "SEARCH ERROR:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    if (!data || data.length === 0) {
+
+      memberTable.innerHTML = "";
+
+      emptyMessage.textContent =
+        "No matching members found.";
+
+      emptyMessage.style.display =
+        "block";
+
+      return;
+
+    }
+
+
+    emptyMessage.style.display =
+      "none";
+
+    displayMembers(data);
+
+  }
+);
+
+
+// ================================
+// ESCAPE HTML
+// ================================
+
+function escapeHTML(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+// ================================
+// START
+// ================================
+
+loadMembers();
