@@ -1,232 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta name="theme-color" content="#166534">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>POGA KSA Member Registration</title>
 
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+
 </head>
+
 
 <body>
 
-<div class="container">
-
-  <header>
-    <h1>POGA KSA</h1>
-    <p>Member Registration</p>
-  </header>
+  <div class="container">
 
 
-  <!-- ========================= -->
-  <!-- MEMBER REGISTRATION -->
-  <!-- ========================= -->
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
 
-  <section class="form-section">
+    <header>
 
-    <h2>Register as a Member</h2>
+      <h1>POGA KSA</h1>
 
-    <p class="form-description">
-      Please complete the form below.
-    </p>
+      <p>
+        Member Registration
+      </p>
 
-    <form id="memberForm">
+    </header>
 
-      <div class="form-grid">
 
-        <div class="form-group">
-          <label for="memberId">Member ID</label>
 
-          <input
-            type="text"
-            id="memberId"
-            placeholder="Example: POGA001"
-            required
+    <!-- ========================= -->
+    <!-- MEMBER REGISTRATION FORM -->
+    <!-- ========================= -->
+
+    <section class="form-section">
+
+      <h2>
+        Member Registration
+      </h2>
+
+      <p class="form-description">
+        Please fill in the information below to register as a POGA KSA member.
+      </p>
+
+
+      <form id="memberForm">
+
+        <div class="form-grid">
+
+
+          <!-- ========================= -->
+          <!-- MEMBER ID -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="memberId">
+              Member ID
+            </label>
+
+            <input
+              type="text"
+              id="memberId"
+              placeholder="Enter Member ID"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- FULL NAME -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="fullName">
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              id="fullName"
+              placeholder="Enter Full Name"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- PASSPORT NUMBER -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="passportNumber">
+              Passport Number
+            </label>
+
+            <input
+              type="text"
+              id="passportNumber"
+              placeholder="Enter Passport Number"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- BIRTHDAY -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="birthday">
+              Birthday
+            </label>
+
+            <input
+              type="date"
+              id="birthday"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- COUNTRY -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="country">
+              Country
+            </label>
+
+            <select
+              id="country"
+              required
+            >
+
+              <option value="">
+                Select Country
+              </option>
+
+              <option value="Saudi Arabia">
+                Saudi Arabia
+              </option>
+
+              <option value="Philippines">
+                Philippines
+              </option>
+
+              <option value="United Arab Emirates">
+                United Arab Emirates
+              </option>
+
+              <option value="Qatar">
+                Qatar
+              </option>
+
+              <option value="Kuwait">
+                Kuwait
+              </option>
+
+              <option value="Bahrain">
+                Bahrain
+              </option>
+
+              <option value="Oman">
+                Oman
+              </option>
+
+              <option value="Japan">
+                Japan
+              </option>
+
+              <option value="South Korea">
+                South Korea
+              </option>
+
+              <option value="Singapore">
+                Singapore
+              </option>
+
+              <option value="Malaysia">
+                Malaysia
+              </option>
+
+              <option value="United States">
+                United States
+              </option>
+
+              <option value="Canada">
+                Canada
+              </option>
+
+              <option value="United Kingdom">
+                United Kingdom
+              </option>
+
+              <option value="Australia">
+                Australia
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- ADDRESS / LOCATION -->
+          <!-- ========================= -->
+
+          <div class="form-group full-width">
+
+            <label for="address">
+              Address / Location
+            </label>
+
+            <textarea
+              id="address"
+              rows="3"
+              placeholder="Enter your current address or location"
+              required
+            ></textarea>
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- CONTACT NUMBER -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="contact">
+              Contact Number
+            </label>
+
+            <input
+              type="tel"
+              id="contact"
+              placeholder="Enter Contact Number"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- EMERGENCY CONTACT PERSON -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="emergencyContact">
+              Emergency Contact Person
+            </label>
+
+            <input
+              type="text"
+              id="emergencyContact"
+              placeholder="Enter Emergency Contact Person"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- EMERGENCY CONTACT NUMBER -->
+          <!-- ========================= -->
+
+          <div class="form-group">
+
+            <label for="emergencyNumber">
+              Emergency Contact Number
+            </label>
+
+            <input
+              type="tel"
+              id="emergencyNumber"
+              placeholder="Enter Emergency Contact Number"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- ========================= -->
+          <!-- MEMBER PHOTO -->
+          <!-- ========================= -->
+
+          <div class="form-group full-width">
+
+            <label for="photo">
+              Member Photo
+            </label>
+
+            <input
+              type="file"
+              id="photo"
+              accept="image/*"
+              required
+            >
+
+            <small>
+              Please upload a clear member photo.
+              Maximum file size: 5MB.
+            </small>
+
+            <div id="photoPreview"></div>
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- ========================= -->
+        <!-- REGISTER BUTTON -->
+        <!-- ========================= -->
+
+        <div class="form-buttons">
+
+          <button
+            type="submit"
+            id="registerButton"
+            class="btn-primary"
           >
-        </div>
-
-
-        <div class="form-group">
-          <label for="fullName">Full Name</label>
-
-          <input
-            type="text"
-            id="fullName"
-            placeholder="Full name"
-            required
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="passportNumber">
-            Passport Number
-          </label>
-
-          <input
-            type="text"
-            id="passportNumber"
-            placeholder="Passport number"
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="birthday">Birthday</label>
-
-          <input
-            type="date"
-            id="birthday"
-          >
-        </div>
-
-
-        <div class="form-group full-width">
-          <label for="address">Address</label>
-
-          <textarea
-            id="address"
-            placeholder="Complete address"
-            rows="3"
-          ></textarea>
-        </div>
-
-
-        <div class="form-group">
-          <label for="contact">
-            Contact Number
-          </label>
-
-          <input
-            type="text"
-            id="contact"
-            placeholder="Contact number"
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="emergencyContact">
-            Emergency Contact Person
-          </label>
-
-          <input
-            type="text"
-            id="emergencyContact"
-            placeholder="Name of emergency contact"
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="emergencyNumber">
-            Emergency Contact Number
-          </label>
-
-          <input
-            type="text"
-            id="emergencyNumber"
-            placeholder="Emergency contact number"
-          >
-        </div>
-
-
-        <!-- PHOTO -->
-
-        <div class="form-group full-width">
-
-          <label for="photo">
-            Member Photo
-          </label>
-
-          <input
-            type="file"
-            id="photo"
-            accept="image/*"
-          >
-
-          <small>
-            Maximum photo size: 5 MB
-          </small>
-
-          <div id="photoPreview"></div>
+            Register Member
+          </button>
 
         </div>
 
-      </div>
+
+      </form>
+
+    </section>
 
 
-      <div class="form-buttons">
 
-        <button
-          type="submit"
-          id="saveButton"
-          class="btn-primary"
-        >
-          Submit Registration
-        </button>
+    <!-- ========================= -->
+    <!-- SUCCESS MESSAGE -->
+    <!-- ========================= -->
 
-        <button
-          type="reset"
-          id="cancelButton"
-          class="btn-secondary"
-        >
-          Clear
-        </button>
-
-      </div>
-
-    </form>
-
-  </section>
-
-
-  <!-- ========================= -->
-  <!-- SUCCESS MESSAGE -->
-  <!-- ========================= -->
-
-  <div
-    id="successMessage"
-    class="success-message hidden"
-  >
-    <strong>Registration successful!</strong>
-
-    <p>
-      Your member registration has been submitted.
-    </p>
-
-    <button
-      type="button"
-      id="newRegistrationButton"
-      class="btn-primary"
+    <div
+      id="successMessage"
+      class="success-message hidden"
     >
-      Register Another Member
-    </button>
+
+      <strong>
+        Registration Successful!
+      </strong>
+
+      <p>
+        Your POGA KSA member registration has been submitted successfully.
+      </p>
+
+      <button
+        type="button"
+        id="registerAnotherButton"
+        class="btn-primary"
+      >
+        Register Another Member
+      </button>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- FOOTER -->
+    <!-- ========================= -->
+
+    <footer class="site-footer">
+
+      <a href="admin.html">
+        Admin Login
+      </a>
+
+    </footer>
+
+
   </div>
 
 
-  <footer class="site-footer">
 
-    <a href="admin.html">
-      Admin Login
-    </a>
+  <!-- ========================= -->
+  <!-- SUPABASE -->
+  <!-- ========================= -->
 
-  </footer>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
 
-</div>
 
+  <!-- ========================= -->
+  <!-- REGISTRATION SCRIPT -->
+  <!-- ========================= -->
 
-<!-- SUPABASE -->
+  <script src="script.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- PUBLIC REGISTRATION SCRIPT -->
-
-<script src="script.js"></script>
 
 </body>
+
 </html>
