@@ -1,116 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
 
-  <meta
-    name="theme-color"
-    content="#166534"
-  >
-
-  <title>POGA KSA Admin</title>
+  <title>POGA KSA Admin Dashboard</title>
 
   <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-<div class="container">
-
-  <!-- ========================= -->
-  <!-- ADMIN LOGIN -->
-  <!-- ========================= -->
-
-  <section
-    id="loginSection"
-    class="login-section"
-  >
-
-    <header>
-      <h1>POGA KSA</h1>
-      <p>Administrator Login</p>
-    </header>
-
-    <form id="loginForm">
-
-      <div class="form-group">
-
-        <label for="adminEmail">
-          Email
-        </label>
-
-        <input
-          type="email"
-          id="adminEmail"
-          placeholder="Admin email"
-          required
-        >
-
-      </div>
-
-      <div class="form-group">
-
-        <label for="adminPassword">
-          Password
-        </label>
-
-        <input
-          type="password"
-          id="adminPassword"
-          placeholder="Password"
-          required
-        >
-
-      </div>
-
-      <div class="form-buttons">
-
-        <button
-          type="submit"
-          id="loginButton"
-          class="btn-primary"
-        >
-          Login
-        </button>
-
-        <a
-          href="index.html"
-          class="btn-secondary link-button"
-        >
-          Member Registration
-        </a>
-
-      </div>
-
-    </form>
-
-  </section>
+  <div class="container">
 
 
-  <!-- ========================= -->
-  <!-- ADMIN DASHBOARD -->
-  <!-- ========================= -->
-
-  <section
-    id="dashboardSection"
-    class="hidden"
-  >
+    <!-- ================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================== -->
 
     <header>
 
-      <h1>POGA KSA</h1>
+      <h1>
+        POGA KSA
+      </h1>
 
       <p>
-        Administrator Dashboard
+        Member Management System
       </p>
+
+    </header>
+
+
+
+    <!-- ================================================== -->
+    <!-- ADMIN LOGIN -->
+    <!-- ================================================== -->
+
+    <section
+      id="loginSection"
+      class="login-section"
+    >
+
+      <h2>
+        Admin Login
+      </h2>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label for="loginEmail">
+            Email Address
+          </label>
+
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Enter admin email"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <br>
+
+
+        <div class="form-group">
+
+          <label for="loginPassword">
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Enter password"
+            autocomplete="current-password"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-buttons">
+
+          <button
+            type="submit"
+            id="loginButton"
+            class="btn-primary"
+          >
+            Login
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+
+    <!-- ================================================== -->
+    <!-- ADMIN DASHBOARD -->
+    <!-- ================================================== -->
+
+    <section
+      id="dashboardSection"
+      class="hidden"
+    >
+
+
+      <!-- ================================================== -->
+      <!-- ADMIN TOOLBAR -->
+      <!-- ================================================== -->
 
       <div class="admin-toolbar">
 
-        <span id="adminEmailDisplay"></span>
+        <span id="adminEmailDisplay">
+          Admin
+        </span>
 
         <button
           type="button"
@@ -122,482 +140,752 @@
 
       </div>
 
-    </header>
 
 
-    <!-- ========================= -->
-    <!-- MEMBER FORM -->
-    <!-- ========================= -->
+      <!-- ================================================== -->
+      <!-- MEMBER FORM -->
+      <!-- ================================================== -->
 
-    <section class="form-section">
+      <section class="form-section">
 
-      <h2 id="formTitle">
-        Add Member
-      </h2>
+        <h2 id="formTitle">
+          Add Member
+        </h2>
 
-      <form id="memberForm">
+        <p class="form-description">
+          Add or update a POGA KSA member record.
+        </p>
 
-        <div class="form-grid">
 
-          <div class="form-group">
+        <form id="memberForm">
 
-            <label for="memberId">
-              Member ID
-            </label>
+          <div class="form-grid">
 
-            <input
-              type="text"
-              id="memberId"
-              placeholder="Example: POGA001"
-              required
+
+            <!-- =============================== -->
+            <!-- MEMBER ID -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="memberId">
+                Member ID
+              </label>
+
+              <input
+                type="text"
+                id="memberId"
+                placeholder="Enter Member ID"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- FULL NAME -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="fullName">
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                id="fullName"
+                placeholder="Enter Full Name"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- PASSPORT NUMBER -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="passportNumber">
+                Passport Number
+              </label>
+
+              <input
+                type="text"
+                id="passportNumber"
+                placeholder="Enter Passport Number"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- BIRTHDAY -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="birthday">
+                Birthday
+              </label>
+
+              <input
+                type="date"
+                id="birthday"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- COUNTRY -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="country">
+                Country
+              </label>
+
+              <select
+                id="country"
+                required
+              >
+
+                <option value="">
+                  Select Country
+                </option>
+
+                <option value="Saudi Arabia">
+                  Saudi Arabia
+                </option>
+
+                <option value="Philippines">
+                  Philippines
+                </option>
+
+                <option value="United Arab Emirates">
+                  United Arab Emirates
+                </option>
+
+                <option value="Qatar">
+                  Qatar
+                </option>
+
+                <option value="Kuwait">
+                  Kuwait
+                </option>
+
+                <option value="Bahrain">
+                  Bahrain
+                </option>
+
+                <option value="Oman">
+                  Oman
+                </option>
+
+                <option value="Japan">
+                  Japan
+                </option>
+
+                <option value="South Korea">
+                  South Korea
+                </option>
+
+                <option value="Singapore">
+                  Singapore
+                </option>
+
+                <option value="Malaysia">
+                  Malaysia
+                </option>
+
+                <option value="United States">
+                  United States
+                </option>
+
+                <option value="Canada">
+                  Canada
+                </option>
+
+                <option value="United Kingdom">
+                  United Kingdom
+                </option>
+
+                <option value="Australia">
+                  Australia
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- ADDRESS -->
+            <!-- =============================== -->
+
+            <div class="form-group full-width">
+
+              <label for="address">
+                Address / Location
+              </label>
+
+              <textarea
+                id="address"
+                rows="3"
+                placeholder="Enter current address or location"
+                required
+              ></textarea>
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- CONTACT NUMBER -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="contact">
+                Contact Number
+              </label>
+
+              <input
+                type="tel"
+                id="contact"
+                placeholder="Enter Contact Number"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- EMERGENCY CONTACT PERSON -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="emergencyContact">
+                Emergency Contact Person
+              </label>
+
+              <input
+                type="text"
+                id="emergencyContact"
+                placeholder="Enter Emergency Contact Person"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- EMERGENCY CONTACT NUMBER -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="emergencyNumber">
+                Emergency Contact Number
+              </label>
+
+              <input
+                type="tel"
+                id="emergencyNumber"
+                placeholder="Enter Emergency Contact Number"
+                required
+              >
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- MEMBERSHIP STATUS -->
+            <!-- =============================== -->
+
+            <div class="form-group">
+
+              <label for="status">
+                Membership Status
+              </label>
+
+              <select id="status">
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- =============================== -->
+            <!-- PHOTO -->
+            <!-- =============================== -->
+
+            <div class="form-group full-width">
+
+              <label for="photo">
+                Member Photo
+              </label>
+
+              <input
+                type="file"
+                id="photo"
+                accept="image/*"
+              >
+
+              <small>
+                Maximum file size: 5MB.
+                Leave empty when editing if you want to keep the existing photo.
+              </small>
+
+              <div id="photoPreview"></div>
+
+            </div>
+
+
+          </div>
+
+
+
+          <!-- ================================================== -->
+          <!-- FORM BUTTONS -->
+          <!-- ================================================== -->
+
+          <div class="form-buttons">
+
+            <button
+              type="submit"
+              id="saveButton"
+              class="btn-primary"
             >
+              Add Member
+            </button>
 
-          </div>
 
-
-          <div class="form-group">
-
-            <label for="fullName">
-              Full Name
-            </label>
-
-            <input
-              type="text"
-              id="fullName"
-              placeholder="Full name"
-              required
+            <button
+              type="button"
+              id="cancelEditButton"
+              class="btn-secondary hidden"
             >
+              Cancel Edit
+            </button>
 
           </div>
 
 
-          <div class="form-group">
+        </form>
 
-            <label for="passportNumber">
-              Passport Number
-            </label>
-
-            <input
-              type="text"
-              id="passportNumber"
-              placeholder="Passport number"
-            >
-
-          </div>
+      </section>
 
 
-          <div class="form-group">
 
-            <label for="birthday">
-              Birthday
-            </label>
+      <!-- ================================================== -->
+      <!-- MEMBER RECORDS -->
+      <!-- ================================================== -->
 
-            <input
-              type="date"
-              id="birthday"
-            >
+      <section class="form-section">
+
+        <div class="section-header">
+
+          <div>
+
+            <h2>
+              Member Records
+            </h2>
 
           </div>
 
 
-          <!-- COUNTRY -->
-
-          <div class="form-group">
-
-            <label for="country">
-              Country
-            </label>
-
-            <select id="country">
-
-              <option value="">
-                Select Country
-              </option>
-
-              <option value="Saudi Arabia">
-                Saudi Arabia
-              </option>
-
-              <option value="Philippines">
-                Philippines
-              </option>
-
-              <option value="United Arab Emirates">
-                United Arab Emirates
-              </option>
-
-              <option value="Qatar">
-                Qatar
-              </option>
-
-              <option value="Kuwait">
-                Kuwait
-              </option>
-
-              <option value="Bahrain">
-                Bahrain
-              </option>
-
-              <option value="Oman">
-                Oman
-              </option>
-
-              <option value="Japan">
-                Japan
-              </option>
-
-              <option value="South Korea">
-                South Korea
-              </option>
-
-              <option value="Singapore">
-                Singapore
-              </option>
-
-              <option value="Malaysia">
-                Malaysia
-              </option>
-
-              <option value="United States">
-                United States
-              </option>
-
-              <option value="Canada">
-                Canada
-              </option>
-
-              <option value="United Kingdom">
-                United Kingdom
-              </option>
-
-              <option value="Australia">
-                Australia
-              </option>
-
-              <option value="Other">
-                Other
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="form-group full-width">
-
-            <label for="address">
-              Address / Location
-            </label>
-
-            <textarea
-              id="address"
-              rows="3"
-              placeholder="Complete address or location"
-            ></textarea>
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label for="contact">
-              Contact Number
-            </label>
-
-            <input
-              type="text"
-              id="contact"
-              placeholder="Contact number"
-            >
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label for="emergencyContact">
-              Emergency Contact Person
-            </label>
-
-            <input
-              type="text"
-              id="emergencyContact"
-              placeholder="Emergency contact name"
-            >
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label for="emergencyNumber">
-              Emergency Contact Number
-            </label>
-
-            <input
-              type="text"
-              id="emergencyNumber"
-              placeholder="Emergency contact number"
-            >
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label for="status">
-              Membership Status
-            </label>
-
-            <select id="status">
-
-              <option value="Active">
-                Active
-              </option>
-
-              <option value="Inactive">
-                Inactive
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="form-group full-width">
-
-            <label for="photo">
-              Member Photo
-            </label>
-
-            <input
-              type="file"
-              id="photo"
-              accept="image/*"
-            >
-
-            <small>
-              Maximum photo size: 5 MB
-            </small>
-
-            <div id="photoPreview"></div>
-
-          </div>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Search members..."
+          >
 
         </div>
 
 
-        <div class="form-buttons">
 
-          <button
-            type="submit"
-            id="saveButton"
-            class="btn-primary"
-          >
-            Add Member
-          </button>
+        <!-- ================================================== -->
+        <!-- MEMBER TABLE -->
+        <!-- ================================================== -->
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Photo
+                </th>
+
+                <th>
+                  Member ID
+                </th>
+
+                <th>
+                  Full Name
+                </th>
+
+                <th>
+                  Passport
+                </th>
+
+                <th>
+                  Birthday
+                </th>
+
+                <th>
+                  Contact
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="membersTableBody">
+
+              <tr>
+
+                <td
+                  colspan="8"
+                  class="empty-message"
+                >
+                  Loading members...
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+    </section>
+
+
+
+    <!-- ================================================== -->
+    <!-- MEMBER DETAILS MODAL -->
+    <!-- ADMIN DASHBOARD ONLY -->
+    <!-- ================================================== -->
+
+    <div
+      id="memberDetailsModal"
+      class="member-modal hidden"
+    >
+
+      <div class="member-modal-content">
+
+
+        <!-- ================================================== -->
+        <!-- MODAL HEADER -->
+        <!-- ================================================== -->
+
+        <div class="member-modal-header">
+
+          <h2>
+            Member Details
+          </h2>
 
           <button
             type="button"
-            id="cancelButton"
-            class="btn-secondary hidden"
+            id="closeDetailsButton"
+            class="modal-close"
+            aria-label="Close"
           >
-            Cancel
+            &times;
           </button>
 
         </div>
 
-      </form>
-
-    </section>
 
 
-    <!-- ========================= -->
-    <!-- MEMBER RECORDS -->
-    <!-- ========================= -->
+        <!-- ================================================== -->
+        <!-- DETAILS BODY -->
+        <!-- ================================================== -->
 
-    <section class="member-section">
+        <div class="member-details-body">
 
-      <div class="section-header">
 
-        <h2>Member Records</h2>
+          <!-- =============================== -->
+          <!-- PHOTO -->
+          <!-- =============================== -->
 
-        <input
-          type="text"
-          id="search"
-          placeholder="Search member..."
-        >
+          <div
+            id="detailsPhoto"
+            class="details-photo"
+          >
+          </div>
+
+
+
+          <!-- =============================== -->
+          <!-- DETAILS GRID -->
+          <!-- =============================== -->
+
+          <div class="details-grid">
+
+
+            <!-- MEMBER ID -->
+
+            <div class="detail-item">
+
+              <span>
+                Member ID
+              </span>
+
+              <strong id="detailsMemberId">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- FULL NAME -->
+
+            <div class="detail-item">
+
+              <span>
+                Full Name
+              </span>
+
+              <strong id="detailsFullName">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- PASSPORT -->
+
+            <div class="detail-item">
+
+              <span>
+                Passport Number
+              </span>
+
+              <strong id="detailsPassport">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- BIRTHDAY -->
+
+            <div class="detail-item">
+
+              <span>
+                Birthday
+              </span>
+
+              <strong id="detailsBirthday">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- COUNTRY -->
+
+            <div class="detail-item">
+
+              <span>
+                Country
+              </span>
+
+              <strong id="detailsCountry">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- CONTACT -->
+
+            <div class="detail-item">
+
+              <span>
+                Contact Number
+              </span>
+
+              <strong id="detailsContact">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- ADDRESS -->
+
+            <div class="detail-item full-width">
+
+              <span>
+                Address / Location
+              </span>
+
+              <strong id="detailsAddress">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- EMERGENCY PERSON -->
+
+            <div class="detail-item">
+
+              <span>
+                Emergency Contact Person
+              </span>
+
+              <strong id="detailsEmergencyPerson">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- EMERGENCY NUMBER -->
+
+            <div class="detail-item">
+
+              <span>
+                Emergency Contact Number
+              </span>
+
+              <strong id="detailsEmergencyNumber">
+                -
+              </strong>
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div class="detail-item">
+
+              <span>
+                Membership Status
+              </span>
+
+              <strong id="detailsStatus">
+                -
+              </strong>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ================================================== -->
+        <!-- MODAL ACTIONS -->
+        <!-- ================================================== -->
+
+        <div class="member-modal-actions">
+
+          <button
+            type="button"
+            id="detailsEditButton"
+            class="btn-primary"
+          >
+            Edit Member
+          </button>
+
+
+          <button
+            type="button"
+            id="detailsCloseButton"
+            class="btn-secondary"
+          >
+            Close
+          </button>
+
+        </div>
+
 
       </div>
 
-
-      <div class="table-container">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>Photo</th>
-              <th>Member ID</th>
-              <th>Full Name</th>
-              <th>Passport</th>
-              <th>Birthday</th>
-              <th>Contact</th>
-              <th>Status</th>
-              <th>Action</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="memberTable"></tbody>
-
-        </table>
-
-      </div>
-
-
-      <p
-        id="emptyMessage"
-        class="empty-message"
-      >
-        No member records found.
-      </p>
-
-    </section>
-
-  </section>
-
-</div>
-
-
-<!-- ========================= -->
-<!-- MEMBER DETAILS MODAL -->
-<!-- ========================= -->
-
-<div
-  id="memberDetailsModal"
-  class="member-modal hidden"
->
-
-  <div class="member-modal-content">
-
-    <div class="member-modal-header">
-
-      <h2>
-        Member Details
-      </h2>
-
-      <button
-        type="button"
-        id="closeDetailsButton"
-        class="modal-close"
-      >
-        ×
-      </button>
-
     </div>
 
-
-    <div class="member-details-body">
-
-      <div
-        id="detailsPhoto"
-        class="details-photo"
-      ></div>
-
-
-      <div class="details-grid">
-
-        <div class="detail-item">
-          <span>Member ID</span>
-          <strong id="detailsMemberId"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Full Name</span>
-          <strong id="detailsFullName"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Passport Number</span>
-          <strong id="detailsPassport"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Birthday</span>
-          <strong id="detailsBirthday"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Country</span>
-          <strong id="detailsCountry"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Contact Number</span>
-          <strong id="detailsContact"></strong>
-        </div>
-
-        <div class="detail-item full-width">
-          <span>Address / Location</span>
-          <strong id="detailsAddress"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Emergency Contact Person</span>
-          <strong id="detailsEmergencyPerson"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Emergency Contact Number</span>
-          <strong id="detailsEmergencyNumber"></strong>
-        </div>
-
-        <div class="detail-item">
-          <span>Membership Status</span>
-          <strong id="detailsStatus"></strong>
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="member-modal-actions">
-
-      <button
-        type="button"
-        id="detailsEditButton"
-        class="btn-primary"
-      >
-        Edit Member
-      </button>
-
-      <button
-        type="button"
-        id="detailsCloseButton"
-        class="btn-secondary"
-      >
-        Close
-      </button>
-
-    </div>
 
   </div>
 
-</div>
 
 
-<!-- SUPABASE -->
+  <!-- ================================================== -->
+  <!-- SUPABASE -->
+  <!-- ================================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+  ></script>
 
-<!-- ADMIN SCRIPT -->
 
-<script src="admin.js"></script>
+  <!-- ================================================== -->
+  <!-- ADMIN JAVASCRIPT -->
+  <!-- ================================================== -->
+
+  <script src="admin.js"></script>
+
 
 </body>
+
 </html>
