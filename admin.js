@@ -1,5 +1,10 @@
 // ========================================
-// SUPABASE
+// POGA KSA ADMIN MEMBER MANAGEMENT SYSTEM
+// ========================================
+
+
+// ========================================
+// SUPABASE CONFIGURATION
 // ========================================
 
 const SUPABASE_URL =
@@ -16,11 +21,10 @@ const supabaseClient =
 
 
 // ========================================
-// SETTINGS
+// STORAGE
 // ========================================
 
-const PHOTO_BUCKET =
-  "member-photos";
+const PHOTO_BUCKET = "member-photos";
 
 
 // ========================================
@@ -30,39 +34,37 @@ const PHOTO_BUCKET =
 const loginSection =
   document.getElementById("loginSection");
 
+const dashboardSection =
+  document.getElementById("dashboardSection");
+
 const loginForm =
   document.getElementById("loginForm");
 
-const adminEmail =
-  document.getElementById("adminEmail");
+const loginEmail =
+  document.getElementById("loginEmail");
 
-const adminPassword =
-  document.getElementById("adminPassword");
+const loginPassword =
+  document.getElementById("loginPassword");
 
 const loginButton =
   document.getElementById("loginButton");
 
-
-// ========================================
-// DASHBOARD ELEMENTS
-// ========================================
-
-const dashboardSection =
-  document.getElementById("dashboardSection");
+const logoutButton =
+  document.getElementById("logoutButton");
 
 const adminEmailDisplay =
   document.getElementById("adminEmailDisplay");
 
-const logoutButton =
-  document.getElementById("logoutButton");
-
 
 // ========================================
-// FORM ELEMENTS
+// MEMBER FORM ELEMENTS
 // ========================================
 
 const memberForm =
   document.getElementById("memberForm");
+
+const formTitle =
+  document.getElementById("formTitle");
 
 const memberId =
   document.getElementById("memberId");
@@ -103,24 +105,23 @@ const photoPreview =
 const saveButton =
   document.getElementById("saveButton");
 
-const cancelButton =
-  document.getElementById("cancelButton");
-
-const formTitle =
-  document.getElementById("formTitle");
-
-const memberTable =
-  document.getElementById("memberTable");
-
-const search =
-  document.getElementById("search");
-
-const emptyMessage =
-  document.getElementById("emptyMessage");
+const cancelEditButton =
+  document.getElementById("cancelEditButton");
 
 
 // ========================================
-// DETAILS MODAL
+// MEMBER RECORD ELEMENTS
+// ========================================
+
+const membersTableBody =
+  document.getElementById("membersTableBody");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+
+// ========================================
+// MEMBER DETAILS MODAL ELEMENTS
 // ========================================
 
 const memberDetailsModal =
@@ -173,14 +174,14 @@ const detailsCountry =
     "detailsCountry"
   );
 
-const detailsContact =
-  document.getElementById(
-    "detailsContact"
-  );
-
 const detailsAddress =
   document.getElementById(
     "detailsAddress"
+  );
+
+const detailsContact =
+  document.getElementById(
+    "detailsContact"
   );
 
 const detailsEmergencyPerson =
@@ -200,7 +201,7 @@ const detailsStatus =
 
 
 // ========================================
-// VARIABLES
+// STATE
 // ========================================
 
 let editingId = null;
@@ -213,43 +214,54 @@ let currentDetailsMemberId = null;
 
 
 // ========================================
-// AUTH CHECK
+// CHECK AUTHENTICATION
 // ========================================
 
 async function checkAuth() {
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getSession();
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.getSession();
 
 
-  if (error) {
+    if (error) {
+
+      console.error(
+        "Auth session error:",
+        error
+      );
+
+      showLogin();
+
+      return;
+    }
+
+
+    const session =
+      data?.session;
+
+
+    if (session?.user) {
+
+      showDashboard(
+        session.user
+      );
+
+    } else {
+
+      showLogin();
+
+    }
+
+  } catch (error) {
 
     console.error(
-      "SESSION ERROR:",
+      "Authentication check error:",
       error
     );
-
-    showLogin();
-
-    return;
-
-  }
-
-
-  const session =
-    data.session;
-
-
-  if (session) {
-
-    showDashboard(
-      session.user
-    );
-
-  } else {
 
     showLogin();
 
@@ -272,6 +284,9 @@ function showLogin() {
     "hidden"
   );
 
+  adminEmailDisplay.textContent =
+    "Admin";
+
 }
 
 
@@ -290,8 +305,17 @@ async function showDashboard(user) {
   );
 
 
-  adminEmailDisplay.textContent =
-    user.email || "Administrator";
+  if (user?.email) {
+
+    adminEmailDisplay.textContent =
+      user.email;
+
+  } else {
+
+    adminEmailDisplay.textContent =
+      "Admin";
+
+  }
 
 
   await loadMembers();
@@ -300,35 +324,17 @@ async function showDashboard(user) {
 
 
 // ========================================
-// LOGIN
+// ADMIN LOGIN
 // ========================================
 
-if (loginForm) {
+loginForm.addEventListener(
+  "submit",
+  async function (event) {
 
-  loginForm.addEventListener(
-    "submit",
-    async function (event) {
-
-      event.preventDefault();
+    event.preventDefault();
 
 
-      const email =
-        adminEmail.value.trim();
-
-      const password =
-        adminPassword.value;
-
-
-      if (!email || !password) {
-
-        alert(
-          "Please enter your email and password."
-        );
-
-        return;
-
-      }
-
+    try {
 
       loginButton.disabled = true;
 
@@ -336,92 +342,83 @@ if (loginForm) {
         "Logging in...";
 
 
-      try {
+      const email =
+        loginEmail.value.trim();
 
-        const {
-          data,
-          error
-        } =
-          await supabaseClient.auth.signInWithPassword({
-
-            email:
-              email,
-
-            password:
-              password
-
-          });
+      const password =
+        loginPassword.value;
 
 
-        if (error) {
-
-          console.error(
-            "LOGIN ERROR:",
-            error
-          );
-
-          alert(
-            "LOGIN FAILED\n\n" +
-            error.message
-          );
-
-          return;
-
-        }
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
 
 
-        adminPassword.value = "";
-
-
-        if (data.user) {
-
-          await showDashboard(
-            data.user
-          );
-
-        }
-
-      }
-
-      catch (error) {
+      if (error) {
 
         console.error(
-          "LOGIN ERROR:",
+          "Login error:",
           error
         );
 
         alert(
-          "LOGIN ERROR\n\n" +
-          error.message
+          error.message ||
+          "Unable to login."
+        );
+
+        return;
+      }
+
+
+      if (data?.user) {
+
+        loginPassword.value = "";
+
+        await showDashboard(
+          data.user
         );
 
       }
 
-      finally {
+    } catch (error) {
 
-        loginButton.disabled =
-          false;
+      console.error(
+        "Login error:",
+        error
+      );
 
-        loginButton.textContent =
-          "Login";
+      alert(
+        error.message ||
+        "Unable to login."
+      );
 
-      }
+    } finally {
+
+      loginButton.disabled = false;
+
+      loginButton.textContent =
+        "Login";
 
     }
-  );
 
-}
+  }
+);
 
 
 // ========================================
 // LOGOUT
 // ========================================
 
-if (logoutButton) {
+logoutButton.addEventListener(
+  "click",
+  async function () {
 
-  logoutButton.addEventListener(
-    "click",
-    async function () {
+    try {
 
       const {
         error
@@ -431,46 +428,37 @@ if (logoutButton) {
 
       if (error) {
 
+        console.error(
+          "Logout error:",
+          error
+        );
+
         alert(
-          "LOGOUT FAILED\n\n" +
-          error.message
+          error.message ||
+          "Unable to logout."
         );
 
         return;
-
       }
 
 
+      closeMemberDetails();
+
       resetForm();
 
-      closeMemberDetails();
-
-      memberTable.innerHTML =
-        "";
-
-      adminEmailDisplay.textContent =
-        "";
-
       showLogin();
 
-    }
-  );
+    } catch (error) {
 
-}
+      console.error(
+        "Logout error:",
+        error
+      );
 
-
-// ========================================
-// AUTH STATE CHANGE
-// ========================================
-
-supabaseClient.auth.onAuthStateChange(
-  function (event) {
-
-    if (event === "SIGNED_OUT") {
-
-      showLogin();
-
-      closeMemberDetails();
+      alert(
+        error.message ||
+        "Unable to logout."
+      );
 
     }
 
@@ -479,144 +467,238 @@ supabaseClient.auth.onAuthStateChange(
 
 
 // ========================================
-// PHOTO CHANGE
+// AUTH STATE CHANGES
 // ========================================
 
-if (photo) {
+supabaseClient.auth.onAuthStateChange(
+  async function (event, session) {
 
-  photo.addEventListener(
-    "change",
-    function () {
+    if (
+      event === "SIGNED_IN" &&
+      session?.user
+    ) {
 
-      const file =
-        photo.files[0];
+      loginSection.classList.add(
+        "hidden"
+      );
 
-      selectedPhotoFile =
-        file || null;
+      dashboardSection.classList.remove(
+        "hidden"
+      );
 
-
-      if (!file) {
-
-        if (currentPhotoUrl) {
-
-          showPhotoPreview(
-            currentPhotoUrl
-          );
-
-        } else {
-
-          photoPreview.innerHTML =
-            "";
-
-        }
-
-        return;
-
-      }
-
-
-      if (!file.type.startsWith("image/")) {
-
-        alert(
-          "Please select an image file."
-        );
-
-        photo.value = "";
-
-        selectedPhotoFile = null;
-
-        return;
-
-      }
-
-
-      if (file.size > 5 * 1024 * 1024) {
-
-        alert(
-          "Photo is too large.\n\n" +
-          "Maximum size is 5 MB."
-        );
-
-        photo.value = "";
-
-        selectedPhotoFile = null;
-
-        return;
-
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function (event) {
-
-          photoPreview.innerHTML = `
-
-            <img
-              src="${event.target.result}"
-              class="preview-image"
-              alt="Photo Preview"
-            >
-
-          `;
-
-        };
-
-
-      reader.readAsDataURL(file);
+      adminEmailDisplay.textContent =
+        session.user.email ||
+        "Admin";
 
     }
-  );
-
-}
 
 
-// ========================================
-// FORM SUBMIT
-// ========================================
+    if (
+      event === "SIGNED_OUT"
+    ) {
 
-if (memberForm) {
-
-  memberForm.addEventListener(
-    "submit",
-    async function (event) {
-
-      event.preventDefault();
-
-
-      if (editingId === null) {
-
-        await addMember();
-
-      } else {
-
-        await updateMember();
-
-      }
-
-    }
-  );
-
-}
-
-
-// ========================================
-// CANCEL
-// ========================================
-
-if (cancelButton) {
-
-  cancelButton.addEventListener(
-    "click",
-    function () {
+      closeMemberDetails();
 
       resetForm();
 
+      showLogin();
+
     }
-  );
+
+  }
+);
+
+
+// ========================================
+// PHOTO VALIDATION
+// ========================================
+
+photo.addEventListener(
+  "change",
+  function () {
+
+    selectedPhotoFile =
+      photo.files[0] || null;
+
+
+    photoPreview.innerHTML =
+      "";
+
+
+    if (!selectedPhotoFile) {
+
+      return;
+
+    }
+
+
+    // Check image
+    if (
+      !selectedPhotoFile.type.startsWith(
+        "image/"
+      )
+    ) {
+
+      alert(
+        "Please select an image file."
+      );
+
+      photo.value = "";
+
+      selectedPhotoFile = null;
+
+      return;
+
+    }
+
+
+    // Maximum 5MB
+    const maxSize =
+      5 * 1024 * 1024;
+
+
+    if (
+      selectedPhotoFile.size >
+      maxSize
+    ) {
+
+      alert(
+        "Photo size must not exceed 5MB."
+      );
+
+      photo.value = "";
+
+      selectedPhotoFile = null;
+
+      return;
+
+    }
+
+
+    // Preview
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function (event) {
+
+        const img =
+          document.createElement(
+            "img"
+          );
+
+        img.src =
+          event.target.result;
+
+        img.alt =
+          "Photo Preview";
+
+        img.className =
+          "preview-image";
+
+        photoPreview.appendChild(
+          img
+        );
+
+      };
+
+
+    reader.readAsDataURL(
+      selectedPhotoFile
+    );
+
+  }
+);
+
+
+// ========================================
+// UPLOAD PHOTO
+// ========================================
+
+async function uploadPhoto(file) {
+
+  if (!file) {
+
+    return null;
+
+  }
+
+
+  const originalName =
+    file.name || "";
+
+
+  const extension =
+    originalName.includes(".")
+      ? originalName
+          .split(".")
+          .pop()
+          .toLowerCase()
+      : "jpg";
+
+
+  const fileName =
+    `member_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 10)}.${extension}`;
+
+
+  const {
+    error: uploadError
+  } =
+    await supabaseClient
+      .storage
+      .from(PHOTO_BUCKET)
+      .upload(
+        fileName,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false
+        }
+      );
+
+
+  if (uploadError) {
+
+    console.error(
+      "Photo upload error:",
+      uploadError
+    );
+
+    throw new Error(
+      uploadError.message ||
+      "Unable to upload photo."
+    );
+
+  }
+
+
+  const {
+    data
+  } =
+    supabaseClient
+      .storage
+      .from(PHOTO_BUCKET)
+      .getPublicUrl(
+        fileName
+      );
+
+
+  if (
+    !data ||
+    !data.publicUrl
+  ) {
+
+    throw new Error(
+      "Unable to create photo URL."
+    );
+
+  }
+
+
+  return data.publicUrl;
 
 }
 
@@ -665,341 +747,183 @@ function getFormData() {
 
 
 // ========================================
-// UPLOAD PHOTO
+// SAVE MEMBER
+// ADD OR UPDATE
 // ========================================
 
-async function uploadPhoto(file) {
+memberForm.addEventListener(
+  "submit",
+  async function (event) {
 
-  if (!file) {
-    return null;
-  }
-
-
-  const extension =
-    getFileExtension(file.name);
+    event.preventDefault();
 
 
-  const fileName =
-    "member_" +
-    Date.now() +
-    "_" +
-    Math.random()
-      .toString(36)
-      .substring(2, 10) +
-    extension;
+    try {
+
+      saveButton.disabled = true;
+
+      saveButton.textContent =
+        editingId
+          ? "Updating..."
+          : "Adding...";
 
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .storage
-      .from(PHOTO_BUCKET)
-      .upload(
-        fileName,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type
+      const formData =
+        getFormData();
+
+
+      // ==================================
+      // UPDATE MEMBER
+      // ==================================
+
+      if (editingId) {
+
+        let updateData = {
+          ...formData
+        };
+
+
+        // Upload new photo only if selected
+        if (selectedPhotoFile) {
+
+          const newPhotoUrl =
+            await uploadPhoto(
+              selectedPhotoFile
+            );
+
+          updateData.photo_url =
+            newPhotoUrl;
+
         }
-      );
 
 
-  if (error) {
-
-    throw new Error(
-      "PHOTO UPLOAD FAILED\n\n" +
-      error.message
-    );
-
-  }
-
-
-  console.log(
-    "Photo uploaded:",
-    data
-  );
+        const {
+          error
+        } =
+          await supabaseClient
+            .from("members")
+            .update(updateData)
+            .eq("id", editingId);
 
 
-  const {
-    data: publicData
-  } =
-    supabaseClient
-      .storage
-      .from(PHOTO_BUCKET)
-      .getPublicUrl(
-        fileName
-      );
+        if (error) {
+
+          console.error(
+            "Update member error:",
+            error
+          );
+
+          throw new Error(
+            error.message ||
+            "Unable to update member."
+          );
+
+        }
 
 
-  if (
-    !publicData ||
-    !publicData.publicUrl
-  ) {
-
-    throw new Error(
-      "Photo uploaded but URL could not be created."
-    );
-
-  }
+        alert(
+          "Member updated successfully."
+        );
 
 
-  return publicData.publicUrl;
+        resetForm();
 
-}
+        await loadMembers();
 
+        return;
 
-// ========================================
-// FILE EXTENSION
-// ========================================
-
-function getFileExtension(filename) {
-
-  const dot =
-    filename.lastIndexOf(".");
+      }
 
 
-  if (dot === -1) {
-    return ".jpg";
-  }
+      // ==================================
+      // ADD MEMBER
+      // ==================================
+
+      if (!selectedPhotoFile) {
+
+        throw new Error(
+          "Please select a member photo."
+        );
+
+      }
 
 
-  return filename
-    .substring(dot)
-    .toLowerCase();
-
-}
-
-
-// ========================================
-// ADD MEMBER
-// ========================================
-
-async function addMember() {
-
-  const member =
-    getFormData();
-
-
-  if (
-    !member.member_id ||
-    !member.full_name
-  ) {
-
-    alert(
-      "Please enter Member ID and Full Name."
-    );
-
-    return;
-
-  }
-
-
-  saveButton.disabled = true;
-
-  saveButton.textContent =
-    "Saving...";
-
-
-  try {
-
-    let photoUrl = null;
-
-
-    if (selectedPhotoFile) {
-
-      photoUrl =
+      const photoUrl =
         await uploadPhoto(
           selectedPhotoFile
         );
 
-    }
+
+      const newMember = {
+
+        ...formData,
+
+        photo_url:
+          photoUrl
+
+      };
 
 
-    member.photo_url =
-      photoUrl;
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("members")
+          .insert([
+            newMember
+          ]);
 
 
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("members")
-        .insert([member]);
+      if (error) {
+
+        console.error(
+          "Add member error:",
+          error
+        );
+
+        throw new Error(
+          error.message ||
+          "Unable to add member."
+        );
+
+      }
 
 
-    if (error) {
+      alert(
+        "Member added successfully."
+      );
+
+
+      resetForm();
+
+      await loadMembers();
+
+
+    } catch (error) {
 
       console.error(
-        "INSERT ERROR:",
+        "Save member error:",
         error
       );
 
       alert(
-        "SAVE FAILED\n\n" +
-        error.message
+        error.message ||
+        "Something went wrong."
       );
 
-      return;
+    } finally {
+
+      saveButton.disabled = false;
+
+      saveButton.textContent =
+        editingId
+          ? "Update Member"
+          : "Add Member";
 
     }
 
-
-    alert(
-      "Member added successfully!"
-    );
-
-
-    resetForm();
-
-    await loadMembers();
-
   }
-
-  catch (error) {
-
-    console.error(
-      "ADD ERROR:",
-      error
-    );
-
-    alert(
-      "SAVE ERROR\n\n" +
-      error.message
-    );
-
-  }
-
-  finally {
-
-    saveButton.disabled =
-      false;
-
-    saveButton.textContent =
-      "Add Member";
-
-  }
-
-}
-
-
-// ========================================
-// UPDATE MEMBER
-// ========================================
-
-async function updateMember() {
-
-  const member =
-    getFormData();
-
-
-  if (
-    !member.member_id ||
-    !member.full_name
-  ) {
-
-    alert(
-      "Please enter Member ID and Full Name."
-    );
-
-    return;
-
-  }
-
-
-  saveButton.disabled = true;
-
-  saveButton.textContent =
-    "Updating...";
-
-
-  try {
-
-    let photoUrl =
-      currentPhotoUrl;
-
-
-    if (selectedPhotoFile) {
-
-      photoUrl =
-        await uploadPhoto(
-          selectedPhotoFile
-        );
-
-    }
-
-
-    member.photo_url =
-      photoUrl;
-
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("members")
-        .update(member)
-        .eq(
-          "id",
-          editingId
-        );
-
-
-    if (error) {
-
-      console.error(
-        "UPDATE ERROR:",
-        error
-      );
-
-      alert(
-        "UPDATE FAILED\n\n" +
-        error.message
-      );
-
-      return;
-
-    }
-
-
-    alert(
-      "Member updated successfully!"
-    );
-
-
-    resetForm();
-
-    await loadMembers();
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "UPDATE ERROR:",
-      error
-    );
-
-    alert(
-      "UPDATE ERROR\n\n" +
-      error.message
-    );
-
-  }
-
-  finally {
-
-    saveButton.disabled =
-      false;
-
-    saveButton.textContent =
-      "Add Member";
-
-  }
-
-}
+);
 
 
 // ========================================
@@ -1008,17 +932,16 @@ async function updateMember() {
 
 async function loadMembers() {
 
-  memberTable.innerHTML =
-    "";
-
-  emptyMessage.textContent =
-    "Loading members...";
-
-  emptyMessage.style.display =
-    "block";
-
-
   try {
+
+    membersTableBody.innerHTML = `
+      <tr>
+        <td colspan="8" class="empty-message">
+          Loading members...
+        </td>
+      </tr>
+    `;
+
 
     const {
       data,
@@ -1038,55 +961,42 @@ async function loadMembers() {
     if (error) {
 
       console.error(
-        "LOAD ERROR:",
+        "Load members error:",
         error
       );
 
-      emptyMessage.textContent =
-        "Unable to load members.";
-
-      alert(
-        "LOAD MEMBERS FAILED\n\n" +
-        error.message
-      );
-
-      return;
-
-    }
-
-
-    if (
-      !data ||
-      data.length === 0
-    ) {
-
-      emptyMessage.textContent =
-        "No member records found.";
+      membersTableBody.innerHTML = `
+        <tr>
+          <td colspan="8" class="empty-message">
+            Unable to load member records.
+          </td>
+        </tr>
+      `;
 
       return;
 
     }
 
 
-    emptyMessage.style.display =
-      "none";
+    displayMembers(
+      data || []
+    );
 
 
-    displayMembers(data);
-
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(
-      "LOAD ERROR:",
+      "Load members error:",
       error
     );
 
-    alert(
-      "LOAD ERROR\n\n" +
-      error.message
-    );
+    membersTableBody.innerHTML = `
+      <tr>
+        <td colspan="8" class="empty-message">
+          Unable to load member records.
+        </td>
+      </tr>
+    `;
 
   }
 
@@ -1097,137 +1007,172 @@ async function loadMembers() {
 // DISPLAY MEMBERS
 // ========================================
 
-function displayMembers(data) {
+function displayMembers(
+  members
+) {
 
-  memberTable.innerHTML =
-    "";
+  if (
+    !members ||
+    members.length === 0
+  ) {
+
+    membersTableBody.innerHTML = `
+      <tr>
+        <td colspan="8" class="empty-message">
+          No member records found.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
 
 
-  data.forEach(
-    function (member) {
-
-      const row =
-        document.createElement("tr");
+  membersTableBody.innerHTML =
+    members.map(
+      function (member) {
 
 
-      const statusClass =
-        member.membership_status === "Active"
-          ? "status-active"
-          : "status-inactive";
+        // ================================
+        // PHOTO
+        // ================================
+
+        let photoHTML =
+          `
+            <div class="no-photo">
+              No Photo
+            </div>
+          `;
 
 
-      let photoHTML;
+        if (
+          member.photo_url
+        ) {
+
+          photoHTML =
+            `
+              <img
+                src="${escapeHTML(
+                  member.photo_url
+                )}"
+                alt="Member Photo"
+                class="member-photo"
+              >
+            `;
+
+        }
 
 
-      if (member.photo_url) {
+        // ================================
+        // STATUS
+        // ================================
 
-        photoHTML = `
+        const statusClass =
+          member.membership_status ===
+          "Active"
+            ? "status-active"
+            : "status-inactive";
 
-          <img
-            src="${escapeHTML(
-              member.photo_url
-            )}"
-            class="member-photo"
-            alt="Member Photo"
-          >
 
-        `;
+        const safeStatus =
+          escapeHTML(
+            member.membership_status ||
+            "-"
+          );
 
-      } else {
 
-        photoHTML = `
+        // ================================
+        // TABLE ROW
+        // ================================
 
-          <div class="no-photo">
-            No Photo
-          </div>
+        return `
+
+          <tr>
+
+            <td>
+              ${photoHTML}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                member.member_id || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                member.full_name || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                member.passport_number || "-"
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                formatDate(
+                  member.birthday
+                )
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                member.contact_number || "-"
+              )}
+            </td>
+
+            <td>
+              <span class="${statusClass}">
+                ${safeStatus}
+              </span>
+            </td>
+
+            <td>
+
+              <button
+                type="button"
+                class="btn-primary btn-small"
+                onclick="viewMember(${Number(
+                  member.id
+                )})"
+              >
+                View Details
+              </button>
+
+              <button
+                type="button"
+                class="btn-edit"
+                onclick="editMember(${Number(
+                  member.id
+                )})"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="btn-delete"
+                onclick="deleteMember(${Number(
+                  member.id
+                )})"
+              >
+                Delete
+              </button>
+
+            </td>
+
+          </tr>
 
         `;
 
       }
-
-
-      row.innerHTML = `
-
-        <td>
-          ${photoHTML}
-        </td>
-
-        <td>
-          ${escapeHTML(
-            member.member_id || ""
-          )}
-        </td>
-
-        <td>
-          ${escapeHTML(
-            member.full_name || ""
-          )}
-        </td>
-
-        <td>
-          ${escapeHTML(
-            member.passport_number || ""
-          )}
-        </td>
-
-        <td>
-          ${escapeHTML(
-            member.birthday || ""
-          )}
-        </td>
-
-        <td>
-          ${escapeHTML(
-            member.contact_number || ""
-          )}
-        </td>
-
-        <td class="${statusClass}">
-          ${escapeHTML(
-            member.membership_status || ""
-          )}
-        </td>
-
-        <td>
-
-          <button
-            type="button"
-            class="btn-primary btn-small"
-            onclick="viewMember(${member.id})"
-          >
-            View Details
-          </button>
-
-          <button
-            type="button"
-            class="btn-edit"
-            onclick="editMember(${member.id})"
-          >
-            Edit
-          </button>
-
-          <button
-            type="button"
-            class="btn-delete"
-            onclick="deleteMember(
-              ${member.id},
-              '${escapeJS(
-                member.full_name || ""
-              )}'
-            )"
-          >
-            Delete
-          </button>
-
-        </td>
-
-      `;
-
-
-      memberTable.appendChild(row);
-
-    }
-  );
+    )
+    .join("");
 
 }
 
@@ -1236,7 +1181,9 @@ function displayMembers(data) {
 // VIEW MEMBER DETAILS
 // ========================================
 
-async function viewMember(id) {
+async function viewMember(
+  id
+) {
 
   try {
 
@@ -1247,18 +1194,31 @@ async function viewMember(id) {
       await supabaseClient
         .from("members")
         .select("*")
-        .eq(
-          "id",
-          id
-        )
+        .eq("id", id)
         .single();
 
 
     if (error) {
 
+      console.error(
+        "View member error:",
+        error
+      );
+
       alert(
-        "VIEW MEMBER FAILED\n\n" +
-        error.message
+        error.message ||
+        "Unable to load member details."
+      );
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      alert(
+        "Member record not found."
       );
 
       return;
@@ -1270,83 +1230,115 @@ async function viewMember(id) {
       data.id;
 
 
+    // ==================================
     // PHOTO
+    // ==================================
 
     if (data.photo_url) {
 
       detailsPhoto.innerHTML = `
-
         <img
           src="${escapeHTML(
             data.photo_url
           )}"
           alt="Member Photo"
         >
-
       `;
 
     } else {
 
       detailsPhoto.innerHTML = `
-
         <div class="no-photo">
           No Photo
         </div>
-
       `;
 
     }
 
 
+    // ==================================
     // DETAILS
+    // ==================================
 
     detailsMemberId.textContent =
-      data.member_id || "—";
+      data.member_id || "-";
 
     detailsFullName.textContent =
-      data.full_name || "—";
+      data.full_name || "-";
 
     detailsPassport.textContent =
-      data.passport_number || "—";
+      data.passport_number || "-";
 
     detailsBirthday.textContent =
-      data.birthday || "—";
+      formatDate(
+        data.birthday
+      );
 
     detailsCountry.textContent =
-      data.country || "—";
-
-    detailsContact.textContent =
-      data.contact_number || "—";
+      data.country || "-";
 
     detailsAddress.textContent =
-      data.address || "—";
+      data.address || "-";
+
+    detailsContact.textContent =
+      data.contact_number || "-";
 
     detailsEmergencyPerson.textContent =
-      data.emergency_contact_person || "—";
+      data.emergency_contact_person || "-";
 
     detailsEmergencyNumber.textContent =
-      data.emergency_contact_number || "—";
+      data.emergency_contact_number || "-";
 
     detailsStatus.textContent =
-      data.membership_status || "—";
+      data.membership_status || "-";
 
+
+    // ==================================
+    // STATUS STYLE
+    // ==================================
+
+    detailsStatus.className = "";
+
+    if (
+      data.membership_status ===
+      "Active"
+    ) {
+
+      detailsStatus.classList.add(
+        "status-active"
+      );
+
+    } else {
+
+      detailsStatus.classList.add(
+        "status-inactive"
+      );
+
+    }
+
+
+    // ==================================
+    // OPEN MODAL
+    // ==================================
 
     memberDetailsModal.classList.remove(
       "hidden"
     );
 
-  }
+    document.body.style.overflow =
+      "hidden";
 
-  catch (error) {
+
+  } catch (error) {
 
     console.error(
-      "VIEW DETAILS ERROR:",
+      "View member error:",
       error
     );
 
     alert(
-      "VIEW DETAILS ERROR\n\n" +
-      error.message
+      error.message ||
+      "Unable to load member details."
     );
 
   }
@@ -1355,7 +1347,7 @@ async function viewMember(id) {
 
 
 // ========================================
-// CLOSE DETAILS
+// CLOSE MEMBER DETAILS
 // ========================================
 
 function closeMemberDetails() {
@@ -1367,48 +1359,182 @@ function closeMemberDetails() {
   currentDetailsMemberId =
     null;
 
-}
-
-
-if (closeDetailsButton) {
-
-  closeDetailsButton.addEventListener(
-    "click",
-    closeMemberDetails
-  );
-
-}
-
-
-if (detailsCloseButton) {
-
-  detailsCloseButton.addEventListener(
-    "click",
-    closeMemberDetails
-  );
+  document.body.style.overflow =
+    "";
 
 }
 
 
 // ========================================
-// EDIT FROM DETAILS
+// CLOSE MODAL BUTTONS
 // ========================================
 
-if (detailsEditButton) {
+closeDetailsButton.addEventListener(
+  "click",
+  function () {
 
-  detailsEditButton.addEventListener(
-    "click",
-    async function () {
+    closeMemberDetails();
 
-      if (
-        currentDetailsMemberId === null
-      ) {
+  }
+);
 
-        return;
 
-      }
+detailsCloseButton.addEventListener(
+  "click",
+  function () {
 
-memberId.value =
+    closeMemberDetails();
+
+  }
+);
+
+
+// ========================================
+// EDIT FROM DETAILS MODAL
+// ========================================
+
+detailsEditButton.addEventListener(
+  "click",
+  async function () {
+
+    if (
+      !currentDetailsMemberId
+    ) {
+
+      return;
+
+    }
+
+
+    const id =
+      currentDetailsMemberId;
+
+
+    closeMemberDetails();
+
+    await editMember(id);
+
+  }
+);
+
+
+// ========================================
+// CLOSE MODAL WHEN CLICKING OUTSIDE
+// ========================================
+
+memberDetailsModal.addEventListener(
+  "click",
+  function (event) {
+
+    if (
+      event.target ===
+      memberDetailsModal
+    ) {
+
+      closeMemberDetails();
+
+    }
+
+  }
+);
+
+
+// ========================================
+// CLOSE MODAL WITH ESC KEY
+// ========================================
+
+document.addEventListener(
+  "keydown",
+  function (event) {
+
+    if (
+      event.key === "Escape" &&
+      !memberDetailsModal.classList.contains(
+        "hidden"
+      )
+    ) {
+
+      closeMemberDetails();
+
+    }
+
+  }
+);
+
+
+// ========================================
+// EDIT MEMBER
+// ========================================
+
+async function editMember(
+  id
+) {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("members")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+
+    if (error) {
+
+      console.error(
+        "Edit member error:",
+        error
+      );
+
+      alert(
+        error.message ||
+        "Unable to load member."
+      );
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      alert(
+        "Member record not found."
+      );
+
+      return;
+
+    }
+
+
+    // ==================================
+    // SET EDIT MODE
+    // ==================================
+
+    editingId =
+      data.id;
+
+
+    formTitle.textContent =
+      "Edit Member";
+
+    saveButton.textContent =
+      "Update Member";
+
+    cancelEditButton.classList.remove(
+      "hidden"
+    );
+
+
+    // ==================================
+    // FILL FORM
+    // ==================================
+
+    memberId.value =
       data.member_id || "";
 
     fullName.value =
@@ -1440,9 +1566,9 @@ memberId.value =
       "Active";
 
 
-    editingId =
-      data.id;
-
+    // ==================================
+    // EXISTING PHOTO
+    // ==================================
 
     currentPhotoUrl =
       data.photo_url || null;
@@ -1452,51 +1578,49 @@ memberId.value =
       null;
 
 
-    photo.value = "";
+    photo.value =
+      "";
 
 
-    if (currentPhotoUrl) {
+    photoPreview.innerHTML =
+      "";
 
-      showPhotoPreview(
-        currentPhotoUrl
-      );
 
-    } else {
+    if (data.photo_url) {
 
-      photoPreview.innerHTML =
-        "";
+      photoPreview.innerHTML = `
+        <img
+          src="${escapeHTML(
+            data.photo_url
+          )}"
+          alt="Current Member Photo"
+          class="preview-image"
+        >
+      `;
 
     }
 
 
-    formTitle.textContent =
-      "Edit Member";
+    // ==================================
+    // SCROLL TO FORM
+    // ==================================
 
-    saveButton.textContent =
-      "Update Member";
-
-    cancelButton.classList.remove(
-      "hidden"
-    );
-
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
+    memberForm.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
     });
 
-  }
 
-  catch (error) {
+  } catch (error) {
 
     console.error(
-      "EDIT ERROR:",
+      "Edit member error:",
       error
     );
 
     alert(
-      "EDIT ERROR\n\n" +
-      error.message
+      error.message ||
+      "Unable to edit member."
     );
 
   }
@@ -1505,28 +1629,41 @@ memberId.value =
 
 
 // ========================================
+// CANCEL EDIT
+// ========================================
+
+cancelEditButton.addEventListener(
+  "click",
+  function () {
+
+    resetForm();
+
+  }
+);
+
+
+// ========================================
 // DELETE MEMBER
 // ========================================
 
 async function deleteMember(
-  id,
-  name
+  id
 ) {
 
-  const confirmed =
-    confirm(
-      "Are you sure you want to delete this member?\n\n" +
-      "Member: " +
-      name
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
   try {
+
+    const confirmed =
+      confirm(
+        "Are you sure you want to delete this member?"
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
 
     const {
       error
@@ -1534,22 +1671,19 @@ async function deleteMember(
       await supabaseClient
         .from("members")
         .delete()
-        .eq(
-          "id",
-          id
-        );
+        .eq("id", id);
 
 
     if (error) {
 
       console.error(
-        "DELETE ERROR:",
+        "Delete member error:",
         error
       );
 
       alert(
-        "DELETE FAILED\n\n" +
-        error.message
+        error.message ||
+        "Unable to delete member."
       );
 
       return;
@@ -1558,168 +1692,139 @@ async function deleteMember(
 
 
     alert(
-      "Member deleted successfully!"
+      "Member deleted successfully."
     );
+
+
+    if (
+      editingId === id
+    ) {
+
+      resetForm();
+
+    }
+
+
+    if (
+      currentDetailsMemberId === id
+    ) {
+
+      closeMemberDetails();
+
+    }
 
 
     await loadMembers();
 
-  }
 
-  catch (error) {
+  } catch (error) {
 
     console.error(
-      "DELETE ERROR:",
+      "Delete member error:",
       error
     );
 
     alert(
-      "DELETE ERROR\n\n" +
-      error.message
+      error.message ||
+      "Unable to delete member."
     );
 
   }
 
-}
-
-
+      }
 // ========================================
-// SEARCH
+// SEARCH MEMBERS
 // ========================================
 
-if (search) {
+searchInput.addEventListener(
+  "input",
+  async function () {
 
-  search.addEventListener(
-    "input",
-    async function () {
-
-      const query =
-        search.value.trim();
+    const searchTerm =
+      searchInput.value.trim();
 
 
-      if (!query) {
+    if (!searchTerm) {
 
-        await loadMembers();
+      await loadMembers();
+
+      return;
+
+    }
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("members")
+          .select("*")
+          .or(
+            `member_id.ilike.%${escapeSearchValue(
+              searchTerm
+            )}%,full_name.ilike.%${escapeSearchValue(
+              searchTerm
+            )}%,passport_number.ilike.%${escapeSearchValue(
+              searchTerm
+            )}%,contact_number.ilike.%${escapeSearchValue(
+              searchTerm
+            )}%`
+          )
+          .order(
+            "id",
+            {
+              ascending: false
+            }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "Search error:",
+          error
+        );
+
+        membersTableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="empty-message">
+              Unable to search members.
+            </td>
+          </tr>
+        `;
 
         return;
 
       }
 
 
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await supabaseClient
-            .from("members")
-            .select("*")
-            .or(
-              "member_id.ilike.%" +
-              query +
-              "%," +
-
-              "full_name.ilike.%" +
-              query +
-              "%," +
-
-              "passport_number.ilike.%" +
-              query +
-              "%," +
-
-              "contact_number.ilike.%" +
-              query +
-              "%"
-            );
+      displayMembers(
+        data || []
+      );
 
 
-        if (error) {
+    } catch (error) {
 
-          alert(
-            "SEARCH FAILED\n\n" +
-            error.message
-          );
+      console.error(
+        "Search error:",
+        error
+      );
 
-          return;
-
-        }
-
-
-        if (
-          !data ||
-          data.length === 0
-        ) {
-
-          memberTable.innerHTML =
-            "";
-
-          emptyMessage.textContent =
-            "No matching members found.";
-
-          emptyMessage.style.display =
-            "block";
-
-          return;
-
-        }
-
-
-        emptyMessage.style.display =
-          "none";
-
-
-        displayMembers(data);
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "SEARCH ERROR:",
-          error
-        );
-
-        alert(
-          "SEARCH ERROR\n\n" +
-          error.message
-        );
-
-      }
+      membersTableBody.innerHTML = `
+        <tr>
+          <td colspan="8" class="empty-message">
+            Unable to search members.
+          </td>
+        </tr>
+      `;
 
     }
-  );
-
-}
-
-
-// ========================================
-// PHOTO PREVIEW
-// ========================================
-
-function showPhotoPreview(url) {
-
-  if (!url) {
-
-    photoPreview.innerHTML =
-      "";
-
-    return;
 
   }
-
-
-  photoPreview.innerHTML = `
-
-    <img
-      src="${escapeHTML(url)}"
-      class="preview-image"
-      alt="Member Photo"
-    >
-
-  `;
-
-}
+);
 
 
 // ========================================
@@ -1728,23 +1833,17 @@ function showPhotoPreview(url) {
 
 function resetForm() {
 
-  memberForm.reset();
-
-
   editingId =
     null;
 
-
   currentPhotoUrl =
     null;
-
 
   selectedPhotoFile =
     null;
 
 
-  photoPreview.innerHTML =
-    "";
+  memberForm.reset();
 
 
   formTitle.textContent =
@@ -1755,8 +1854,64 @@ function resetForm() {
     "Add Member";
 
 
-  cancelButton.classList.add(
+  cancelEditButton.classList.add(
     "hidden"
+  );
+
+
+  photoPreview.innerHTML =
+    "";
+
+
+  photo.value =
+    "";
+
+
+  status.value =
+    "Active";
+
+}
+
+
+// ========================================
+// FORMAT DATE
+// ========================================
+
+function formatDate(
+  dateValue
+) {
+
+  if (!dateValue) {
+
+    return "-";
+
+  }
+
+
+  const date =
+    new Date(
+      dateValue + "T00:00:00"
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return dateValue;
+
+  }
+
+
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
   );
 
 }
@@ -1766,30 +1921,37 @@ function resetForm() {
 // ESCAPE HTML
 // ========================================
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return "";
+
+  }
+
 
   return String(value)
-
     .replace(
       /&/g,
       "&amp;"
     )
-
     .replace(
       /</g,
       "&lt;"
     )
-
     .replace(
       />/g,
       "&gt;"
     )
-
     .replace(
       /"/g,
       "&quot;"
     )
-
     .replace(
       /'/g,
       "&#039;"
@@ -1799,43 +1961,44 @@ function escapeHTML(value) {
 
 
 // ========================================
-// ESCAPE JAVASCRIPT
+// ESCAPE SEARCH VALUE
 // ========================================
 
-function escapeJS(value) {
+function escapeSearchValue(
+  value
+) {
 
   return String(value)
-
     .replace(
       /\\/g,
       "\\\\"
     )
-
     .replace(
-      /'/g,
-      "\\'"
+      /%/g,
+      "\\%"
     )
-
     .replace(
-      /\n/g,
-      "\\n"
+      /_/g,
+      "\\_"
     )
-
     .replace(
-      /\r/g,
-      "\\r"
+      /,/g,
+      "\\,"
+    )
+    .replace(
+      /\(/g,
+      "\\("
+    )
+    .replace(
+      /\)/g,
+      "\\)"
     );
 
 }
 
 
 // ========================================
-// START
+// INITIAL AUTH CHECK
 // ========================================
 
 checkAuth();
-
-console.log(
-  "POGA ADMIN SYSTEM READY"
-);
-      
