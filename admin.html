@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#166534"
+  >
+
+  <title>POGA KSA Admin</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- ========================= -->
+  <!-- ADMIN LOGIN -->
+  <!-- ========================= -->
+
+  <section
+    id="loginSection"
+    class="login-section"
+  >
+
+    <header>
+      <h1>POGA KSA</h1>
+      <p>Administrator Login</p>
+    </header>
+
+
+    <form id="loginForm">
+
+      <div class="form-group">
+
+        <label for="adminEmail">
+          Email
+        </label>
+
+        <input
+          type="email"
+          id="adminEmail"
+          placeholder="Admin email"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="adminPassword">
+          Password
+        </label>
+
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Password"
+          required
+        >
+
+      </div>
+
+
+      <div class="form-buttons">
+
+        <button
+          type="submit"
+          id="loginButton"
+          class="btn-primary"
+        >
+          Login
+        </button>
+
+        <a
+          href="index.html"
+          class="btn-secondary link-button"
+        >
+          Member Registration
+        </a>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- ADMIN DASHBOARD -->
+  <!-- ========================= -->
+
+  <section
+    id="dashboardSection"
+    class="hidden"
+  >
+
+    <header>
+
+      <h1>POGA KSA</h1>
+
+      <p>
+        Administrator Dashboard
+      </p>
+
+      <div class="admin-toolbar">
+
+        <span id="adminEmailDisplay"></span>
+
+        <button
+          type="button"
+          id="logoutButton"
+          class="btn-secondary"
+        >
+          Logout
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <!-- ========================= -->
+    <!-- MEMBER FORM -->
+    <!-- ========================= -->
+
+    <section class="form-section">
+
+      <h2 id="formTitle">
+        Add Member
+      </h2>
+
+
+      <form id="memberForm">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label for="memberId">
+              Member ID
+            </label>
+
+            <input
+              type="text"
+              id="memberId"
+              placeholder="Example: POGA001"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="fullName">
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              id="fullName"
+              placeholder="Full name"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="passportNumber">
+              Passport Number
+            </label>
+
+            <input
+              type="text"
+              id="passportNumber"
+              placeholder="Passport number"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="birthday">
+              Birthday
+            </label>
+
+            <input
+              type="date"
+              id="birthday"
+            >
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label for="address">
+              Address
+            </label>
+
+            <textarea
+              id="address"
+              rows="3"
+              placeholder="Complete address"
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="contact">
+              Contact Number
+            </label>
+
+            <input
+              type="text"
+              id="contact"
+              placeholder="Contact number"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="emergencyContact">
+              Emergency Contact Person
+            </label>
+
+            <input
+              type="text"
+              id="emergencyContact"
+              placeholder="Emergency contact name"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="emergencyNumber">
+              Emergency Contact Number
+            </label>
+
+            <input
+              type="text"
+              id="emergencyNumber"
+              placeholder="Emergency contact number"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="status">
+              Membership Status
+            </label>
+
+            <select id="status">
+
+              <option value="Active">
+                Active
+              </option>
+
+              <option value="Inactive">
+                Inactive
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group full-width">
+
+            <label for="photo">
+              Member Photo
+            </label>
+
+            <input
+              type="file"
+              id="photo"
+              accept="image/*"
+            >
+
+            <small>
+              Maximum photo size: 5 MB
+            </small>
+
+            <div id="photoPreview"></div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-buttons">
+
+          <button
+            type="submit"
+            id="saveButton"
+            class="btn-primary"
+          >
+            Add Member
+          </button>
+
+
+          <button
+            type="button"
+            id="cancelButton"
+            class="btn-secondary hidden"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- MEMBER RECORDS -->
+    <!-- ========================= -->
+
+    <section class="member-section">
+
+      <div class="section-header">
+
+        <h2>Member Records</h2>
+
+        <input
+          type="text"
+          id="search"
+          placeholder="Search member..."
+        >
+
+      </div>
+
+
+      <div class="table-container">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Photo</th>
+              <th>Member ID</th>
+              <th>Full Name</th>
+              <th>Passport</th>
+              <th>Birthday</th>
+              <th>Contact</th>
+              <th>Status</th>
+              <th>Action</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="memberTable"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <p
+        id="emptyMessage"
+        class="empty-message"
+      >
+        No member records found.
+      </p>
+
+    </section>
+
+  </section>
+
+</div>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- ADMIN SCRIPT -->
+
+<script src="admin.js"></script>
+
+</body>
+</html>
