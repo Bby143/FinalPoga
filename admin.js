@@ -28,29 +28,19 @@ const PHOTO_BUCKET =
 // ========================================
 
 const loginSection =
-  document.getElementById(
-    "loginSection"
-  );
+  document.getElementById("loginSection");
 
 const loginForm =
-  document.getElementById(
-    "loginForm"
-  );
+  document.getElementById("loginForm");
 
 const adminEmail =
-  document.getElementById(
-    "adminEmail"
-  );
+  document.getElementById("adminEmail");
 
 const adminPassword =
-  document.getElementById(
-    "adminPassword"
-  );
+  document.getElementById("adminPassword");
 
 const loginButton =
-  document.getElementById(
-    "loginButton"
-  );
+  document.getElementById("loginButton");
 
 
 // ========================================
@@ -58,19 +48,13 @@ const loginButton =
 // ========================================
 
 const dashboardSection =
-  document.getElementById(
-    "dashboardSection"
-  );
+  document.getElementById("dashboardSection");
 
 const adminEmailDisplay =
-  document.getElementById(
-    "adminEmailDisplay"
-  );
+  document.getElementById("adminEmailDisplay");
 
 const logoutButton =
-  document.getElementById(
-    "logoutButton"
-  );
+  document.getElementById("logoutButton");
 
 
 // ========================================
@@ -78,93 +62,140 @@ const logoutButton =
 // ========================================
 
 const memberForm =
-  document.getElementById(
-    "memberForm"
-  );
+  document.getElementById("memberForm");
 
 const memberId =
-  document.getElementById(
-    "memberId"
-  );
+  document.getElementById("memberId");
 
 const fullName =
-  document.getElementById(
-    "fullName"
-  );
+  document.getElementById("fullName");
 
 const passportNumber =
-  document.getElementById(
-    "passportNumber"
-  );
+  document.getElementById("passportNumber");
 
 const birthday =
-  document.getElementById(
-    "birthday"
-  );
+  document.getElementById("birthday");
+
+const country =
+  document.getElementById("country");
 
 const address =
-  document.getElementById(
-    "address"
-  );
+  document.getElementById("address");
 
 const contact =
-  document.getElementById(
-    "contact"
-  );
+  document.getElementById("contact");
 
 const emergencyContact =
-  document.getElementById(
-    "emergencyContact"
-  );
+  document.getElementById("emergencyContact");
 
 const emergencyNumber =
-  document.getElementById(
-    "emergencyNumber"
-  );
+  document.getElementById("emergencyNumber");
 
 const status =
-  document.getElementById(
-    "status"
-  );
+  document.getElementById("status");
 
 const photo =
-  document.getElementById(
-    "photo"
-  );
+  document.getElementById("photo");
 
 const photoPreview =
-  document.getElementById(
-    "photoPreview"
-  );
+  document.getElementById("photoPreview");
 
 const saveButton =
-  document.getElementById(
-    "saveButton"
-  );
+  document.getElementById("saveButton");
 
 const cancelButton =
-  document.getElementById(
-    "cancelButton"
-  );
+  document.getElementById("cancelButton");
 
 const formTitle =
-  document.getElementById(
-    "formTitle"
-  );
+  document.getElementById("formTitle");
 
 const memberTable =
-  document.getElementById(
-    "memberTable"
-  );
+  document.getElementById("memberTable");
 
 const search =
-  document.getElementById(
-    "search"
-  );
+  document.getElementById("search");
 
 const emptyMessage =
+  document.getElementById("emptyMessage");
+
+
+// ========================================
+// DETAILS MODAL
+// ========================================
+
+const memberDetailsModal =
   document.getElementById(
-    "emptyMessage"
+    "memberDetailsModal"
+  );
+
+const closeDetailsButton =
+  document.getElementById(
+    "closeDetailsButton"
+  );
+
+const detailsCloseButton =
+  document.getElementById(
+    "detailsCloseButton"
+  );
+
+const detailsEditButton =
+  document.getElementById(
+    "detailsEditButton"
+  );
+
+const detailsPhoto =
+  document.getElementById(
+    "detailsPhoto"
+  );
+
+const detailsMemberId =
+  document.getElementById(
+    "detailsMemberId"
+  );
+
+const detailsFullName =
+  document.getElementById(
+    "detailsFullName"
+  );
+
+const detailsPassport =
+  document.getElementById(
+    "detailsPassport"
+  );
+
+const detailsBirthday =
+  document.getElementById(
+    "detailsBirthday"
+  );
+
+const detailsCountry =
+  document.getElementById(
+    "detailsCountry"
+  );
+
+const detailsContact =
+  document.getElementById(
+    "detailsContact"
+  );
+
+const detailsAddress =
+  document.getElementById(
+    "detailsAddress"
+  );
+
+const detailsEmergencyPerson =
+  document.getElementById(
+    "detailsEmergencyPerson"
+  );
+
+const detailsEmergencyNumber =
+  document.getElementById(
+    "detailsEmergencyNumber"
+  );
+
+const detailsStatus =
+  document.getElementById(
+    "detailsStatus"
   );
 
 
@@ -177,6 +208,8 @@ let editingId = null;
 let currentPhotoUrl = null;
 
 let selectedPhotoFile = null;
+
+let currentDetailsMemberId = null;
 
 
 // ========================================
@@ -246,9 +279,7 @@ function showLogin() {
 // SHOW DASHBOARD
 // ========================================
 
-async function showDashboard(
-  user
-) {
+async function showDashboard(user) {
 
   loginSection.classList.add(
     "hidden"
@@ -412,13 +443,13 @@ if (logoutButton) {
 
       resetForm();
 
+      closeMemberDetails();
 
       memberTable.innerHTML =
         "";
 
       adminEmailDisplay.textContent =
         "";
-
 
       showLogin();
 
@@ -433,11 +464,13 @@ if (logoutButton) {
 // ========================================
 
 supabaseClient.auth.onAuthStateChange(
-  function (event, session) {
+  function (event) {
 
     if (event === "SIGNED_OUT") {
 
       showLogin();
+
+      closeMemberDetails();
 
     }
 
@@ -608,6 +641,9 @@ function getFormData() {
     birthday:
       birthday.value || null,
 
+    country:
+      country.value || null,
+
     address:
       address.value.trim(),
 
@@ -658,11 +694,8 @@ async function uploadPhoto(file) {
     error
   } =
     await supabaseClient
-
       .storage
-
       .from(PHOTO_BUCKET)
-
       .upload(
         fileName,
         file,
@@ -694,11 +727,8 @@ async function uploadPhoto(file) {
     data: publicData
   } =
     supabaseClient
-
       .storage
-
       .from(PHOTO_BUCKET)
-
       .getPublicUrl(
         fileName
       );
@@ -725,9 +755,7 @@ async function uploadPhoto(file) {
 // FILE EXTENSION
 // ========================================
 
-function getFileExtension(
-  filename
-) {
+function getFileExtension(filename) {
 
   const dot =
     filename.lastIndexOf(".");
@@ -798,9 +826,7 @@ async function addMember() {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .insert([member]);
 
 
@@ -913,11 +939,8 @@ async function updateMember() {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .update(member)
-
         .eq(
           "id",
           editingId
@@ -1002,11 +1025,8 @@ async function loadMembers() {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
         .order(
           "id",
           {
@@ -1172,6 +1192,14 @@ function displayMembers(data) {
 
           <button
             type="button"
+            class="btn-primary btn-small"
+            onclick="viewMember(${member.id})"
+          >
+            View Details
+          </button>
+
+          <button
+            type="button"
             class="btn-edit"
             onclick="editMember(${member.id})"
           >
@@ -1205,10 +1233,10 @@ function displayMembers(data) {
 
 
 // ========================================
-// EDIT MEMBER
+// VIEW MEMBER DETAILS
 // ========================================
 
-async function editMember(id) {
+async function viewMember(id) {
 
   try {
 
@@ -1217,23 +1245,19 @@ async function editMember(id) {
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .select("*")
-
         .eq(
           "id",
           id
         )
-
         .single();
 
 
     if (error) {
 
       alert(
-        "EDIT FAILED\n\n" +
+        "VIEW MEMBER FAILED\n\n" +
         error.message
       );
 
@@ -1242,7 +1266,149 @@ async function editMember(id) {
     }
 
 
-    memberId.value =
+    currentDetailsMemberId =
+      data.id;
+
+
+    // PHOTO
+
+    if (data.photo_url) {
+
+      detailsPhoto.innerHTML = `
+
+        <img
+          src="${escapeHTML(
+            data.photo_url
+          )}"
+          alt="Member Photo"
+        >
+
+      `;
+
+    } else {
+
+      detailsPhoto.innerHTML = `
+
+        <div class="no-photo">
+          No Photo
+        </div>
+
+      `;
+
+    }
+
+
+    // DETAILS
+
+    detailsMemberId.textContent =
+      data.member_id || "—";
+
+    detailsFullName.textContent =
+      data.full_name || "—";
+
+    detailsPassport.textContent =
+      data.passport_number || "—";
+
+    detailsBirthday.textContent =
+      data.birthday || "—";
+
+    detailsCountry.textContent =
+      data.country || "—";
+
+    detailsContact.textContent =
+      data.contact_number || "—";
+
+    detailsAddress.textContent =
+      data.address || "—";
+
+    detailsEmergencyPerson.textContent =
+      data.emergency_contact_person || "—";
+
+    detailsEmergencyNumber.textContent =
+      data.emergency_contact_number || "—";
+
+    detailsStatus.textContent =
+      data.membership_status || "—";
+
+
+    memberDetailsModal.classList.remove(
+      "hidden"
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "VIEW DETAILS ERROR:",
+      error
+    );
+
+    alert(
+      "VIEW DETAILS ERROR\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+// ========================================
+// CLOSE DETAILS
+// ========================================
+
+function closeMemberDetails() {
+
+  memberDetailsModal.classList.add(
+    "hidden"
+  );
+
+  currentDetailsMemberId =
+    null;
+
+}
+
+
+if (closeDetailsButton) {
+
+  closeDetailsButton.addEventListener(
+    "click",
+    closeMemberDetails
+  );
+
+}
+
+
+if (detailsCloseButton) {
+
+  detailsCloseButton.addEventListener(
+    "click",
+    closeMemberDetails
+  );
+
+}
+
+
+// ========================================
+// EDIT FROM DETAILS
+// ========================================
+
+if (detailsEditButton) {
+
+  detailsEditButton.addEventListener(
+    "click",
+    async function () {
+
+      if (
+        currentDetailsMemberId === null
+      ) {
+
+        return;
+
+      }
+
+memberId.value =
       data.member_id || "";
 
     fullName.value =
@@ -1253,6 +1419,9 @@ async function editMember(id) {
 
     birthday.value =
       data.birthday || "";
+
+    country.value =
+      data.country || "";
 
     address.value =
       data.address || "";
@@ -1363,11 +1532,8 @@ async function deleteMember(
       error
     } =
       await supabaseClient
-
         .from("members")
-
         .delete()
-
         .eq(
           "id",
           id
@@ -1447,11 +1613,8 @@ if (search) {
           error
         } =
           await supabaseClient
-
             .from("members")
-
             .select("*")
-
             .or(
               "member_id.ilike.%" +
               query +
@@ -1675,3 +1838,4 @@ checkAuth();
 console.log(
   "POGA ADMIN SYSTEM READY"
 );
+      
