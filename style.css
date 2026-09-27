@@ -55,6 +55,11 @@ header p {
   margin-top: 0;
 }
 
+.form-description {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -74,6 +79,12 @@ header p {
   margin-bottom: 6px;
   font-weight: bold;
   font-size: 14px;
+}
+
+.form-group small {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 12px;
 }
 
 input,
@@ -125,6 +136,7 @@ textarea:focus {
   margin-top: 20px;
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 button {
@@ -144,6 +156,7 @@ button:disabled {
 .btn-primary {
   background: #16a34a;
   color: white;
+  text-decoration: none;
 }
 
 .btn-primary:hover {
@@ -153,6 +166,7 @@ button:disabled {
 .btn-secondary {
   background: #6b7280;
   color: white;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
@@ -177,6 +191,95 @@ button:disabled {
 
 .btn-delete:hover {
   background: #b91c1c;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ========================= */
+/* LOGIN */
+/* ========================= */
+
+.login-section {
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+.login-section form {
+  padding: 25px;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+
+
+/* ========================= */
+/* ADMIN TOOLBAR */
+/* ========================= */
+
+.admin-toolbar {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+#adminEmailDisplay {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* ========================= */
+/* SUCCESS MESSAGE */
+/* ========================= */
+
+.success-message {
+  margin: 20px 0;
+  padding: 25px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.success-message strong {
+  display: block;
+  color: #166534;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.success-message p {
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+
+/* ========================= */
+/* FOOTER */
+/* ========================= */
+
+.site-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.site-footer a {
+  color: #166534;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
 }
 
 
@@ -279,7 +382,7 @@ tr:hover {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 
@@ -316,6 +419,19 @@ tr:hover {
 
   header h1 {
     font-size: 23px;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .form-buttons button,
+  .form-buttons .link-button {
+    width: 100%;
+  }
+
+  .admin-toolbar {
+    flex-direction: column;
   }
 
 }
