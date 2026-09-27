@@ -1514,4 +1514,164 @@ if (search) {
 
         console.error(
           "SEARCH ERROR:",
-  
+          error
+        );
+
+        alert(
+          "SEARCH ERROR\n\n" +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+// ========================================
+// PHOTO PREVIEW
+// ========================================
+
+function showPhotoPreview(url) {
+
+  if (!url) {
+
+    photoPreview.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  photoPreview.innerHTML = `
+
+    <img
+      src="${escapeHTML(url)}"
+      class="preview-image"
+      alt="Member Photo"
+    >
+
+  `;
+
+}
+
+
+// ========================================
+// RESET FORM
+// ========================================
+
+function resetForm() {
+
+  memberForm.reset();
+
+
+  editingId =
+    null;
+
+
+  currentPhotoUrl =
+    null;
+
+
+  selectedPhotoFile =
+    null;
+
+
+  photoPreview.innerHTML =
+    "";
+
+
+  formTitle.textContent =
+    "Add Member";
+
+
+  saveButton.textContent =
+    "Add Member";
+
+
+  cancelButton.classList.add(
+    "hidden"
+  );
+
+}
+
+
+// ========================================
+// ESCAPE HTML
+// ========================================
+
+function escapeHTML(value) {
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+// ========================================
+// ESCAPE JAVASCRIPT
+// ========================================
+
+function escapeJS(value) {
+
+  return String(value)
+
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    )
+
+    .replace(
+      /\n/g,
+      "\\n"
+    )
+
+    .replace(
+      /\r/g,
+      "\\r"
+    );
+
+}
+
+
+// ========================================
+// START
+// ========================================
+
+checkAuth();
+
+console.log(
+  "POGA ADMIN SYSTEM READY"
+);
