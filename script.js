@@ -1,51 +1,41 @@
 // ========================================
-// SUPABASE
+// POGA KSA PUBLIC MEMBER REGISTRATION
 // ========================================
 
-const SUPABASE_URL =
-  "https://rocvqcqgbdohfwfkhncy.supabase.co";
+// Supabase configuration
+const SUPABASE_URL = "https://rocvqcqgbdohfwfkhncy.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_wStACVHPYgU82oxbsvAWTg_EdkHrQaF";
 
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
 // ========================================
-// SETTINGS
+// STORAGE
 // ========================================
 
 const PHOTO_BUCKET = "member-photos";
 
 
 // ========================================
-// ELEMENTS
+// FORM ELEMENTS
 // ========================================
 
-const memberForm =
-  document.getElementById("memberForm");
+const memberForm = document.getElementById("memberForm");
 
-const memberId =
-  document.getElementById("memberId");
+const memberId = document.getElementById("memberId");
+const fullName = document.getElementById("fullName");
+const passportNumber = document.getElementById("passportNumber");
+const birthday = document.getElementById("birthday");
 
-const fullName =
-  document.getElementById("fullName");
+const country = document.getElementById("country");
 
-const passportNumber =
-  document.getElementById("passportNumber");
-
-const birthday =
-  document.getElementById("birthday");
-
-const address =
-  document.getElementById("address");
-
-const contact =
-  document.getElementById("contact");
+const address = document.getElementById("address");
+const contact = document.getElementById("contact");
 
 const emergencyContact =
   document.getElementById("emergencyContact");
@@ -53,286 +43,80 @@ const emergencyContact =
 const emergencyNumber =
   document.getElementById("emergencyNumber");
 
-const photo =
-  document.getElementById("photo");
+const photo = document.getElementById("photo");
 
 const photoPreview =
   document.getElementById("photoPreview");
 
-const saveButton =
-  document.getElementById("saveButton");
+const registerButton =
+  document.getElementById("registerButton");
 
 const successMessage =
   document.getElementById("successMessage");
 
-const newRegistrationButton =
-  document.getElementById("newRegistrationButton");
+const registerAnotherButton =
+  document.getElementById("registerAnotherButton");
 
 
 // ========================================
-// VARIABLES
+// PHOTO PREVIEW
 // ========================================
 
-let selectedPhotoFile = null;
+photo.addEventListener("change", function () {
+
+  photoPreview.innerHTML = "";
+
+  const file = photo.files[0];
+
+  if (!file) {
+    return;
+  }
 
 
-// ========================================
-// PHOTO CHANGE
-// ========================================
+  // Check if image
+  if (!file.type.startsWith("image/")) {
 
-if (photo) {
+    alert("Please select an image file.");
 
-  photo.addEventListener(
-    "change",
-    function () {
-
-      const file =
-        photo.files[0];
-
-      selectedPhotoFile =
-        file || null;
-
-
-      photoPreview.innerHTML = "";
-
-
-      if (!file) {
-        return;
-      }
-
-
-      if (!file.type.startsWith("image/")) {
-
-        alert(
-          "Please select an image file."
-        );
-
-        photo.value = "";
-        selectedPhotoFile = null;
-
-        return;
-      }
-
-
-      if (file.size > 5 * 1024 * 1024) {
-
-        alert(
-          "Photo is too large.\n\n" +
-          "Maximum size is 5 MB."
-        );
-
-        photo.value = "";
-        selectedPhotoFile = null;
-
-        return;
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function (event) {
-
-          photoPreview.innerHTML = `
-
-            <img
-              src="${event.target.result}"
-              class="preview-image"
-              alt="Photo Preview"
-            >
-
-          `;
-
-        };
-
-
-      reader.readAsDataURL(file);
-
-    }
-  );
-
-}
-
-
-// ========================================
-// FORM SUBMIT
-// ========================================
-
-if (memberForm) {
-
-  memberForm.addEventListener(
-    "submit",
-    async function (event) {
-
-      event.preventDefault();
-
-      await registerMember();
-
-    }
-  );
-
-}
-
-
-// ========================================
-// REGISTER MEMBER
-// ========================================
-
-async function registerMember() {
-
-  const member = {
-
-    member_id:
-      memberId.value.trim(),
-
-    full_name:
-      fullName.value.trim(),
-
-    passport_number:
-      passportNumber.value.trim(),
-
-    birthday:
-      birthday.value || null,
-
-    address:
-      address.value.trim(),
-
-    contact_number:
-      contact.value.trim(),
-
-    emergency_contact_person:
-      emergencyContact.value.trim(),
-
-    emergency_contact_number:
-      emergencyNumber.value.trim(),
-
-    // Public registration always starts as Active.
-    // Admin can change this later.
-    membership_status:
-      "Active"
-
-  };
-
-
-  if (
-    !member.member_id ||
-    !member.full_name
-  ) {
-
-    alert(
-      "Please enter Member ID and Full Name."
-    );
+    photo.value = "";
 
     return;
   }
 
 
-  saveButton.disabled = true;
+  // Maximum 5MB
+  const maxSize = 5 * 1024 * 1024;
 
-  saveButton.textContent =
-    "Submitting...";
+  if (file.size > maxSize) {
 
+    alert("Photo size must not exceed 5MB.");
 
-  try {
+    photo.value = "";
 
-    // ========================================
-    // PHOTO
-    // ========================================
-
-    let photoUrl = null;
-
-
-    if (selectedPhotoFile) {
-
-      photoUrl =
-        await uploadPhoto(
-          selectedPhotoFile
-        );
-
-    }
-
-
-    member.photo_url =
-      photoUrl;
-
-
-    // ========================================
-    // INSERT MEMBER
-    // ========================================
-    //
-    // IMPORTANT:
-    // Do NOT use .select() here.
-    //
-    // anon has INSERT permission only.
-    //
-
-    const {
-      error
-    } =
-      await supabaseClient
-
-        .from("members")
-
-        .insert([member]);
-
-
-    if (error) {
-
-      console.error(
-        "REGISTRATION ERROR:",
-        error
-      );
-
-      alert(
-        "REGISTRATION FAILED\n\n" +
-        error.message
-      );
-
-      return;
-    }
-
-
-    // ========================================
-    // SUCCESS
-    // ========================================
-
-    memberForm.classList.add(
-      "hidden"
-    );
-
-    successMessage.classList.remove(
-      "hidden"
-    );
-
-
+    return;
   }
 
-  catch (error) {
 
-    console.error(
-      "REGISTRATION ERROR:",
-      error
-    );
+  // Create preview
+  const reader = new FileReader();
 
-    alert(
-      "REGISTRATION ERROR\n\n" +
-      error.message
-    );
+  reader.onload = function (event) {
 
-  }
+    const img = document.createElement("img");
 
-  finally {
+    img.src = event.target.result;
 
-    saveButton.disabled = false;
+    img.alt = "Photo Preview";
 
-    saveButton.textContent =
-      "Submit Registration";
+    img.className = "preview-image";
 
-  }
+    photoPreview.appendChild(img);
 
-}
+  };
+
+  reader.readAsDataURL(file);
+
+});
 
 
 // ========================================
@@ -346,145 +130,282 @@ async function uploadPhoto(file) {
   }
 
 
+  // Get file extension
+  const originalName = file.name || "";
+
   const extension =
-    getFileExtension(file.name);
+    originalName.includes(".")
+      ? originalName.split(".").pop().toLowerCase()
+      : "jpg";
 
 
+  // Generate unique filename
   const fileName =
-    "member_" +
-    Date.now() +
-    "_" +
-    Math.random()
+    `member_${Date.now()}_${Math.random()
       .toString(36)
-      .substring(2, 10) +
-    extension;
+      .substring(2, 10)}.${extension}`;
 
 
-  const {
-    data,
-    error
-  } =
+  // Upload to Supabase Storage
+  const { error: uploadError } =
     await supabaseClient
-
       .storage
-
       .from(PHOTO_BUCKET)
-
-      .upload(
-        fileName,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type
-        }
-      );
-
-
-  if (error) {
-
-    throw new Error(
-      "PHOTO UPLOAD FAILED\n\n" +
-      error.message
-    );
-
-  }
-
-
-  console.log(
-    "Photo uploaded:",
-    data
-  );
-
-
-  const {
-    data: publicData
-  } =
-    supabaseClient
-
-      .storage
-
-      .from(PHOTO_BUCKET)
-
-      .getPublicUrl(
-        fileName
-      );
-
-
-  if (
-    !publicData ||
-    !publicData.publicUrl
-  ) {
-
-    throw new Error(
-      "Photo uploaded but URL could not be created."
-    );
-
-  }
-
-
-  return publicData.publicUrl;
-
-}
-
-
-// ========================================
-// FILE EXTENSION
-// ========================================
-
-function getFileExtension(filename) {
-
-  const dot =
-    filename.lastIndexOf(".");
-
-
-  if (dot === -1) {
-    return ".jpg";
-  }
-
-
-  return filename
-    .substring(dot)
-    .toLowerCase();
-
-}
-
-
-// ========================================
-// NEW REGISTRATION
-// ========================================
-
-if (newRegistrationButton) {
-
-  newRegistrationButton.addEventListener(
-    "click",
-    function () {
-
-      successMessage.classList.add(
-        "hidden"
-      );
-
-      memberForm.classList.remove(
-        "hidden"
-      );
-
-      memberForm.reset();
-
-      photoPreview.innerHTML = "";
-
-      selectedPhotoFile = null;
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false
       });
 
+
+  if (uploadError) {
+
+    console.error(
+      "Photo upload error:",
+      uploadError
+    );
+
+    throw new Error(
+      "Unable to upload member photo."
+    );
+  }
+
+
+  // Get public URL
+  const { data } =
+    supabaseClient
+      .storage
+      .from(PHOTO_BUCKET)
+      .getPublicUrl(fileName);
+
+
+  if (!data || !data.publicUrl) {
+
+    throw new Error(
+      "Unable to create photo URL."
+    );
+  }
+
+
+  return data.publicUrl;
+}
+
+
+// ========================================
+// REGISTER MEMBER
+// ========================================
+
+async function registerMember() {
+
+  try {
+
+    // Disable button while submitting
+    registerButton.disabled = true;
+
+    registerButton.textContent =
+      "Registering...";
+
+
+    // Validate photo
+    const photoFile = photo.files[0];
+
+    if (!photoFile) {
+
+      throw new Error(
+        "Please upload a member photo."
+      );
     }
-  );
+
+
+    // Validate photo type
+    if (!photoFile.type.startsWith("image/")) {
+
+      throw new Error(
+        "Please upload a valid image file."
+      );
+    }
+
+
+    // Validate photo size
+    const maxSize = 5 * 1024 * 1024;
+
+    if (photoFile.size > maxSize) {
+
+      throw new Error(
+        "Photo size must not exceed 5MB."
+      );
+    }
+
+
+    // ========================================
+    // UPLOAD PHOTO
+    // ========================================
+
+    const photoUrl =
+      await uploadPhoto(photoFile);
+
+
+    // ========================================
+    // MEMBER DATA
+    // ========================================
+
+    const memberData = {
+
+      member_id:
+        memberId.value.trim(),
+
+      full_name:
+        fullName.value.trim(),
+
+      passport_number:
+        passportNumber.value.trim(),
+
+      birthday:
+        birthday.value || null,
+
+      country:
+        country.value || null,
+
+      address:
+        address.value.trim(),
+
+      contact_number:
+        contact.value.trim(),
+
+      emergency_contact_person:
+        emergencyContact.value.trim(),
+
+      emergency_contact_number:
+        emergencyNumber.value.trim(),
+
+      membership_status:
+        "Active",
+
+      photo_url:
+        photoUrl
+
+    };
+
+
+    console.log(
+      "Submitting member:",
+      memberData
+    );
+
+
+    // ========================================
+    // INSERT MEMBER
+    // ========================================
+
+    const { error: insertError } =
+      await supabaseClient
+        .from("members")
+        .insert([memberData]);
+
+
+    if (insertError) {
+
+      console.error(
+        "Member registration error:",
+        insertError
+      );
+
+      throw new Error(
+        insertError.message ||
+        "Unable to register member."
+      );
+    }
+
+
+    // ========================================
+    // SUCCESS
+    // ========================================
+
+    memberForm.classList.add("hidden");
+
+    successMessage.classList.remove("hidden");
+
+
+    // Scroll to success message
+    successMessage.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "Registration error:",
+      error
+    );
+
+    alert(
+      error.message ||
+      "Something went wrong. Please try again."
+    );
+
+
+  } finally {
+
+    registerButton.disabled = false;
+
+    registerButton.textContent =
+      "Register Member";
+
+  }
 
 }
 
 
-console.log(
-  "POGA PUBLIC REGISTRATION READY"
+// ========================================
+// FORM SUBMIT
+// ========================================
+
+memberForm.addEventListener(
+  "submit",
+  async function (event) {
+
+    event.preventDefault();
+
+    await registerMember();
+
+  }
+);
+
+
+// ========================================
+// REGISTER ANOTHER MEMBER
+// ========================================
+
+registerAnotherButton.addEventListener(
+  "click",
+  function () {
+
+    // Reset form
+    memberForm.reset();
+
+
+    // Clear photo preview
+    photoPreview.innerHTML = "";
+
+
+    // Hide success message
+    successMessage.classList.add(
+      "hidden"
+    );
+
+
+    // Show form
+    memberForm.classList.remove(
+      "hidden"
+    );
+
+
+    // Scroll to top of form
+    memberForm.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }
 );
