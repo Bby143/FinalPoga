@@ -6,7 +6,7 @@
 
   <meta name="theme-color" content="#166534">
 
-  <title>POGA KSA Member Management System</title>
+  <title>POGA KSA Member Registration</title>
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
@@ -17,18 +17,22 @@
 <div class="container">
 
   <header>
-    <h1>POGA KSA Member Management System</h1>
-    <p>Member Records</p>
+    <h1>POGA KSA</h1>
+    <p>Member Registration</p>
   </header>
 
 
   <!-- ========================= -->
-  <!-- MEMBER FORM -->
+  <!-- MEMBER REGISTRATION -->
   <!-- ========================= -->
 
   <section class="form-section">
 
-    <h2 id="formTitle">Add Member</h2>
+    <h2>Register as a Member</h2>
+
+    <p class="form-description">
+      Please complete the form below.
+    </p>
 
     <form id="memberForm">
 
@@ -131,25 +135,6 @@
         </div>
 
 
-        <div class="form-group">
-          <label for="status">
-            Membership Status
-          </label>
-
-          <select id="status">
-
-            <option value="Active">
-              Active
-            </option>
-
-            <option value="Inactive">
-              Inactive
-            </option>
-
-          </select>
-        </div>
-
-
         <!-- PHOTO -->
 
         <div class="form-group full-width">
@@ -163,6 +148,10 @@
             id="photo"
             accept="image/*"
           >
+
+          <small>
+            Maximum photo size: 5 MB
+          </small>
 
           <div id="photoPreview"></div>
 
@@ -178,16 +167,15 @@
           id="saveButton"
           class="btn-primary"
         >
-          Add Member
+          Submit Registration
         </button>
 
-
         <button
-          type="button"
+          type="reset"
           id="cancelButton"
-          class="btn-secondary hidden"
+          class="btn-secondary"
         >
-          Cancel
+          Clear
         </button>
 
       </div>
@@ -198,61 +186,36 @@
 
 
   <!-- ========================= -->
-  <!-- MEMBER RECORDS -->
+  <!-- SUCCESS MESSAGE -->
   <!-- ========================= -->
 
-  <section class="member-section">
+  <div
+    id="successMessage"
+    class="success-message hidden"
+  >
+    <strong>Registration successful!</strong>
 
-    <div class="section-header">
-
-      <h2>Member Records</h2>
-
-      <input
-        type="text"
-        id="search"
-        placeholder="Search member..."
-      >
-
-    </div>
-
-
-    <div class="table-container">
-
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>Photo</th>
-            <th>Member ID</th>
-            <th>Full Name</th>
-            <th>Passport</th>
-            <th>Birthday</th>
-            <th>Contact</th>
-            <th>Status</th>
-            <th>Action</th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody id="memberTable"></tbody>
-
-      </table>
-
-    </div>
-
-
-    <p
-      id="emptyMessage"
-      class="empty-message"
-    >
-      No member records found.
+    <p>
+      Your member registration has been submitted.
     </p>
 
-  </section>
+    <button
+      type="button"
+      id="newRegistrationButton"
+      class="btn-primary"
+    >
+      Register Another Member
+    </button>
+  </div>
+
+
+  <footer class="site-footer">
+
+    <a href="admin.html">
+      Admin Login
+    </a>
+
+  </footer>
 
 </div>
 
@@ -261,7 +224,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- YOUR SCRIPT -->
+<!-- PUBLIC REGISTRATION SCRIPT -->
 
 <script src="script.js"></script>
 
