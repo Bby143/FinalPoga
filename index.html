@@ -1,171 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>POGA KSA Member Registration</title>
 
   <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
   <div class="container">
 
-
-    <!-- ========================= -->
-    <!-- HEADER -->
-    <!-- ========================= -->
-
     <header>
-
       <h1>POGA KSA</h1>
-
-      <p>
-        Member Registration
-      </p>
-
+      <p>Member Registration</p>
     </header>
 
 
-
     <!-- ========================= -->
-    <!-- MEMBER REGISTRATION FORM -->
+    <!-- REGISTRATION FORM -->
     <!-- ========================= -->
 
-    <section class="form-section">
+    <section id="registrationSection" class="form-section">
 
-      <h2>
-        Member Registration
-      </h2>
+      <h2>Member Registration</h2>
 
       <p class="form-description">
-        Please fill in the information below to register as a POGA KSA member.
+        Please provide your complete and accurate information.
       </p>
 
-
-      <form id="memberForm">
+      <form id="registrationForm">
 
         <div class="form-grid">
 
-
-          <!-- ========================= -->
           <!-- MEMBER ID -->
-          <!-- ========================= -->
-
           <div class="form-group">
-
-            <label for="memberId">
-              Member ID
-            </label>
-
+            <label for="memberId">Member ID</label>
             <input
               type="text"
               id="memberId"
-              placeholder="Enter Member ID"
               required
             >
-
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- FULL NAME -->
-          <!-- ========================= -->
-
           <div class="form-group">
-
-            <label for="fullName">
-              Full Name
-            </label>
-
+            <label for="fullName">Full Name</label>
             <input
               type="text"
               id="fullName"
-              placeholder="Enter Full Name"
               required
             >
-
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- PASSPORT NUMBER -->
-          <!-- ========================= -->
-
           <div class="form-group">
-
-            <label for="passportNumber">
-              Passport Number
-            </label>
-
+            <label for="passportNumber">Passport Number</label>
             <input
               type="text"
               id="passportNumber"
-              placeholder="Enter Passport Number"
               required
             >
-
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- BIRTHDAY -->
-          <!-- ========================= -->
-
           <div class="form-group">
-
-            <label for="birthday">
-              Birthday
-            </label>
-
+            <label for="birthday">Birthday</label>
             <input
               type="date"
               id="birthday"
               required
             >
-
           </div>
 
 
-
-          <!-- ========================= -->
-          <!-- COUNTRY -->
-          <!-- ========================= -->
-
+          <!-- COUNTRY OF WORK -->
           <div class="form-group">
 
             <label for="country">
-              Country
+              Country of Work Abroad
             </label>
 
-            <select
-              id="country"
-              required
-            >
+            <select id="country" required>
 
               <option value="">
-                Select Country
+                Select Country of Work
               </option>
 
               <option value="Saudi Arabia">
                 Saudi Arabia
-              </option>
-
-              <option value="Philippines">
-                Philippines
               </option>
 
               <option value="United Arab Emirates">
@@ -204,6 +132,14 @@
                 Malaysia
               </option>
 
+              <option value="Taiwan">
+                Taiwan
+              </option>
+
+              <option value="Hong Kong">
+                Hong Kong
+              </option>
+
               <option value="United States">
                 United States
               </option>
@@ -220,41 +156,53 @@
                 Australia
               </option>
 
+              <option value="Italy">
+                Italy
+              </option>
+
+              <option value="Germany">
+                Germany
+              </option>
+
+              <option value="New Zealand">
+                New Zealand
+              </option>
+
               <option value="Other">
                 Other
               </option>
 
             </select>
 
+            <small>
+              Select the country where you are currently working abroad.
+            </small>
+
           </div>
 
 
-
-          <!-- ========================= -->
-          <!-- ADDRESS / LOCATION -->
-          <!-- ========================= -->
-
+          <!-- PHILIPPINE ADDRESS -->
           <div class="form-group full-width">
 
             <label for="address">
-              Address / Location
+              Philippine Address
             </label>
 
             <textarea
               id="address"
               rows="3"
-              placeholder="Enter your current address or location"
+              placeholder="Enter your current/permanent address in the Philippines"
               required
             ></textarea>
+
+            <small>
+              Please enter your address in the Philippines.
+            </small>
 
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- CONTACT NUMBER -->
-          <!-- ========================= -->
-
           <div class="form-group">
 
             <label for="contact">
@@ -264,18 +212,13 @@
             <input
               type="tel"
               id="contact"
-              placeholder="Enter Contact Number"
               required
             >
 
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- EMERGENCY CONTACT PERSON -->
-          <!-- ========================= -->
-
           <div class="form-group">
 
             <label for="emergencyContact">
@@ -285,18 +228,13 @@
             <input
               type="text"
               id="emergencyContact"
-              placeholder="Enter Emergency Contact Person"
               required
             >
 
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- EMERGENCY CONTACT NUMBER -->
-          <!-- ========================= -->
-
           <div class="form-group">
 
             <label for="emergencyNumber">
@@ -306,19 +244,14 @@
             <input
               type="tel"
               id="emergencyNumber"
-              placeholder="Enter Emergency Contact Number"
               required
             >
 
           </div>
 
 
-
-          <!-- ========================= -->
           <!-- MEMBER PHOTO -->
-          <!-- ========================= -->
-
-          <div class="form-group full-width">
+          <div class="form-group">
 
             <label for="photo">
               Member Photo
@@ -332,7 +265,6 @@
             >
 
             <small>
-              Please upload a clear member photo.
               Maximum file size: 5MB.
             </small>
 
@@ -340,39 +272,32 @@
 
           </div>
 
-
         </div>
 
 
-
-        <!-- ========================= -->
-        <!-- REGISTER BUTTON -->
-        <!-- ========================= -->
-
+        <!-- BUTTON -->
         <div class="form-buttons">
 
           <button
             type="submit"
-            id="registerButton"
             class="btn-primary"
+            id="registerButton"
           >
             Register Member
           </button>
 
         </div>
 
-
       </form>
 
     </section>
-
 
 
     <!-- ========================= -->
     <!-- SUCCESS MESSAGE -->
     <!-- ========================= -->
 
-    <div
+    <section
       id="successMessage"
       class="success-message hidden"
     >
@@ -382,7 +307,7 @@
       </strong>
 
       <p>
-        Your POGA KSA member registration has been submitted successfully.
+        Your member information has been submitted successfully.
       </p>
 
       <button
@@ -393,8 +318,7 @@
         Register Another Member
       </button>
 
-    </div>
-
+    </section>
 
 
     <!-- ========================= -->
@@ -409,27 +333,16 @@
 
     </footer>
 
-
   </div>
-
 
 
   <!-- ========================= -->
   <!-- SUPABASE -->
   <!-- ========================= -->
 
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-  ></script>
-
-
-  <!-- ========================= -->
-  <!-- REGISTRATION SCRIPT -->
-  <!-- ========================= -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script src="script.js"></script>
 
-
 </body>
-
 </html>
