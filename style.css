@@ -62,7 +62,7 @@ header p {
 
 
 /* =========================================================
-   FORM SECTION
+   FORM
 ========================================================= */
 
 .form-section {
@@ -80,11 +80,6 @@ header p {
   color: #6b7280;
   margin-bottom: 20px;
 }
-
-
-/* =========================================================
-   FORM GRID
-========================================================= */
 
 .form-grid {
   display: grid;
@@ -373,7 +368,7 @@ button:disabled {
 
 
 /* =========================================================
-   RECORDS SECTION
+   RECORDS
 ========================================================= */
 
 .records-section {
@@ -462,7 +457,7 @@ tbody tr:hover {
 
 
 /* =========================================================
-   MEMBER PHOTO
+   MEMBER PHOTO IN TABLE
 ========================================================= */
 
 .member-photo {
@@ -515,7 +510,7 @@ tbody tr:hover {
 
 
 /* =========================================================
-   SUCCESS / ERROR MESSAGE
+   SUCCESS / ERROR
 ========================================================= */
 
 .success-message {
@@ -693,25 +688,30 @@ tbody tr:hover {
 
 .member-details-body {
   display: grid;
-  gap: 24px;
+  gap: 20px;
 }
 
 
 /* =========================================================
    DETAILS PHOTO
+   SMALL / COMPACT
 ========================================================= */
 
 .details-photo-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .details-photo {
-  display: block;
+  display: block !important;
 
-  width: 180px;
-  height: 180px;
+  width: 140px !important;
+  height: 140px !important;
+
+  max-width: 140px !important;
+  max-height: 140px !important;
 
   object-fit: cover;
 
@@ -803,7 +803,7 @@ tbody tr:hover {
 
 
 /* =========================================================
-   SCROLLBAR
+   MODAL SCROLLBAR
 ========================================================= */
 
 .member-modal-content::-webkit-scrollbar {
@@ -926,11 +926,12 @@ tbody tr:hover {
   }
 
 
-  /* MODAL */
+  /* =====================================================
+     MOBILE MODAL
+  ===================================================== */
 
   .member-modal {
     padding: 10px;
-
     align-items: flex-start;
   }
 
@@ -949,6 +950,19 @@ tbody tr:hover {
   }
 
 
+  /* SMALL PHOTO ON PHONE */
+
+  .details-photo {
+    width: 120px !important;
+    height: 120px !important;
+
+    max-width: 120px !important;
+    max-height: 120px !important;
+  }
+
+
+  /* DETAILS */
+
   .details-grid {
     grid-template-columns: 1fr;
   }
@@ -958,11 +972,7 @@ tbody tr:hover {
   }
 
 
-  .details-photo {
-    width: 150px;
-    height: 150px;
-  }
-
+  /* MODAL BUTTONS */
 
   .member-modal-actions {
     flex-direction: column;
@@ -992,31 +1002,15 @@ tbody tr:hover {
     padding: 14px;
   }
 
-  .details-photo {
-    width: 130px;
-    height: 130px;
-  }
-
-  .detail-item {
-    padding: 12px;
-  }
-
-  .detail-value {
-    font-size: 14px;
-  }
-}
-    
-    padding: 10px;
-  }
-
-  .member-modal-content {
-    padding: 14px;
-  }
 
   .details-photo {
-    width: 130px;
-    height: 130px;
+    width: 110px !important;
+    height: 110px !important;
+
+    max-width: 110px !important;
+    max-height: 110px !important;
   }
+
 
   .detail-item {
     padding: 12px;
