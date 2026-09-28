@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>POGA KSA Chapter Registration</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header class="brand-header">
+      <div class="brand-row">
+        <img src="saudi-flag.svg" class="flag-icon" alt="Saudi Arabia Flag">
+        <img src="poga-ksa-logo.png" class="site-logo" alt="POGA KSA Logo">
+        <img src="philippines-flag.svg" class="flag-icon" alt="Philippines Flag">
+      </div>
+      <h1>POGA KSA CHAPTER</h1>
+      <p>POGA KSA CHAPTER REGISTRATION</p>
+    </header>
+
+
+    <!-- ========================= -->
+    <!-- REGISTRATION FORM -->
+    <!-- ========================= -->
+
+    <section id="registrationSection" class="form-section">
+
+      <h2>Member Registration</h2>
+
+      <p class="form-description">
+        Please provide your complete and accurate information.
+      </p>
+
+      <form id="registrationForm">
+
+        <div class="form-grid">
+
+          <!-- MEMBER ID -->
+          <div class="form-group">
+            <label for="memberId">Member ID</label>
+            <input
+              type="text"
+              id="memberId"
+              required
+            >
+          </div>
+
+
+          <!-- FULL NAME -->
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              required
+            >
+          </div>
+
+
+          <!-- PASSPORT NUMBER -->
+          <div class="form-group">
+            <label for="passportNumber">Passport Number</label>
+            <input
+              type="text"
+              id="passportNumber"
+              required
+            >
+          </div>
+
+
+          <!-- BIRTHDAY -->
+          <div class="form-group">
+            <label for="birthday">Birthday</label>
+            <input
+              type="date"
+              id="birthday"
+              required
+            >
+          </div>
+
+
+          <!-- COUNTRY OF WORK -->
+          <div class="form-group">
+
+            <label for="country">
+              Country of Work Abroad
+            </label>
+
+            <select id="country" required>
+
+              <option value="">
+                Select Country of Work
+              </option>
+
+              <option value="Saudi Arabia">
+                Saudi Arabia
+              </option>
+
+              <option value="United Arab Emirates">
+                United Arab Emirates
+              </option>
+
+              <option value="Qatar">
+                Qatar
+              </option>
+
+              <option value="Kuwait">
+                Kuwait
+              </option>
+
+              <option value="Bahrain">
+                Bahrain
+              </option>
+
+              <option value="Oman">
+                Oman
+              </option>
+
+              <option value="Japan">
+                Japan
+              </option>
+
+              <option value="South Korea">
+                South Korea
+              </option>
+
+              <option value="Singapore">
+                Singapore
+              </option>
+
+              <option value="Malaysia">
+                Malaysia
+              </option>
+
+              <option value="Taiwan">
+                Taiwan
+              </option>
+
+              <option value="Hong Kong">
+                Hong Kong
+              </option>
+
+              <option value="United States">
+                United States
+              </option>
+
+              <option value="Canada">
+                Canada
+              </option>
+
+              <option value="United Kingdom">
+                United Kingdom
+              </option>
+
+              <option value="Australia">
+                Australia
+              </option>
+
+              <option value="Italy">
+                Italy
+              </option>
+
+              <option value="Germany">
+                Germany
+              </option>
+
+              <option value="New Zealand">
+                New Zealand
+              </option>
+
+              <option value="Other">
+                Other
+              </option>
+
+            </select>
+
+            <small>
+              Select the country where you are currently working abroad.
+            </small>
+
+          </div>
+
+
+          <!-- PHILIPPINE ADDRESS -->
+          <div class="form-group full-width">
+
+            <label for="address">
+              Philippine Address
+            </label>
+
+            <textarea
+              id="address"
+              rows="3"
+              placeholder="Enter your current/permanent address in the Philippines"
+              required
+            ></textarea>
+
+            <small>
+              Please enter your address in the Philippines.
+            </small>
+
+          </div>
+
+
+          <!-- CONTACT NUMBER -->
+          <div class="form-group">
+
+            <label for="contact">
+              Contact Number
+            </label>
+
+            <input
+              type="tel"
+              id="contact"
+              required
+            >
+
+          </div>
+
+
+          <!-- EMERGENCY CONTACT PERSON -->
+          <div class="form-group">
+
+            <label for="emergencyContact">
+              Emergency Contact Person
+            </label>
+
+            <input
+              type="text"
+              id="emergencyContact"
+              required
+            >
+
+          </div>
+
+
+          <!-- EMERGENCY CONTACT NUMBER -->
+          <div class="form-group">
+
+            <label for="emergencyNumber">
+              Emergency Contact Number
+            </label>
+
+            <input
+              type="tel"
+              id="emergencyNumber"
+              required
+            >
+
+          </div>
+
+
+          <!-- MEMBER PHOTO -->
+          <div class="form-group">
+
+            <label for="photo">
+              Member Photo
+            </label>
+
+            <input
+              type="file"
+              id="photo"
+              accept="image/*"
+              required
+            >
+
+            <small>
+              Maximum file size: 5MB.
+            </small>
+
+            <div id="photoPreview"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- BUTTON -->
+        <div class="form-buttons">
+
+          <button
+            type="submit"
+            class="btn-primary"
+            id="registerButton"
+          >
+            Register Member
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- SUCCESS MESSAGE -->
+    <!-- ========================= -->
+
+    <section
+      id="successMessage"
+      class="success-message hidden"
+    >
+
+      <strong>
+        Registration Successful!
+      </strong>
+
+      <p>
+        Your member information has been submitted successfully.
+      </p>
+
+      <button
+        type="button"
+        id="registerAnotherButton"
+        class="btn-primary"
+      >
+        Register Another Member
+      </button>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- FOOTER -->
+    <!-- ========================= -->
+
+    <footer class="site-footer">
+
+      <a href="admin.html">
+        Admin Login
+      </a>
+
+    </footer>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- SUPABASE -->
+  <!-- ========================= -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

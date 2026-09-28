@@ -1,0 +1,1531 @@
+/* =========================================================
+   POGA KSA MEMBER MANAGEMENT SYSTEM
+   COMPLETE UPDATED STYLE.CSS
+   MOBILE FRIENDLY
+========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  background: #f0fdf4;
+  color: #123b2a;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  color: #166534;
+}
+
+header p {
+  margin: 0;
+  color: #365c49;
+}
+
+
+/* =========================================================
+   POGA KSA BRAND HEADER
+========================================================= */
+.brand-header {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #123b2a;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.site-logo {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  display: block;
+}
+
+.flag-icon {
+  width: 62px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+}
+
+.brand-header h1 {
+  margin: 0 0 6px;
+  color: #166534;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: .4px;
+}
+
+.brand-header p {
+  margin: 0;
+  color: #365c49;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.admin-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.brand-row-small {
+  justify-content: flex-start;
+  margin: 0 0 8px;
+}
+
+.site-logo-small {
+  width: 78px;
+  height: 78px;
+}
+
+.flag-small {
+  width: 46px;
+  height: 31px;
+}
+
+.admin-brand h1 {
+  margin: 0 0 5px;
+  color: #166534;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-section {
+  margin-bottom: 35px;
+  padding: 20px;
+  background: #f7fff9;
+  border-radius: 10px;
+}
+
+.form-section h2 {
+  margin-top: 0;
+}
+
+.form-description {
+  color: #365c49;
+  margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-group small {
+  margin-top: 6px;
+  color: #365c49;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #b7d8c3;
+  border-radius: 6px;
+  font-size: 15px;
+  background: #ffffff;
+  font-family: Arial, sans-serif;
+  color: #123b2a;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6f8d7c;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #166534;
+  box-shadow: 0 0 0 2px rgba(22, 101, 52, 0.14);
+}
+
+
+/* =========================================================
+   PHOTO PREVIEW
+========================================================= */
+
+#photoPreview {
+  margin-top: 10px;
+}
+
+.preview-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #b7d8c3;
+}
+
+#photoPreview img {
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #b7d8c3;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+button {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.1s ease;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: #166534;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #14532d;
+}
+
+.btn-secondary {
+  background: #166534;
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background: #14532d;
+}
+
+.btn-danger {
+  background: #14532d;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background: #0b3d2e;
+}
+
+.btn-edit {
+  background: #166534;
+  color: #ffffff;
+  margin: 2px;
+}
+
+.btn-edit:hover {
+  background: #14532d;
+}
+
+.btn-delete {
+  background: #14532d;
+  color: #ffffff;
+  margin: 2px;
+}
+
+.btn-delete:hover {
+  background: #0b3d2e;
+}
+
+.btn-small {
+  padding: 7px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =========================================================
+   FORM BUTTONS
+========================================================= */
+
+.form-actions,
+.form-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-section {
+  max-width: 500px;
+  margin: 30px auto;
+}
+
+.login-section form {
+  padding: 25px;
+  background: #f7fff9;
+  border-radius: 10px;
+}
+
+.login-section .header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-section .header h1 {
+  margin: 0 0 5px;
+  color: #166534;
+}
+
+.login-section .header p {
+  margin: 0;
+  color: #365c49;
+}
+
+
+/* =========================================================
+   ADMIN TOOLBAR
+========================================================= */
+
+.admin-toolbar {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #d1fae5;
+}
+
+.admin-toolbar h1 {
+  margin: 0 0 5px;
+  color: #166534;
+  font-size: 25px;
+}
+
+.admin-toolbar p {
+  margin: 0;
+  color: #365c49;
+  font-size: 14px;
+}
+
+#adminEmail,
+#adminEmailDisplay {
+  color: #166534;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+  color: #166534;
+}
+
+
+/* =========================================================
+   RECORDS
+========================================================= */
+
+.records-section {
+  margin-top: 25px;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.records-header h2 {
+  margin: 0 0 5px;
+  color: #166534;
+}
+
+.records-header p {
+  margin: 0;
+  color: #365c49;
+  font-size: 14px;
+}
+
+.search-box {
+  width: 300px;
+  max-width: 100%;
+}
+
+.search-box input {
+  width: 100%;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper,
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
+  background: #ffffff;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #d1fae5;
+  text-align: left;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+th {
+  background: #166534;
+  color: #ffffff;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+tbody tr:hover {
+  background: #f7fff9;
+}
+
+
+/* =========================================================
+   TABLE ACTIONS
+========================================================= */
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   MEMBER PHOTO IN TABLE
+========================================================= */
+
+.member-photo {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #b7d8c3;
+  background: #f0fdf4;
+}
+
+.no-photo {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #dcfce7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 11px;
+  color: #365c49;
+  text-align: center;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.status-active {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-inactive {
+  color: #14532d;
+  background: #dcfce7;
+}
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+.success-message {
+  margin: 20px 0;
+  padding: 15px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  color: #166534;
+  text-align: center;
+}
+
+.success-message strong {
+  display: block;
+  color: #166534;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.success-message p {
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+.error-message {
+  margin-top: 15px;
+  padding: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.site-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.site-footer a {
+  color: #166534;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-message,
+.empty-state {
+  text-align: center;
+  color: #365c49;
+  padding: 30px;
+}
+
+
+/* =========================================================
+   HIDDEN
+========================================================= */
+
+.hidden {
+  display: none !important;
+}
+
+
+/* =========================================================
+   MEMBER DETAILS MODAL
+========================================================= */
+
+.member-modal {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  z-index: 9999;
+}
+
+.member-modal.hidden {
+  display: none !important;
+}
+
+
+/* =========================================================
+   MODAL CONTENT
+========================================================= */
+
+.member-modal-content {
+  width: min(750px, 100%);
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  background: #ffffff;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.25);
+
+  padding: 24px;
+}
+
+
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.member-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+
+  padding-bottom: 15px;
+
+  border-bottom: 1px solid #d1fae5;
+}
+
+.member-modal-header h2 {
+  margin: 0;
+  color: #166534;
+}
+
+.modal-close {
+  border: none;
+
+  background: #f0fdf4;
+
+  color: #374151;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  font-size: 28px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.modal-close:hover {
+  background: #dcfce7;
+}
+
+
+/* =========================================================
+   MEMBER DETAILS BODY
+========================================================= */
+
+.member-details-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========================================================
+   MEMBER DETAILS PHOTO
+   SQUARE / COMPACT
+========================================================= */
+
+.details-photo {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  margin-bottom: 5px;
+}
+
+.details-photo img {
+  display: block;
+
+  width: 180px !important;
+  height: 180px !important;
+
+  min-width: 180px !important;
+  min-height: 180px !important;
+
+  max-width: 180px !important;
+  max-height: 180px !important;
+
+  object-fit: cover;
+
+  border-radius: 10px;
+
+  border: 2px solid #b7d8c3;
+
+  background: #f0fdf4;
+}
+
+.details-photo .no-photo {
+  width: 180px;
+  height: 180px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f0fdf4;
+
+  border: 2px solid #b7d8c3;
+
+  color: #365c49;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   DETAILS GRID
+========================================================= */
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.detail-item {
+  padding: 13px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+
+  min-width: 0;
+}
+
+.detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.detail-item span {
+  display: block;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #365c49;
+
+  margin-bottom: 5px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+}
+
+.detail-item strong {
+  display: block;
+
+  color: #111827;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  word-break: break-word;
+
+  white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   MODAL ACTIONS
+========================================================= */
+
+.member-modal-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+
+/* =========================================================
+   MODAL SCROLLBAR
+========================================================= */
+
+.member-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.member-modal-content::-webkit-scrollbar-track {
+  background: #f0fdf4;
+  border-radius: 10px;
+}
+
+.member-modal-content::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 10px;
+}
+
+.member-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #166534;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+
+  /* -------------------------------------------------------
+     FORM
+  ------------------------------------------------------- */
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .form-actions,
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .form-actions .btn,
+  .form-buttons button,
+  .form-buttons .link-button {
+    width: 100%;
+  }
+
+
+  /* -------------------------------------------------------
+     HEADER
+  ------------------------------------------------------- */
+
+  header h1 {
+    font-size: 23px;
+  }
+
+
+  /* -------------------------------------------------------
+     ADMIN TOOLBAR
+  ------------------------------------------------------- */
+
+  .admin-toolbar {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    text-align: center;
+  }
+
+  .admin-toolbar h1 {
+    font-size: 22px;
+  }
+
+  .admin-toolbar .btn {
+    width: 100%;
+  }
+
+
+  /* -------------------------------------------------------
+     SECTION HEADER
+  ------------------------------------------------------- */
+
+  .section-header {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+
+  /* -------------------------------------------------------
+     RECORDS
+  ------------------------------------------------------- */
+
+  .records-header {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+
+  /* -------------------------------------------------------
+     TABLE
+  ------------------------------------------------------- */
+
+  table {
+    min-width: 950px;
+  }
+
+
+  /* -------------------------------------------------------
+     TABLE ACTIONS
+  ------------------------------------------------------- */
+
+  .table-actions {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .table-actions .btn {
+    width: 100%;
+  }
+
+
+  /* =======================================================
+     MOBILE MEMBER DETAILS MODAL
+  ======================================================= */
+
+  .member-modal {
+    position: fixed;
+
+    inset: 0;
+
+    padding: 10px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    overflow-y: auto;
+  }
+
+  .member-modal-content {
+    width: 100%;
+
+    max-width: 420px;
+
+    margin-top: 10px;
+
+    margin-bottom: 10px;
+
+    max-height: calc(100vh - 20px);
+
+    overflow-y: auto;
+
+    padding: 18px;
+
+    border-radius: 14px;
+  }
+
+
+  /* -------------------------------------------------------
+     MODAL HEADER
+  ------------------------------------------------------- */
+
+  .member-modal-header {
+    margin-bottom: 15px;
+
+    padding-bottom: 12px;
+  }
+
+  .member-modal-header h2 {
+    font-size: 21px;
+  }
+
+  .modal-close {
+    width: 38px;
+    height: 38px;
+
+    font-size: 24px;
+  }
+
+
+  /* -------------------------------------------------------
+     PHOTO - 160 x 160 MOBILE
+  ------------------------------------------------------- */
+
+  .details-photo {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    width: 100%;
+
+    margin-bottom: 5px;
+  }
+
+  .details-photo img {
+    width: 160px !important;
+    height: 160px !important;
+
+    min-width: 160px !important;
+    min-height: 160px !important;
+
+    max-width: 160px !important;
+    max-height: 160px !important;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    border: 2px solid #b7d8c3;
+  }
+
+  .details-photo .no-photo {
+    width: 160px;
+    height: 160px;
+
+    border-radius: 10px;
+
+    background: #f0fdf4;
+
+    border: 2px solid #b7d8c3;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #365c49;
+
+    font-size: 14px;
+  }
+
+
+  /* -------------------------------------------------------
+     DETAILS - ONE COLUMN ON PHONE
+  ------------------------------------------------------- */
+
+  .details-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .detail-item {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 9px;
+  }
+
+  .detail-item span {
+    font-size: 11px;
+
+    margin-bottom: 4px;
+  }
+
+  .detail-item strong {
+    font-size: 15px;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+  }
+
+  .detail-item.full-width {
+    grid-column: auto;
+  }
+
+
+  /* -------------------------------------------------------
+     MODAL BUTTONS
+  ------------------------------------------------------- */
+
+  .member-modal-actions {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 18px;
+
+    padding-top: 15px;
+  }
+
+  .member-modal-actions button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 400px) {
+
+  body {
+    padding: 5px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  .member-modal-content {
+    padding: 14px;
+  }
+
+
+  /* PHOTO */
+
+  .details-photo img {
+    width: 150px !important;
+    height: 150px !important;
+
+    min-width: 150px !important;
+    min-height: 150px !important;
+
+    max-width: 150px !important;
+    max-height: 150px !important;
+  }
+
+  .details-photo .no-photo {
+    width: 150px;
+    height: 150px;
+  }
+
+
+  /* DETAILS */
+
+  .detail-item {
+    padding: 11px;
+  }
+
+  .detail-value {
+    font-size: 14px;
+  }
+
+  .detail-item strong {
+    font-size: 14px;
+  }
+     }
+
+
+/* =========================================================
+   POGA KSA CLARITY UPDATE
+   Larger, cleaner and easier-to-read text
+========================================================= */
+
+body {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1250px;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 25px;
+}
+
+h3 {
+  font-size: 21px;
+}
+
+.form-group label {
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.form-group small,
+.form-description,
+.records-header p,
+.admin-toolbar p {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+input,
+select,
+textarea {
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+textarea {
+  min-height: 105px;
+}
+
+button,
+.btn {
+  min-height: 46px;
+  padding: 11px 17px;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.table-wrapper table {
+  font-size: 16px;
+}
+
+.table-wrapper th {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.table-wrapper td {
+  font-size: 16px;
+}
+
+.detail-label {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.detail-value {
+  font-size: 18px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.records-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.records-tools .search-box {
+  margin: 0;
+}
+
+@media (max-width: 800px) {
+  body {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .container {
+    padding: 18px;
+  }
+
+  h1 {
+    font-size: 27px;
+  }
+
+  h2 {
+    font-size: 23px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .records-tools {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .records-tools > * {
+    width: 100%;
+  }
+
+  .records-tools .search-box input {
+    width: 100%;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 17px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: 8px;
+  }
+
+  .container {
+    padding: 14px;
+    border-radius: 8px;
+  }
+
+  .form-section,
+  .card {
+    padding: 14px;
+  }
+
+  .form-group label {
+    font-size: 16px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  button,
+  .btn {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .form-actions,
+  .member-modal-actions {
+    flex-direction: column;
+  }
+}
+
+/* Registration page clarity */
+#registrationSection h2 {
+  font-size: 27px;
+}
+
+#registrationSection .form-description {
+  font-size: 16px;
+}
+
+#registrationSection .form-group label {
+  font-size: 17px;
+}
+
+#registrationSection input,
+#registrationSection select,
+#registrationSection textarea {
+  font-size: 17px;
+  min-height: 50px;
+}
+
+#registrationSection button {
+  font-size: 17px;
+  min-height: 50px;
+}
+
+
+/* =========================================================
+   CLARITY / READABILITY UPGRADES
+========================================================= */
+body { font-size: 16px; }
+.form-group label { font-size: 16px; color: #123b2a; }
+input, select, textarea { font-size: 17px; min-height: 48px; }
+textarea { min-height: 110px; }
+button, .btn { font-size: 16px; min-height: 46px; }
+th, td { font-size: 15px; }
+.form-description, .records-header p, .admin-toolbar p { font-size: 15px; }
+
+/* Clearly visible overall-members print button */
+.print-overall-btn {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  min-width: 220px;
+  border: 2px solid #14532d;
+}
+
+@media (max-width: 700px) {
+  .print-overall-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
