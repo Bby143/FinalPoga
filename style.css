@@ -2,6 +2,7 @@
    POGA KSA MEMBER MANAGEMENT SYSTEM
    COMPLETE UPDATED STYLE.CSS
    MOBILE FRIENDLY
+   NORMAL ORIGINAL FONT SIZES
 ========================================================= */
 
 * {
@@ -54,6 +55,7 @@ header p {
 /* =========================================================
    POGA KSA BRAND HEADER
 ========================================================= */
+
 .brand-header {
   text-align: center;
   margin-bottom: 30px;
@@ -80,7 +82,7 @@ header p {
   height: 42px;
   object-fit: cover;
   border-radius: 5px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
 }
 
 .brand-header h1 {
@@ -126,6 +128,7 @@ header p {
   font-weight: 800;
   letter-spacing: .3px;
 }
+
 
 /* =========================================================
    CARD
@@ -782,7 +785,6 @@ tbody tr:hover {
 
 /* =========================================================
    MEMBER DETAILS PHOTO
-   SQUARE / COMPACT
 ========================================================= */
 
 .details-photo {
@@ -1237,295 +1239,137 @@ tbody tr:hover {
 
   .member-modal-actions button {
     width: 100%;
-  }
+       }
 }
 
 
-/* =========================================================
-   VERY SMALL PHONES
-========================================================= */
-
-@media (max-width: 400px) {
-
-  body {
-    padding: 5px;
-  }
-
-  .container {
-    padding: 10px;
-  }
-
-  .member-modal-content {
-    padding: 14px;
-  }
-
-
-  /* PHOTO */
-
-  .details-photo img {
-    width: 150px !important;
-    height: 150px !important;
-
-    min-width: 150px !important;
-    min-height: 150px !important;
-
-    max-width: 150px !important;
-    max-height: 150px !important;
-  }
-
-  .details-photo .no-photo {
-    width: 150px;
-    height: 150px;
-  }
-
-
-  /* DETAILS */
-
-  .detail-item {
-    padding: 11px;
-  }
-
-  .detail-value {
-    font-size: 14px;
-  }
-
-  .detail-item strong {
-    font-size: 14px;
-  }
-     }
-
-
-/* =========================================================
-   POGA KSA CLARITY UPDATE
-   Larger, cleaner and easier-to-read text
+     
+     /* =========================================================
+   FINAL FONT SIZE CONTROL
+   NORMAL TEXT = ORIGINAL SIZE
+   TITLES = LARGE
 ========================================================= */
 
 body {
-  font-size: 17px;
-  line-height: 1.6;
-}
-
-.container {
-  max-width: 1250px;
-}
-
-h1 {
-  font-size: 30px;
-}
-
-h2 {
-  font-size: 25px;
-}
-
-h3 {
-  font-size: 21px;
+  font-size: 15px;
 }
 
 .form-group label {
-  font-size: 17px;
-  line-height: 1.35;
+  font-size: 14px;
 }
 
-.form-group small,
-.form-description,
-.records-header p,
-.admin-toolbar p {
-  font-size: 15px;
-  line-height: 1.5;
+.form-group small {
+  font-size: 12px;
 }
 
 input,
 select,
 textarea {
-  min-height: 48px;
-  padding: 12px 14px;
-  font-size: 17px;
-  line-height: 1.4;
-}
-
-textarea {
-  min-height: 105px;
+  font-size: 15px;
 }
 
 button,
 .btn {
-  min-height: 46px;
-  padding: 11px 17px;
-  font-size: 16px;
-  line-height: 1.25;
+  font-size: 14px;
 }
 
-.table-wrapper table {
-  font-size: 16px;
+.btn-small {
+  font-size: 12px;
 }
 
-.table-wrapper th {
-  font-size: 16px;
-  font-weight: 800;
+.admin-toolbar p,
+#adminEmail,
+#adminEmailDisplay,
+.records-header p {
+  font-size: 14px;
 }
 
-.table-wrapper td {
-  font-size: 16px;
+th,
+td {
+  font-size: 14px;
 }
 
-.detail-label {
+.status {
+  font-size: 12px;
+}
+
+.detail-item span {
+  font-size: 12px;
+}
+
+.detail-item strong {
   font-size: 15px;
-  font-weight: 800;
-}
-
-.detail-value {
-  font-size: 18px;
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-}
-
-.records-tools {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.records-tools .search-box {
-  margin: 0;
-}
-
-@media (max-width: 800px) {
-  body {
-    padding: 14px;
-    font-size: 16px;
-  }
-
-  .container {
-    padding: 18px;
-  }
-
-  h1 {
-    font-size: 27px;
-  }
-
-  h2 {
-    font-size: 23px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .full-width {
-    grid-column: auto;
-  }
-
-  .records-tools {
-    width: 100%;
-    align-items: stretch;
-  }
-
-  .records-tools > * {
-    width: 100%;
-  }
-
-  .records-tools .search-box input {
-    width: 100%;
-  }
-
-  input,
-  select,
-  textarea {
-    font-size: 17px;
-  }
-
-  .table-wrapper {
-    overflow-x: auto;
-  }
-}
-
-@media (max-width: 500px) {
-  body {
-    padding: 8px;
-  }
-
-  .container {
-    padding: 14px;
-    border-radius: 8px;
-  }
-
-  .form-section,
-  .card {
-    padding: 14px;
-  }
-
-  .form-group label {
-    font-size: 16px;
-  }
-
-  input,
-  select,
-  textarea {
-    font-size: 16px;
-    min-height: 48px;
-  }
-
-  button,
-  .btn {
-    width: 100%;
-    font-size: 16px;
-  }
-
-  .form-actions,
-  .member-modal-actions {
-    flex-direction: column;
-  }
-}
-
-/* Registration page clarity */
-#registrationSection h2 {
-  font-size: 27px;
-}
-
-#registrationSection .form-description {
-  font-size: 16px;
-}
-
-#registrationSection .form-group label {
-  font-size: 17px;
-}
-
-#registrationSection input,
-#registrationSection select,
-#registrationSection textarea {
-  font-size: 17px;
-  min-height: 50px;
-}
-
-#registrationSection button {
-  font-size: 17px;
-  min-height: 50px;
 }
 
 
 /* =========================================================
-   CLARITY / READABILITY UPGRADES
+   TITLE SIZES
+   TITLE LANG ANG MALAKI
 ========================================================= */
-body { font-size: 16px; }
-.form-group label { font-size: 16px; color: #123b2a; }
-input, select, textarea { font-size: 17px; min-height: 48px; }
-textarea { min-height: 110px; }
-button, .btn { font-size: 16px; min-height: 46px; }
-th, td { font-size: 15px; }
-.form-description, .records-header p, .admin-toolbar p { font-size: 15px; }
 
-/* Clearly visible overall-members print button */
-.print-overall-btn {
+.brand-header h1 {
+  font-size: 30px;
   font-weight: 800;
-  letter-spacing: 0.2px;
-  min-width: 220px;
-  border: 2px solid #14532d;
 }
 
+.admin-brand h1 {
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.admin-toolbar h1 {
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   MOBILE FINAL FONT SIZES
+========================================================= */
+
 @media (max-width: 700px) {
-  .print-overall-btn {
-    width: 100%;
-    min-width: 0;
+
+  header h1 {
+    font-size: 23px;
+  }
+
+  .brand-header h1 {
+    font-size: 26px;
+  }
+
+  .admin-brand h1 {
+    font-size: 22px;
+  }
+
+  .admin-toolbar h1 {
+    font-size: 22px;
+  }
+
+  /* Normal text stays normal */
+  .form-group label {
+    font-size: 14px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 15px;
+  }
+
+  button,
+  .btn {
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    font-size: 14px;
+  }
+
+  .detail-item span {
+    font-size: 11px;
+  }
+
+  .detail-item strong {
+    font-size: 15px;
   }
 }
