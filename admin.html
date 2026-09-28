@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>POGA KSA Admin Dashboard</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- =========================
+         LOGIN SECTION
+    ========================== -->
+    <section id="loginSection" class="login-section">
+
+      <div class="card">
+
+        <div class="header brand-header">
+          <div class="brand-row">
+            <img src="saudi-flag.svg" class="flag-icon" alt="Saudi Arabia Flag">
+            <img src="poga-ksa-logo.png" class="site-logo" alt="POGA KSA Logo">
+            <img src="philippines-flag.svg" class="flag-icon" alt="Philippines Flag">
+          </div>
+          <h1>POGA KSA ADMIN DASHBOARD</h1>
+          <p>Admin Login</p>
+        </div>
+
+        <form id="loginForm">
+
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <input
+              type="email"
+              id="loginEmail"
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input
+              type="password"
+              id="loginPassword"
+              required
+              autocomplete="current-password"
+            >
+          </div>
+
+          <button
+            type="submit"
+            id="loginButton"
+            class="btn btn-primary"
+          >
+            Login
+          </button>
+
+          <p id="loginError" class="error-message hidden"></p>
+
+        </form>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         ADMIN DASHBOARD
+    ========================== -->
+    <section id="dashboardSection" class="hidden">
+
+      <!-- ADMIN TOOLBAR -->
+      <div class="admin-toolbar">
+
+        <div class="admin-brand">
+          <div class="brand-row brand-row-small">
+            <img src="saudi-flag.svg" class="flag-icon flag-small" alt="Saudi Arabia Flag">
+            <img src="poga-ksa-logo.png" class="site-logo site-logo-small" alt="POGA KSA Logo">
+            <img src="philippines-flag.svg" class="flag-icon flag-small" alt="Philippines Flag">
+          </div>
+          <h1>POGA KSA ADMIN DASHBOARD</h1>
+          <p>
+            Logged in as:
+            <strong id="adminEmail"></strong>
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="logoutButton"
+          class="btn btn-secondary"
+        >
+          Logout
+        </button>
+
+      </div>
+
+
+      <!-- =========================
+           ADD / EDIT MEMBER FORM
+      ========================== -->
+      <section class="card">
+
+        <div class="section-header">
+          <h2 id="formTitle">Add New Member</h2>
+        </div>
+
+        <form id="memberForm">
+
+          <div class="form-grid">
+
+            <!-- MEMBER ID -->
+            <div class="form-group">
+              <label for="memberId">Member ID</label>
+
+              <input
+                type="text"
+                id="memberId"
+                required
+              >
+            </div>
+
+
+            <!-- FULL NAME -->
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+
+              <input
+                type="text"
+                id="fullName"
+                required
+              >
+            </div>
+
+
+            <!-- PASSPORT -->
+            <div class="form-group">
+              <label for="passportNumber">Passport Number</label>
+
+              <input
+                type="text"
+                id="passportNumber"
+                required
+              >
+            </div>
+
+
+            <!-- BIRTHDAY -->
+            <div class="form-group">
+              <label for="birthday">Birthday</label>
+
+              <input
+                type="date"
+                id="birthday"
+                required
+              >
+            </div>
+
+
+            <!-- COUNTRY OF WORK ABROAD -->
+            <div class="form-group">
+
+              <label for="country">
+                Country of Work Abroad
+              </label>
+
+              <select
+                id="country"
+                required
+              >
+                <option value="">
+                  -- Select Country --
+                </option>
+
+                <option value="Saudi Arabia">
+                  Saudi Arabia
+                </option>
+
+                <option value="United Arab Emirates">
+                  United Arab Emirates
+                </option>
+
+                <option value="Qatar">
+                  Qatar
+                </option>
+
+                <option value="Kuwait">
+                  Kuwait
+                </option>
+
+                <option value="Bahrain">
+                  Bahrain
+                </option>
+
+                <option value="Oman">
+                  Oman
+                </option>
+
+                <option value="Japan">
+                  Japan
+                </option>
+
+                <option value="South Korea">
+                  South Korea
+                </option>
+
+                <option value="Singapore">
+                  Singapore
+                </option>
+
+                <option value="Malaysia">
+                  Malaysia
+                </option>
+
+                <option value="Taiwan">
+                  Taiwan
+                </option>
+
+                <option value="Hong Kong">
+                  Hong Kong
+                </option>
+
+                <option value="United States">
+                  United States
+                </option>
+
+                <option value="Canada">
+                  Canada
+                </option>
+
+                <option value="United Kingdom">
+                  United Kingdom
+                </option>
+
+                <option value="Australia">
+                  Australia
+                </option>
+
+                <option value="Italy">
+                  Italy
+                </option>
+
+                <option value="Germany">
+                  Germany
+                </option>
+
+                <option value="New Zealand">
+                  New Zealand
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- PHILIPPINE ADDRESS -->
+            <div class="form-group full-width">
+
+              <label for="address">
+                Philippine Address
+              </label>
+
+              <textarea
+                id="address"
+                rows="3"
+                required
+                placeholder="Enter member's address in the Philippines"
+              ></textarea>
+
+            </div>
+
+
+            <!-- CONTACT -->
+            <div class="form-group">
+
+              <label for="contact">
+                Contact Number
+              </label>
+
+              <input
+                type="text"
+                id="contact"
+                required
+              >
+
+            </div>
+
+
+            <!-- EMERGENCY CONTACT PERSON -->
+            <div class="form-group">
+
+              <label for="emergencyContact">
+                Emergency Contact Person
+              </label>
+
+              <input
+                type="text"
+                id="emergencyContact"
+                required
+              >
+
+            </div>
+
+
+            <!-- EMERGENCY CONTACT NUMBER -->
+            <div class="form-group">
+
+              <label for="emergencyNumber">
+                Emergency Contact Number
+              </label>
+
+              <input
+                type="text"
+                id="emergencyNumber"
+                required
+              >
+
+            </div>
+
+
+            <!-- MEMBERSHIP STATUS -->
+            <div class="form-group">
+
+              <label for="status">
+                Membership Status
+              </label>
+
+              <select
+                id="status"
+                required
+              >
+
+                <option value="Active">
+                  Active
+                </option>
+
+                <option value="Inactive">
+                  Inactive
+                </option>
+
+              </select>
+
+            </div>
+
+
+            <!-- PHOTO -->
+            <div class="form-group full-width">
+
+              <label for="photo">
+                Member Photo
+              </label>
+
+              <input
+                type="file"
+                id="photo"
+                accept="image/*"
+              >
+
+              <small>
+                Maximum file size: 5MB
+              </small>
+
+              <div
+                id="photoPreview"
+                class="photo-preview"
+              ></div>
+
+            </div>
+
+          </div>
+
+
+          <!-- FORM BUTTONS -->
+          <div class="form-actions">
+
+            <button
+              type="submit"
+              id="saveButton"
+              class="btn btn-primary"
+            >
+              Save Member
+            </button>
+
+            <button
+              type="button"
+              id="cancelEditButton"
+              class="btn btn-secondary hidden"
+            >
+              Cancel Edit
+            </button>
+
+          </div>
+
+          <p
+            id="formMessage"
+            class="success-message hidden"
+          ></p>
+
+        </form>
+
+      </section>
+
+
+      <!-- =========================
+           MEMBER RECORDS
+      ========================== -->
+      <section class="card records-section">
+
+        <div class="records-header">
+
+          <div>
+            <h2>Member Records</h2>
+            <p>
+              View and manage registered members.
+            </p>
+          </div>
+
+          <div class="records-tools">
+            <button
+              type="button"
+              id="printAllMembersButton"
+              class="btn btn-primary"
+            >
+              Print Overall Records
+            </button>
+
+            <div class="search-box">
+
+              <input
+                type="search"
+                id="searchInput"
+                placeholder="Search member..."
+              >
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>Photo</th>
+
+                <th>Member ID</th>
+
+                <th>Full Name</th>
+
+                <th>Passport</th>
+
+                <th>Birthday</th>
+
+                <th>Contact</th>
+
+                <th>Status</th>
+
+                <th>Action</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="membersTableBody">
+
+              <!-- Members will be loaded here -->
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </section>
+
+  </div>
+
+
+  <!-- =========================
+       MEMBER DETAILS MODAL
+  ========================== -->
+  <div
+    id="memberDetailsModal"
+    class="member-modal hidden"
+  >
+
+    <div class="member-modal-content">
+
+      <!-- MODAL HEADER -->
+      <div class="member-modal-header">
+
+        <h2>Member Details</h2>
+
+        <button
+          type="button"
+          id="closeDetailsButton"
+          class="modal-close"
+          aria-label="Close"
+        >
+          &times;
+        </button>
+
+      </div>
+
+
+      <!-- MODAL BODY -->
+      <div class="member-details-body">
+
+        <!-- PHOTO -->
+        <div class="details-photo-wrapper">
+
+          <div
+            id="detailsPhoto"
+            class="details-photo"
+            aria-label="Member Photo"
+          ></div>
+
+        </div>
+
+
+        <!-- DETAILS -->
+        <div class="details-grid">
+
+          <!-- MEMBER ID -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Member ID
+            </span>
+
+            <span
+              id="detailsMemberId"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- FULL NAME -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Full Name
+            </span>
+
+            <span
+              id="detailsFullName"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- PASSPORT -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Passport Number
+            </span>
+
+            <span
+              id="detailsPassport"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- BIRTHDAY -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Birthday
+            </span>
+
+            <span
+              id="detailsBirthday"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- COUNTRY -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Country of Work Abroad
+            </span>
+
+            <span
+              id="detailsCountry"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- PHILIPPINE ADDRESS -->
+          <div class="detail-item detail-item-full">
+
+            <span class="detail-label">
+              Philippine Address
+            </span>
+
+            <span
+              id="detailsAddress"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- CONTACT -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Contact Number
+            </span>
+
+            <span
+              id="detailsContact"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- EMERGENCY PERSON -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Emergency Contact Person
+            </span>
+
+            <span
+              id="detailsEmergencyPerson"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- EMERGENCY NUMBER -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Emergency Contact Number
+            </span>
+
+            <span
+              id="detailsEmergencyNumber"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+
+          <!-- STATUS -->
+          <div class="detail-item">
+
+            <span class="detail-label">
+              Membership Status
+            </span>
+
+            <span
+              id="detailsStatus"
+              class="detail-value"
+            ></span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- MODAL ACTIONS -->
+      <div class="member-modal-actions">
+
+        <button
+          type="button"
+          id="detailsPrintButton"
+          class="btn btn-primary"
+        >
+          Print Full Details
+        </button>
+
+        <button
+          type="button"
+          id="detailsEditButton"
+          class="btn btn-primary"
+        >
+          Edit Member
+        </button>
+
+        <button
+          type="button"
+          id="detailsCloseButton"
+          class="btn btn-secondary"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADMIN JAVASCRIPT -->
+  <script src="admin.js"></script>
+
+</body>
+              </html>
